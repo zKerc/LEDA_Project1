@@ -4,13 +4,14 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Random;
 
 public class InsertionSortVenue {
 
     private String inputFile;
     private String path = "src/OrdenacaoResultados/InsertionSort/";
     private String outputMedio = path + "matches_t2_venues_insertionSort_medioCaso.csv";
+    private String outputMelhor = path + "matches_t2_venues_insertionSort_melhorCaso.csv";
+    private String outputPior = path + "matches_t2_venues_insertionSort_piorCaso.csv";
     private int venueIndex = 7;
 
     public InsertionSortVenue(String inputFile) {
@@ -18,66 +19,75 @@ public class InsertionSortVenue {
     }
 
     public void ordenar() {
-        ordenarMelhorCaso();
-        ordenarMedioCaso();
-        ordenarPiorCaso();
+        criarCasoMelhor();
+        criarCasoMedio();
+        criarCasoPior();
+        
+        ordenarEImprimirTempo(outputMelhor);
+        ordenarEImprimirTempo(outputMedio);
+        ordenarEImprimirTempo(outputPior);
     }
 
-    private void ordenarMedioCaso() {
+    private void criarCasoMedio() {
         try (BufferedReader br = new BufferedReader(new FileReader(inputFile));
              FileWriter writer = new FileWriter(outputMedio)) {
-
-            // Escrever cabeçalho
             String line;
-            if ((line = br.readLine()) != null) {
-                writer.write(line + "\n");
-            }
-
-            int rowCount = 0;
-
-            // Calcular o número de linhas no arquivo
-            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            while (reader.readLine() != null) rowCount++;
-            reader.close();
-
-            String[][] data = new String[rowCount][14];
-
-            rowCount = 0;
             while ((line = br.readLine()) != null) {
-                data[rowCount++] = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-            }
-
-            // Embaralhar metade dos dados
-            Random rand = new Random();
-            for (int i = 0; i < rowCount / 2; i++) {
-                int j = rand.nextInt(rowCount / 2);
-                String[] temp = data[i];
-                data[i] = data[j];
-                data[j] = temp;
-            }
-
-            ordenacao(data, venueIndex, rowCount);
-
-            // Escrever no arquivo
-            for (int i = 0; i < rowCount; i++) {
-                writer.write(String.join(",", data[i]) + "\n");
+                writer.write(line + "\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void ordenarMelhorCaso() {
-        String outputFile = "src/OrdenacaoResultados/InsertionSort/matches_t2_venues_insertionSort_melhorCaso.csv";
-        ordenacao(inputFile, outputFile, false, true);
+    private void criarCasoMelhor() {
+        ordenacao(inputFile, outputMelhor, false, true);
     }
 
-    private void ordenarPiorCaso() {
-        String outputFile = "src/OrdenacaoResultados/InsertionSort/matches_t2_venues_insertionSort_piorCaso.csv";
-        ordenacao(inputFile, outputFile, true, false);
+    private void criarCasoPior() {
+        ordenacao(inputFile, outputPior, true, false);
     }
+    
+    private void ordenarEImprimirTempo(String fileToOrder) {
+        try {
+            // Contar linhas do arquivo
+            int rowCount = 0;
+            try (BufferedReader counter = new BufferedReader(new FileReader(fileToOrder))) {
+                while (counter.readLine() != null) rowCount++;
+            }
+    
+            String[][] data = new String[rowCount][14];
+    
+            // Carregar arquivo em um array
+            int index = 0;
+            try (BufferedReader br = new BufferedReader(new FileReader(fileToOrder))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    data[index++] = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+                }
+            }
+    
+            // Início da medição de tempo
+            long startTime = System.currentTimeMillis();
+    
+            ordenarArray(data, venueIndex, rowCount);
+    
+            // Fim da medição de tempo
+            long endTime = System.currentTimeMillis();
+            System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+    
+            // Escrever no arquivo ordenado
+            try (FileWriter writer = new FileWriter(fileToOrder)) {
+                for (int i = 0; i < rowCount; i++) {
+                    writer.write(String.join(",", data[i]) + "\n");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }    
 
-    private void ordenacao(String[][] data, int venueIndex, int rowCount) {
+    private void ordenarArray(String[][] data, int venueIndex, int rowCount) {
         for (int i = 1; i < rowCount; i++) {
             String[] key = data[i];
             int j = i - 1;
@@ -88,11 +98,12 @@ public class InsertionSortVenue {
             }
             data[j + 1] = key;
         }
-    }    
-
+    }
+    
+    
     private void ordenacao(String inputFile, String outputFile, boolean inverter, boolean melhorCaso) {
         try (BufferedReader br = new BufferedReader(new FileReader(inputFile));
-             FileWriter writer = new FileWriter(outputFile)) {
+             FileWriter writer = new FileWriter(outputFile, true)) {    
 
             String line;
             if ((line = br.readLine()) != null) {
