@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Scanner;
+import Ordenacao.InsertionSort.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -247,7 +248,8 @@ public class Main {
 
                 switch (fieldChoice) {
                     case 1:
-                        // Chame a função de ordenação correspondente para 'venue' e o algoritmo escolhido aqui
+                        InsertionSortVenue insertion = new InsertionSortVenue(outputMatchesT2);
+                        insertion.ordenar();
                         break;
                     case 2:
                         // Chame a função de ordenação correspondente para 'attendance' e o algoritmo escolhido aqui
