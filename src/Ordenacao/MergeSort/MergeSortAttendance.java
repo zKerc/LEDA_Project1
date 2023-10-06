@@ -1,4 +1,4 @@
-package Ordenacao.InsertionSort;
+package Ordenacao.MergeSort;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -6,28 +6,28 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * A classe {@code InsertionSortAttendance} realiza a ordenação de dados em
- * arquivos CSV usando o algoritmo de ordenação Insertion Sort.
+ * A classe {@code MergeSortAttendance} realiza a ordenação de dados em arquivos
+ * CSV usando o algoritmo de ordenação Merge Sort.
  * Ela é projetada para criar três casos de ordenação (melhor, médio e pior) e
  * medir o tempo de execução.
  * Os resultados ordenados são escritos nos arquivos de saída correspondentes.
  */
-public class InsertionSortAttendance {
+public class MergeSortAttendance {
 
     private String inputFile;
-    private String path = "src/OrdenacaoResultados/InsertionSort/";
-    private String outputMedio = path + "matches_t2_attendance_insertionSort_medioCaso.csv";
-    private String outputMelhor = path + "matches_t2_attendance_insertionSort_melhorCaso.csv";
-    private String outputPior = path + "matches_t2_attendance_insertionSort_piorCaso.csv";
+    private String path = "src/OrdenacaoResultados/MergeSort/";
+    private String outputMedio = path + "matches_t2_attendance_mergeSort_medioCaso.csv";
+    private String outputMelhor = path + "matches_t2_attendance_mergeSort_melhorCaso.csv";
+    private String outputPior = path + "matches_t2_attendance_mergeSort_piorCaso.csv";
     private int attendanceIndex = 6;
 
     /**
-     * Cria uma nova instância de {@code InsertionSortAttendance} com o arquivo de
+     * Cria uma nova instância de {@code MergeSortAttendance} com o arquivo de
      * entrada especificado.
      *
      * @param inputFile O arquivo de entrada a ser ordenado.
      */
-    public InsertionSortAttendance(String inputFile) {
+    public MergeSortAttendance(String inputFile) {
         this.inputFile = inputFile;
     }
 
@@ -64,7 +64,7 @@ public class InsertionSortAttendance {
 
             String[][] data = carregarArquivoEmArray(inputFile, rowCount);
 
-            ordenarArray(data, attendanceIndex, rowCount); // Ordenando o array
+            mergeSort(data, attendanceIndex, rowCount); // Ordenando o array
 
             // Escrevendo no arquivo de saída
             try (FileWriter writer = new FileWriter(outputMelhor)) {
@@ -105,7 +105,7 @@ public class InsertionSortAttendance {
             String[][] dataArray = new String[rowCount - 1][14]; // Array para os dados sem cabeçalho
             System.arraycopy(data, 1, dataArray, 0, rowCount - 1); // Copiando os dados sem o cabeçalho
 
-            ordenarArray(dataArray, attendanceIndex, rowCount - 1);
+            mergeSort(dataArray, attendanceIndex, rowCount - 1);
 
             for (int i = 0; i < dataArray.length / 2; i++) {
                 String[] temp = dataArray[i];
@@ -159,7 +159,7 @@ public class InsertionSortAttendance {
             // Início da medição de tempo
             long startTime = System.currentTimeMillis();
 
-            ordenarArray(dataArray, attendanceIndex, rowCount - 1);
+            mergeSort(dataArray, attendanceIndex, rowCount - 1);
 
             // Fim da medição de tempo
             long endTime = System.currentTimeMillis();
@@ -210,56 +210,65 @@ public class InsertionSortAttendance {
 
     /**
      * Ordena um array bidimensional com base em uma coluna específica usando o
-     * algoritmo Insertion Sort.
+     * algoritmo Merge Sort.
      *
      * @param data        O array bidimensional a ser ordenado.
      * @param columnIndex O índice da coluna pela qual os dados serão ordenados.
      * @param rowCount    O número de linhas no array.
      */
-    private void ordenarArray(String[][] data, int columnIndex, int rowCount) {
-        for (int i = 0; i < rowCount; i++) {
-            String[] key = data[i];
-            int j = i - 1;
-
-            String currentData = (j >= 0) ? data[j][columnIndex].replace("\"", "").replace(",", "") : "";
-            String keyData = (key[columnIndex] != null) ? key[columnIndex].replace("\"", "").replace(",", "") : "";
-
-            if (!isNumeric(currentData)) {
-                currentData = "0";
-            }
-            if (!isNumeric(keyData)) {
-                keyData = "0";
-            }
-
-            int currentVal = Integer.parseInt(currentData);
-            int keyVal = Integer.parseInt(keyData);
-
-            while (j >= 0 && currentVal > keyVal) {
-                data[j + 1] = data[j];
-                j--;
-
-                if (j >= 0) {
-                    currentData = data[j][columnIndex].replace("\"", "").replace(",", "");
-                    currentVal = isNumeric(currentData) ? Integer.parseInt(currentData) : 0;
-                }
-            }
-            data[j + 1] = key;
+    private void mergeSort(String[][] data, int columnIndex, int rowCount) {
+        if (rowCount < 2) {
+            return;
         }
+
+        int mid = rowCount / 2;
+        String[][] left = new String[mid][14];
+        String[][] right = new String[rowCount - mid][14];
+
+        // Copiar dados para arrays esquerdo e direito
+        for (int i = 0; i < mid; i++) {
+            left[i] = data[i];
+        }
+        for (int i = mid; i < rowCount; i++) {
+            right[i - mid] = data[i];
+        }
+
+        // Recursivamente ordenar as duas metades
+        mergeSort(left, columnIndex, mid);
+        mergeSort(right, columnIndex, rowCount - mid);
+
+        // Mesclar as duas metades ordenadas
+        merge(data, left, right, columnIndex);
     }
 
     /**
-     * Verifica se uma string pode ser convertida em um número inteiro.
+     * Mescla duas metades de um array em ordem ordenada com base em uma coluna
+     * específica.
      *
-     * @param str A string a ser verificada.
-     * @return {@code true} se a string for um número inteiro válido, caso contrário
-     *         {@code false}.
+     * @param data        O array a ser mesclado.
+     * @param left        O array da metade esquerda.
+     * @param right       O array da metade direita.
+     * @param columnIndex O índice da coluna pela qual os dados serão mesclados.
      */
-    private boolean isNumeric(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
+    private void merge(String[][] data, String[][] left, String[][] right, int columnIndex) {
+        int leftLength = left.length;
+        int rightLength = right.length;
+        int i = 0, j = 0, k = 0;
+
+        while (i < leftLength && j < rightLength) {
+            if (left[i][columnIndex].compareTo(right[j][columnIndex]) <= 0) {
+                data[k++] = left[i++];
+            } else {
+                data[k++] = right[j++];
+            }
+        }
+
+        while (i < leftLength) {
+            data[k++] = left[i++];
+        }
+
+        while (j < rightLength) {
+            data[k++] = right[j++];
         }
     }
 }

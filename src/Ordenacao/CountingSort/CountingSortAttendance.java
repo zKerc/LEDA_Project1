@@ -1,4 +1,4 @@
-package Ordenacao.InsertionSort;
+package Ordenacao.CountingSort;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -6,28 +6,28 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * A classe {@code InsertionSortAttendance} realiza a ordenação de dados em
- * arquivos CSV usando o algoritmo de ordenação Insertion Sort.
+ * A classe {@code CountingSortAttendance} realiza a ordenação de dados em
+ * arquivos CSV usando o algoritmo de ordenação Counting Sort.
  * Ela é projetada para criar três casos de ordenação (melhor, médio e pior) e
  * medir o tempo de execução.
  * Os resultados ordenados são escritos nos arquivos de saída correspondentes.
  */
-public class InsertionSortAttendance {
+public class CountingSortAttendance {
 
     private String inputFile;
-    private String path = "src/OrdenacaoResultados/InsertionSort/";
-    private String outputMedio = path + "matches_t2_attendance_insertionSort_medioCaso.csv";
-    private String outputMelhor = path + "matches_t2_attendance_insertionSort_melhorCaso.csv";
-    private String outputPior = path + "matches_t2_attendance_insertionSort_piorCaso.csv";
+    private String path = "src/OrdenacaoResultados/CountingSort/";
+    private String outputMedio = path + "matches_t2_attendance_countingSort_medioCaso.csv";
+    private String outputMelhor = path + "matches_t2_attendance_countingSort_melhorCaso.csv";
+    private String outputPior = path + "matches_t2_attendance_countingSort_piorCaso.csv";
     private int attendanceIndex = 6;
 
     /**
-     * Cria uma nova instância de {@code InsertionSortAttendance} com o arquivo de
+     * Cria uma nova instância de {@code CountingSortAttendance} com o arquivo de
      * entrada especificado.
      *
      * @param inputFile O arquivo de entrada a ser ordenado.
      */
-    public InsertionSortAttendance(String inputFile) {
+    public CountingSortAttendance(String inputFile) {
         this.inputFile = inputFile;
     }
 
@@ -54,7 +54,7 @@ public class InsertionSortAttendance {
     }
 
     /**
-     * Cria o caso de ordenação melhor ordenando o arquivo de entrada de forma
+     * Cria o caso de ordenação melhor ordenando o arquivo de entrada em ordem
      * crescente.
      */
     private void criarCasoMelhor() {
@@ -64,7 +64,7 @@ public class InsertionSortAttendance {
 
             String[][] data = carregarArquivoEmArray(inputFile, rowCount);
 
-            ordenarArray(data, attendanceIndex, rowCount); // Ordenando o array
+            countingSort(data, attendanceIndex, rowCount); // Ordenando o array
 
             // Escrevendo no arquivo de saída
             try (FileWriter writer = new FileWriter(outputMelhor)) {
@@ -78,7 +78,7 @@ public class InsertionSortAttendance {
     }
 
     /**
-     * Cria o caso de ordenação pior ordenando o arquivo de entrada de forma
+     * Cria o caso de ordenação pior ordenando o arquivo de entrada em ordem
      * decrescente.
      */
     private void criarCasoPior() {
@@ -105,7 +105,7 @@ public class InsertionSortAttendance {
             String[][] dataArray = new String[rowCount - 1][14]; // Array para os dados sem cabeçalho
             System.arraycopy(data, 1, dataArray, 0, rowCount - 1); // Copiando os dados sem o cabeçalho
 
-            ordenarArray(dataArray, attendanceIndex, rowCount - 1);
+            countingSort(dataArray, attendanceIndex, rowCount - 1);
 
             for (int i = 0; i < dataArray.length / 2; i++) {
                 String[] temp = dataArray[i];
@@ -126,8 +126,8 @@ public class InsertionSortAttendance {
     /**
      * Copia um arquivo de origem para um arquivo de destino.
      *
-     * @param origem  O arquivo de origem a ser copiado.
-     * @param destino O arquivo de destino onde o conteúdo será copiado.
+     * @param origem  O arquivo de origem.
+     * @param destino O arquivo de destino.
      */
     private void copiarArquivo(String origem, String destino) {
         try (BufferedReader br = new BufferedReader(new FileReader(origem));
@@ -142,7 +142,7 @@ public class InsertionSortAttendance {
     }
 
     /**
-     * Ordena os dados no arquivo especificado e imprime o tempo de execução.
+     * Realiza a ordenação e imprime o tempo de execução.
      *
      * @param fileToOrder O arquivo a ser ordenado.
      */
@@ -159,7 +159,7 @@ public class InsertionSortAttendance {
             // Início da medição de tempo
             long startTime = System.currentTimeMillis();
 
-            ordenarArray(dataArray, attendanceIndex, rowCount - 1);
+            countingSort(dataArray, attendanceIndex, rowCount - 1);
 
             // Fim da medição de tempo
             long endTime = System.currentTimeMillis();
@@ -210,56 +210,55 @@ public class InsertionSortAttendance {
 
     /**
      * Ordena um array bidimensional com base em uma coluna específica usando o
-     * algoritmo Insertion Sort.
+     * algoritmo Counting Sort.
      *
      * @param data        O array bidimensional a ser ordenado.
      * @param columnIndex O índice da coluna pela qual os dados serão ordenados.
      * @param rowCount    O número de linhas no array.
      */
-    private void ordenarArray(String[][] data, int columnIndex, int rowCount) {
+    private void countingSort(String[][] data, int columnIndex, int rowCount) {
+        if (rowCount < 2) {
+            return;
+        }
+
+        // Encontrar o valor máximo
+        int maxVal = Integer.MIN_VALUE;
         for (int i = 0; i < rowCount; i++) {
-            String[] key = data[i];
-            int j = i - 1;
-
-            String currentData = (j >= 0) ? data[j][columnIndex].replace("\"", "").replace(",", "") : "";
-            String keyData = (key[columnIndex] != null) ? key[columnIndex].replace("\"", "").replace(",", "") : "";
-
-            if (!isNumeric(currentData)) {
-                currentData = "0";
+            int val = Integer.parseInt(data[i][columnIndex]);
+            if (val > maxVal) {
+                maxVal = val;
             }
-            if (!isNumeric(keyData)) {
-                keyData = "0";
-            }
-
-            int currentVal = Integer.parseInt(currentData);
-            int keyVal = Integer.parseInt(keyData);
-
-            while (j >= 0 && currentVal > keyVal) {
-                data[j + 1] = data[j];
-                j--;
-
-                if (j >= 0) {
-                    currentData = data[j][columnIndex].replace("\"", "").replace(",", "");
-                    currentVal = isNumeric(currentData) ? Integer.parseInt(currentData) : 0;
-                }
-            }
-            data[j + 1] = key;
         }
-    }
 
-    /**
-     * Verifica se uma string pode ser convertida em um número inteiro.
-     *
-     * @param str A string a ser verificada.
-     * @return {@code true} se a string for um número inteiro válido, caso contrário
-     *         {@code false}.
-     */
-    private boolean isNumeric(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
+        // Criar um array de contagem e inicializá-lo com zeros
+        int[] countArray = new int[maxVal + 1];
+        for (int i = 0; i <= maxVal; i++) {
+            countArray[i] = 0;
         }
+
+        // Contar a frequência de cada valor
+        for (int i = 0; i < rowCount; i++) {
+            int val = Integer.parseInt(data[i][columnIndex]);
+            countArray[val]++;
+        }
+
+        // Atualizar o array de contagem para conter as posições finais
+        for (int i = 1; i <= maxVal; i++) {
+            countArray[i] += countArray[i - 1];
+        }
+
+        // Criar um array de saída
+        String[][] outputArray = new String[rowCount][14];
+
+        // Preencher o array de saída com os valores ordenados
+        for (int i = rowCount - 1; i >= 0; i--) {
+            int val = Integer.parseInt(data[i][columnIndex]);
+            int countIndex = countArray[val] - 1;
+            outputArray[countIndex] = data[i];
+            countArray[val]--;
+        }
+
+        // Copiar os valores ordenados de volta para o array original
+        System.arraycopy(outputArray, 0, data, 0, rowCount);
     }
 }
