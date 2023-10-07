@@ -239,9 +239,12 @@ public class Main {
                 System.out.println("Escolha o algoritmo de ordenação:");
                 System.out.println("1- InsertionSort");
                 System.out.println("2- SelectionSort");
-                // Adicione as outras opções de algoritmo aqui
-                System.out.println("0- Voltar");
-                System.out.print("Sua escolha: ");
+                System.out.println("3- CountingSort");
+                System.out.println("4- HeapSort");
+                System.out.println("5- MergeSort");
+                System.out.println("6- QuickSort");
+                System.out.println("7- QuickSortMediana3");
+                System.out.print("0- Voltar");
                 algorithmChoice = scanner.nextInt();
 
                 if (algorithmChoice == 0) break;
