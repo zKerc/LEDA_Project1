@@ -1,13 +1,14 @@
 package Ordenacao.HeapSort;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * A classe {@code HeapSortVenue} realiza a ordenação de dados em arquivos CSV
- * usando o algoritmo de ordenação Heap Sort.
+ * A classe {@code HeapSortVenue} realiza a ordenação de dados em arquivos
+ * CSV usando o algoritmo de ordenação Heap Sort.
  * Ela é projetada para criar três casos de ordenação (melhor, médio e pior) e
  * medir o tempo de execução.
  * Os resultados ordenados são escritos nos arquivos de saída correspondentes.
@@ -22,18 +23,18 @@ public class HeapSortVenue {
     private int venueIndex = 7;
 
     /**
-     * Cria uma nova instância de {@code HeapSortVenue} com o arquivo de entrada
+     * Cria uma nova instância da classe HeapSortVenue com o arquivo de entrada
      * especificado.
      *
-     * @param inputFile O arquivo de entrada a ser ordenado.
+     * @param inputFile O arquivo de entrada contendo os dados a serem ordenados.
      */
     public HeapSortVenue(String inputFile) {
         this.inputFile = inputFile;
     }
 
     /**
-     * Realiza a ordenação dos dados nos casos de melhor, médio e pior e imprime os
-     * tempos de execução.
+     * Realiza a ordenação em cenários de melhor, médio e pior caso,
+     * mede o tempo de execução e imprime-o no console.
      */
     public void ordenar() {
         criarCasoMelhor();
@@ -46,76 +47,47 @@ public class HeapSortVenue {
     }
 
     /**
-     * Cria o caso de ordenação médio copiando o conteúdo do arquivo de entrada para
-     * o arquivo de saída.
+     * Cria um cenário de caso médio copiando o arquivo de entrada para um arquivo
+     * de saída correspondente.
      */
     private void criarCasoMedio() {
-        try (BufferedReader br = new BufferedReader(new FileReader(inputFile));
-                FileWriter writer = new FileWriter(outputMedio)) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                writer.write(line + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        copiarArquivo(inputFile, outputMedio);
     }
 
     /**
-     * Cria o caso de ordenação melhor ordenando o arquivo de entrada de forma
-     * crescente.
+     * Cria um cenário de melhor caso, ordenando os dados com o algoritmo Heap Sort
+     * e salvando-os em um arquivo de saída correspondente.
      */
     private void criarCasoMelhor() {
-        ordenacao(inputFile, outputMelhor, false, true);
+        String[][] data = carregarArquivoEmArray(inputFile);
+        heapSort(data, venueIndex);
+        escreverDados(data, outputMelhor);
     }
 
     /**
-     * Cria o caso de ordenação pior ordenando o arquivo de entrada de forma
-     * decrescente.
+     * Cria um cenário de pior caso, ordenando os dados com o algoritmo Heap Sort
+     * e salvando-os em um arquivo de saída correspondente.
      */
     private void criarCasoPior() {
-        ordenacao(inputFile, outputPior, true, false);
+        String[][] data = carregarArquivoEmArray(inputFile);
+        heapSort(data, venueIndex);
+        inverterDados(data);
+        escreverDados(data, outputPior);
     }
 
     /**
-     * Ordena os dados no arquivo especificado e imprime o tempo de execução.
+     * Copia um arquivo de origem para um arquivo de destino.
      *
-     * @param fileToOrder O arquivo a ser ordenado.
+     * @param origem  O caminho do arquivo de origem.
+     * @param destino O caminho do arquivo de destino.
      */
-    private void ordenarEImprimirTempo(String fileToOrder) {
-        try {
-            // Contar linhas do arquivo
-            int rowCount = 0;
-            try (BufferedReader counter = new BufferedReader(new FileReader(fileToOrder))) {
-                while (counter.readLine() != null)
-                    rowCount++;
-            }
-
-            String[][] data = new String[rowCount][14];
-
-            // Carregar arquivo em um array
-            int index = 0;
-            try (BufferedReader br = new BufferedReader(new FileReader(fileToOrder))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    data[index++] = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-                }
-            }
-
-            // Início da medição de tempo
-            long startTime = System.currentTimeMillis();
-
-            heapSort(data, venueIndex);
-
-            // Fim da medição de tempo
-            long endTime = System.currentTimeMillis();
-            System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
-
-            // Escrever no arquivo ordenado
-            try (FileWriter writer = new FileWriter(fileToOrder)) {
-                for (int i = 0; i < rowCount; i++) {
-                    writer.write(String.join(",", data[i]) + "\n");
-                }
+    private void copiarArquivo(String origem, String destino) {
+        try (BufferedReader br = new BufferedReader(new FileReader(origem));
+                BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                writer.write(line);
+                writer.newLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -123,147 +95,127 @@ public class HeapSortVenue {
     }
 
     /**
-     * Implementa o algoritmo Heap Sort para ordenar um array bidimensional de
-     * strings.
+     * Carrega um arquivo CSV em um array bidimensional de strings, excluindo o
+     * cabeçalho.
      *
-     * @param data       O array a ser ordenado.
-     * @param venueIndex O índice da coluna usada como chave de ordenação.
+     * @param file O caminho do arquivo CSV a ser carregado.
+     * @return Um array bidimensional de strings representando os dados do arquivo.
      */
-    private void heapSort(String[][] data, int venueIndex) {
-        int rowCount = data.length;
-
-        // Construir um heap máximo
-        for (int i = rowCount / 2 - 1; i >= 0; i--) {
-            heapify(data, venueIndex, rowCount, i);
+    private String[][] carregarArquivoEmArray(String file) {
+        String[][] data;
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            data = br.lines().skip(1).map(line -> line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1))
+                    .toArray(String[][]::new);
+        } catch (IOException e) {
+            e.printStackTrace();
+            data = new String[0][];
         }
+        return data;
+    }
 
-        // Extrair elementos do heap e rearranjar o heap
-        for (int i = rowCount - 1; i >= 0; i--) {
-            // Mova a raiz atual para o final do array
-            swap(data, 0, i);
+    /**
+     * Escreve os dados de um array bidimensional em um arquivo CSV especificado.
+     *
+     * @param data       O array bidimensional de dados a serem escritos.
+     * @param outputFile O caminho do arquivo CSV de saída.
+     */
+    private void escreverDados(String[][] data, String outputFile) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+            // Escreva o cabeçalho
+            writer.write(
+                    "id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,home_goal_scorers,away_goal_scorers,full_date");
+            writer.newLine();
 
-            // Chame o heapify na subárvore reduzida
-            heapify(data, venueIndex, i, 0);
+            // Escreva os dados
+            for (int i = 0; i < data.length; i++) {
+                writer.write(String.join(",", data[i]));
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     /**
-     * Mantém a propriedade de heap máximo em uma subárvore com a raiz em 'root'.
+     * Inverte a ordem dos dados em um array bidimensional.
      *
-     * @param data       O array a ser ordenado.
-     * @param venueIndex O índice da coluna usada como chave de ordenação.
-     * @param rowCount   O número de elementos no heap.
-     * @param root       O índice da raiz da subárvore.
+     * @param data O array bidimensional de dados a ser invertido.
      */
-    private void heapify(String[][] data, int venueIndex, int rowCount, int root) {
-        int largest = root;
-        int left = 2 * root + 1;
-        int right = 2 * root + 2;
+    private void inverterDados(String[][] data) {
+        for (int i = 0; i < data.length / 2; i++) {
+            String[] temp = data[i];
+            data[i] = data[data.length - i - 1];
+            data[data.length - i - 1] = temp;
+        }
+    }
 
-        if (left < rowCount && data[left][venueIndex].compareTo(data[largest][venueIndex]) > 0) {
+    /**
+     * Realiza a ordenação do arquivo especificado com o algoritmo Heap Sort e mede
+     * o tempo
+     * de execução da ordenação. O tempo de execução é impresso no console.
+     *
+     * @param fileToOrder O caminho do arquivo a ser ordenado e medido.
+     */
+    private void ordenarEImprimirTempo(String fileToOrder) {
+        String[][] data = carregarArquivoEmArray(fileToOrder);
+
+        long startTime = System.currentTimeMillis();
+        heapSort(data, venueIndex);
+        long endTime = System.currentTimeMillis();
+
+        System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+    }
+
+    /**
+     * Realiza a ordenação Heap Sort em um conjunto de dados com base no índice da
+     * coluna de venues.
+     *
+     * @param data       O conjunto de dados a ser ordenado.
+     * @param venueIndex O índice da coluna de venues.
+     */
+    private void heapSort(String[][] data, int venueIndex) {
+        int n = data.length;
+
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            heapify(data, n, i, venueIndex);
+        }
+
+        for (int i = n - 1; i > 0; i--) {
+            String[] temp = data[0];
+            data[0] = data[i];
+            data[i] = temp;
+
+            heapify(data, i, 0, venueIndex);
+        }
+    }
+
+    /**
+     * Realiza a operação de heapify em um conjunto de dados.
+     *
+     * @param data       O conjunto de dados a ser heapificado.
+     * @param n          O tamanho do heap.
+     * @param i          O índice do elemento raiz.
+     * @param venueIndex O índice da coluna de venues.
+     */
+    private void heapify(String[][] data, int n, int i, int venueIndex) {
+        int largest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < n && data[left][venueIndex].compareTo(data[largest][venueIndex]) > 0) {
             largest = left;
         }
 
-        if (right < rowCount && data[right][venueIndex].compareTo(data[largest][venueIndex]) > 0) {
+        if (right < n && data[right][venueIndex].compareTo(data[largest][venueIndex]) > 0) {
             largest = right;
         }
 
-        if (largest != root) {
-            swap(data, root, largest);
+        if (largest != i) {
+            String[] swap = data[i];
+            data[i] = data[largest];
+            data[largest] = swap;
 
-            // Recursivamente heapify a subárvore afetada
-            heapify(data, venueIndex, rowCount, largest);
-        }
-    }
-
-    /**
-     * Troca dois elementos em um array bidimensional.
-     *
-     * @param data O array que contém os elementos a serem trocados.
-     * @param i    O índice do primeiro elemento.
-     * @param j    O índice do segundo elemento.
-     */
-    private void swap(String[][] data, int i, int j) {
-        String[] temp = data[i];
-        data[i] = data[j];
-        data[j] = temp;
-    }
-
-    /**
-     * Realiza a ordenação do arquivo de entrada especificado e escreve os
-     * resultados no arquivo de saída correspondente.
-     *
-     * @param inputFile  O arquivo de entrada a ser ordenado.
-     * @param outputFile O arquivo de saída onde o resultado ordenado será escrito.
-     * @param inverter   Indica se os dados devem ser invertidos.
-     * @param melhorCaso Indica se este é o caso de melhor ordenação.
-     */
-    private void ordenacao(String inputFile, String outputFile, boolean inverter, boolean melhorCaso) {
-        try (BufferedReader br = new BufferedReader(new FileReader(inputFile));
-                FileWriter writer = new FileWriter(outputFile, true)) {
-
-            String line;
-            if ((line = br.readLine()) != null) {
-                writer.write(line + "\n");
-            }
-
-            int rowCount = 0;
-
-            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            while (reader.readLine() != null)
-                rowCount++;
-            reader.close();
-
-            String[][] data = new String[rowCount][14];
-
-            rowCount = 0;
-            while ((line = br.readLine()) != null) {
-                String[] values = new String[14];
-                StringBuilder sb = new StringBuilder();
-                int valueCount = 0;
-                boolean insideQuotes = false;
-                for (char c : line.toCharArray()) {
-                    if (c == '"') {
-                        insideQuotes = !insideQuotes;
-                    } else if (c == ',' && !insideQuotes) {
-                        values[valueCount++] = sb.toString();
-                        sb.setLength(0);
-                    } else {
-                        sb.append(c);
-                    }
-                }
-                values[valueCount] = sb.toString();
-                data[rowCount++] = values;
-            }
-
-            heapSort(data, venueIndex);
-
-            if (inverter) {
-                String[][] dataInvertida = new String[rowCount][14];
-                for (int i = 0; i < rowCount; i++) {
-                    dataInvertida[i] = data[rowCount - i - 1];
-                }
-                data = dataInvertida;
-            }
-
-            for (int i = 0; i < rowCount; i++) {
-                StringBuilder sb = new StringBuilder();
-                for (int j = 0; j < data[i].length; j++) {
-                    String value = data[i][j];
-                    if (value.contains(",")) {
-                        sb.append('"').append(value).append('"');
-                    } else {
-                        sb.append(value);
-                    }
-                    if (j < data[i].length - 1) {
-                        sb.append(",");
-                    }
-                }
-                writer.write(sb.toString() + "\n");
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            heapify(data, n, largest, venueIndex);
         }
     }
 }

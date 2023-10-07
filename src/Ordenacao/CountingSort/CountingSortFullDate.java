@@ -1,36 +1,39 @@
-package Ordenacao.SelectionSort;
+package Ordenacao.CountingSort;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
- * A classe {@code SelectionSortVenue} realiza a ordenação de dados em
- * arquivos
- * CSV usando o algoritmo de ordenação Selection Sort.
+ * A classe {@code CountingSortFullDate} realiza a ordenação de dados em
+ * arquivos CSV usando o algoritmo de ordenação Counting Sort.
  * Ela é projetada para criar três casos de ordenação (melhor, médio e pior) e
  * medir o tempo de execução.
  * Os resultados ordenados são escritos nos arquivos de saída correspondentes.
  */
-public class SelectionSortVenue {
+public class CountingSortFullDate {
 
     private String inputFile;
-    private String path = "src/OrdenacaoResultados/SelectionSort/";
-    private String outputMedio = path + "matches_t2_venues_selectionSort_medioCaso.csv";
-    private String outputMelhor = path + "matches_t2_venues_selectionSort_melhorCaso.csv";
-    private String outputPior = path + "matches_t2_venues_selectionSort_piorCaso.csv";
-    private int venueIndex = 7;
+    private String path = "src/OrdenacaoResultados/CountingSort/";
+    private String outputMedio = path + "matches_t2_full_date_countingSort_medioCaso.csv";
+    private String outputMelhor = path + "matches_t2_full_date_countingSort_melhorCaso.csv";
+    private String outputPior = path + "matches_t2_full_date_countingSort_piorCaso.csv";
+    private int fullDateIndex = 13;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
-     * Cria uma nova instância de SelectionSortVenue com o caminho do arquivo de
+     * Cria uma nova instância de CountingSortFullDate com o caminho do arquivo de
      * entrada especificado.
      *
      * @param inputFile O caminho do arquivo de entrada contendo os dados a serem
      *                  ordenados.
      */
-    public SelectionSortVenue(String inputFile) {
+    public CountingSortFullDate(String inputFile) {
         this.inputFile = inputFile;
     }
 
@@ -58,24 +61,24 @@ public class SelectionSortVenue {
     }
 
     /**
-     * Cria o caso de cenário melhor ordenando os dados com o algoritmo Selection
+     * Cria o caso de cenário melhor ordenando os dados com o algoritmo Counting
      * Sort
      * e, em seguida, escreve os resultados no arquivo de saída correspondente.
      */
     private void criarCasoMelhor() {
         String[][] data = carregarArquivoEmArray(inputFile);
-        selectionSort(data, venueIndex);
+        countingSort(data, fullDateIndex);
         escreverDados(data, outputMelhor);
     }
 
     /**
-     * Cria o caso de cenário pior ordenando os dados com o algoritmo Selection Sort
+     * Cria o caso de cenário pior ordenando os dados com o algoritmo Counting Sort
      * em ordem decrescente e, em seguida, escreve os resultados no arquivo de saída
      * correspondente.
      */
     private void criarCasoPior() {
         String[][] data = carregarArquivoEmArray(inputFile);
-        selectionSort(data, venueIndex);
+        countingSort(data, fullDateIndex);
         inverterDados(data);
         escreverDados(data, outputPior);
     }
@@ -154,7 +157,7 @@ public class SelectionSortVenue {
     }
 
     /**
-     * Realiza a ordenação e mede o tempo de execução usando o algoritmo Selection
+     * Realiza a ordenação e mede o tempo de execução usando o algoritmo Counting
      * Sort.
      * O tempo de execução é impresso no console.
      *
@@ -164,33 +167,55 @@ public class SelectionSortVenue {
         String[][] data = carregarArquivoEmArray(fileToOrder);
 
         long startTime = System.currentTimeMillis();
-        selectionSort(data, venueIndex);
+        countingSort(data, fullDateIndex);
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
     }
 
     /**
-     * Realiza a ordenação de um conjunto de dados usando o algoritmo Selection
-     * Sort.
+     * Realiza a ordenação de um conjunto de dados usando o algoritmo Counting Sort.
      *
-     * @param data       O array bidimensional contendo os dados a serem ordenados.
-     * @param venueIndex O índice da coluna de locais (venue) nos dados.
+     * @param data        O array bidimensional contendo os dados a serem ordenados.
+     * @param columnIndex O índice da coluna de datas completas (full_date) nos
+     *                    dados.
      */
-    private void selectionSort(String[][] data, int venueIndex) {
+    private void countingSort(String[][] data, int columnIndex) {
         int n = data.length;
+        String[][] output = new String[n][];
+        int[] count = new int[n];
+        for (int i = 0; i < n; i++) {
+            count[i] = 0;
+        }
 
-        for (int i = 0; i < n - 1; i++) {
-            int minIndex = i;
-            for (int j = i + 1; j < n; j++) {
-                if (data[j][venueIndex].compareTo(data[minIndex][venueIndex]) < 0) {
-                    minIndex = j;
+        for (int i = 0; i < n; i++) {
+            String[] key = data[i];
+            String keyData = key[columnIndex].replace("\"", "");
+            Date keyDate;
+            try {
+                keyDate = sdf.parse(keyData);
+                for (int j = 0; j < n; j++) {
+                    if (i != j) {
+                        String currentData = data[j][columnIndex].replace("\"", "");
+                        Date currentDate = sdf.parse(currentData);
+                        if (keyDate.compareTo(currentDate) > 0) {
+                            count[i]++;
+                        } else {
+                            count[j]++;
+                        }
+                    }
                 }
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
+        }
 
-            String[] temp = data[minIndex];
-            data[minIndex] = data[i];
-            data[i] = temp;
+        for (int i = 0; i < n; i++) {
+            output[count[i]] = data[i];
+        }
+
+        for (int i = 0; i < n; i++) {
+            data[i] = output[i];
         }
     }
 }

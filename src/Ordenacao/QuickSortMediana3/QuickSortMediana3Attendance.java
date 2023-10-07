@@ -16,7 +16,7 @@ import java.io.IOException;
 public class QuickSortMediana3Attendance {
 
     private String inputFile;
-    private String path = "src/OrdenacaoResultados/QuickSort/";
+    private String path = "src/OrdenacaoResultados/QuickSortMediana3/";
     private String outputMedio = path + "matches_t2_attendance_quickSort_medioCaso.csv";
     private String outputMelhor = path + "matches_t2_attendance_quickSort_melhorCaso.csv";
     private String outputPior = path + "matches_t2_attendance_quickSort_piorCaso.csv";

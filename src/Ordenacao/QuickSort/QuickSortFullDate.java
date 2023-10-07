@@ -5,39 +5,40 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Random;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
- * A classe {@code QuickSortVenue} realiza a ordenação de dados em arquivos
+ * A classe {@code QuickSortFullDate} realiza a ordenação de dados em arquivos
  * CSV usando o algoritmo de ordenação Quick Sort.
  * Ela é projetada para criar três casos de ordenação (melhor, médio e pior) e
  * medir o tempo de execução.
  * Os resultados ordenados são escritos nos arquivos de saída correspondentes.
  */
-public class QuickSortVenue {
+public class QuickSortFullDate {
 
     private String inputFile;
     private String path = "src/OrdenacaoResultados/QuickSort/";
-    private String outputMedio = path + "matches_t2_venues_quickSort_medioCaso.csv";
-    private String outputMelhor = path + "matches_t2_venues_quickSort_melhorCaso.csv";
-    private String outputPior = path + "matches_t2_venues_quickSort_piorCaso.csv";
-    private int venueIndex = 7;
+    private String outputMedio = path + "matches_t2_full_date_quickSort_medioCaso.csv";
+    private String outputMelhor = path + "matches_t2_full_date_quickSort_melhorCaso.csv";
+    private String outputPior = path + "matches_t2_full_date_quickSort_piorCaso.csv";
+    private int fullDateIndex = 13;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
-     * Cria uma nova instância de QuickSortVenue com o caminho do arquivo de entrada
-     * especificado.
+     * Construtor da classe QuickSortFullDate.
      *
-     * @param inputFile O caminho do arquivo de entrada contendo os dados a serem
+     * @param inputFile O caminho do arquivo de entrada que contém os dados a serem
      *                  ordenados.
      */
-    public QuickSortVenue(String inputFile) {
+    public QuickSortFullDate(String inputFile) {
         this.inputFile = inputFile;
     }
 
     /**
-     * Realiza a ordenação e gera os resultados para os casos de melhor, médio e
-     * pior cenário,
-     * além de medir e imprimir o tempo de execução para cada caso.
+     * Ordena os dados nos cenários de melhor, médio e pior caso e imprime o tempo
+     * de execução.
      */
     public void ordenar() {
         criarCasoMelhor();
@@ -50,31 +51,28 @@ public class QuickSortVenue {
     }
 
     /**
-     * Cria o caso de cenário médio copiando o arquivo de entrada para o arquivo de
-     * saída correspondente.
+     * Cria o cenário de caso médio copiando o arquivo de entrada para o arquivo de
+     * saída.
      */
     private void criarCasoMedio() {
         copiarArquivo(inputFile, outputMedio);
     }
 
     /**
-     * Cria o caso de cenário melhor ordenando os dados com o algoritmo Quick Sort
-     * e, em seguida, escreve os resultados no arquivo de saída correspondente.
+     * Cria o cenário de melhor caso ordenando os dados em ordem crescente.
      */
     private void criarCasoMelhor() {
         String[][] data = carregarArquivoEmArray(inputFile);
-        quickSort(data, venueIndex, 0, data.length - 1);
+        quickSort(data, 0, data.length - 1, fullDateIndex);
         escreverDados(data, outputMelhor);
     }
 
     /**
-     * Cria o caso de cenário pior ordenando os dados com o algoritmo Quick Sort
-     * em ordem decrescente e, em seguida, escreve os resultados no arquivo de saída
-     * correspondente.
+     * Cria o cenário de pior caso ordenando os dados em ordem decrescente.
      */
     private void criarCasoPior() {
         String[][] data = carregarArquivoEmArray(inputFile);
-        quickSort(data, venueIndex, 0, data.length - 1);
+        quickSort(data, 0, data.length - 1, fullDateIndex);
         inverterDados(data);
         escreverDados(data, outputPior);
     }
@@ -99,10 +97,10 @@ public class QuickSortVenue {
     }
 
     /**
-     * Carrega os dados de um arquivo CSV em um array bidimensional.
+     * Carrega os dados de um arquivo CSV em uma matriz bidimensional.
      *
      * @param file O caminho do arquivo CSV a ser carregado.
-     * @return Um array bidimensional contendo os dados do arquivo.
+     * @return Uma matriz bidimensional contendo os dados do arquivo CSV.
      */
     private String[][] carregarArquivoEmArray(String file) {
         String[][] data;
@@ -117,9 +115,9 @@ public class QuickSortVenue {
     }
 
     /**
-     * Escreve os dados de um array bidimensional em um arquivo CSV.
+     * Escreve os dados de uma matriz bidimensional em um arquivo CSV.
      *
-     * @param data       O array bidimensional contendo os dados a serem escritos.
+     * @param data       A matriz bidimensional contendo os dados a serem escritos.
      * @param outputFile O caminho do arquivo CSV de saída.
      */
     private void escreverDados(String[][] data, String outputFile) {
@@ -140,9 +138,9 @@ public class QuickSortVenue {
     }
 
     /**
-     * Inverte a ordem dos dados em um array bidimensional.
+     * Inverte a ordem dos dados em uma matriz bidimensional.
      *
-     * @param data O array bidimensional a ser invertido.
+     * @param data A matriz bidimensional a ser invertida.
      */
     private void inverterDados(String[][] data) {
         for (int i = 0; i < data.length / 2; i++) {
@@ -153,78 +151,81 @@ public class QuickSortVenue {
     }
 
     /**
-     * Realiza a ordenação e mede o tempo de execução usando o algoritmo Quick Sort.
-     * O tempo de execução é impresso no console.
+     * Ordena os dados e imprime o tempo de execução.
      *
-     * @param fileToOrder O caminho do arquivo a ser ordenado e medido.
+     * @param fileToOrder O caminho do arquivo a ser ordenado.
      */
     private void ordenarEImprimirTempo(String fileToOrder) {
         String[][] data = carregarArquivoEmArray(fileToOrder);
 
         long startTime = System.currentTimeMillis();
-        quickSort(data, venueIndex, 0, data.length - 1);
+        quickSort(data, 0, data.length - 1, fullDateIndex);
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
     }
 
     /**
-     * Realiza a ordenação de um subconjunto de dados usando o algoritmo Quick Sort.
+     * Ordena os dados em uma matriz bidimensional usando o algoritmo Quick Sort.
      *
-     * @param data       O array bidimensional contendo os dados a serem ordenados.
-     * @param venueIndex O índice da coluna de locais (venue) nos dados.
-     * @param low        O índice inicial do subconjunto a ser ordenado.
-     * @param high       O índice final do subconjunto a ser ordenado.
+     * @param data        A matriz bidimensional contendo os dados a serem
+     *                    ordenados.
+     * @param low         O índice baixo inicial para a ordenação.
+     * @param high        O índice alto inicial para a ordenação.
+     * @param columnIndex O índice da coluna de datas completas (full_date) nos
+     *                    dados.
      */
-    private void quickSort(String[][] data, int venueIndex, int low, int high) {
+    private void quickSort(String[][] data, int low, int high, int columnIndex) {
         if (low < high) {
-            int pivotIndex = partition(data, venueIndex, low, high);
-
-            quickSort(data, venueIndex, low, pivotIndex - 1);
-            quickSort(data, venueIndex, pivotIndex + 1, high);
+            int pi = partition(data, low, high, columnIndex);
+            quickSort(data, low, pi - 1, columnIndex);
+            quickSort(data, pi + 1, high, columnIndex);
         }
     }
 
     /**
-     * Particiona o subconjunto de dados para o algoritmo Quick Sort.
+     * Particiona os dados em uma matriz bidimensional para a ordenação rápida.
      *
-     * @param data       O array bidimensional contendo os dados a serem ordenados.
-     * @param venueIndex O índice da coluna de locais (venue) nos dados.
-     * @param low        O índice inicial do subconjunto a ser ordenado.
-     * @param high       O índice final do subconjunto a ser ordenado.
-     * @return O índice do pivô após a partição.
+     * @param data        A matriz bidimensional contendo os dados a serem
+     *                    particionados.
+     * @param low         O índice baixo inicial para a particionamento.
+     * @param high        O índice alto inicial para a particionamento.
+     * @param columnIndex O índice da coluna de datas completas (full_date) nos
+     *                    dados.
+     * @return O índice da posição de partição.
      */
-    private int partition(String[][] data, int venueIndex, int low, int high) {
-        Random rand = new Random();
-        int pivotIndex = low + rand.nextInt(high - low + 1);
-        swap(data, pivotIndex, high);
-
-        String[] pivot = data[high];
-        int i = low - 1;
-
+    private int partition(String[][] data, int low, int high, int columnIndex) {
+        String pivot = data[high][columnIndex];
+        int i = (low - 1);
         for (int j = low; j < high; j++) {
-            if (data[j][venueIndex].compareTo(pivot[venueIndex]) <= 0) {
+            if (isDateGreater(data[j][columnIndex], pivot)) {
                 i++;
-                swap(data, i, j);
+                String[] temp = data[i];
+                data[i] = data[j];
+                data[j] = temp;
             }
         }
-
-        swap(data, i + 1, high);
+        String[] temp = data[i + 1];
+        data[i + 1] = data[high];
+        data[high] = temp;
         return i + 1;
     }
 
     /**
-     * Particiona o subconjunto de dados para o algoritmo Quick Sort.
+     * Verifica se uma data1 é maior do que uma data2.
      *
-     * @param data       O array bidimensional contendo os dados a serem ordenados.
-     * @param venueIndex O índice da coluna de locais (venue) nos dados.
-     * @param low        O índice inicial do subconjunto a ser ordenado.
-     * @param high       O índice final do subconjunto a ser ordenado.
-     * @return O índice do pivô após a partição.
+     * @param date1 A primeira data a ser comparada.
+     * @param date2 A segunda data a ser comparada.
+     * @return true se a data1 for maior que a data2, caso contrário, false.
      */
-    private void swap(String[][] data, int i, int j) {
-        String[] temp = data[i];
-        data[i] = data[j];
-        data[j] = temp;
+    private boolean isDateGreater(String date1, String date2) {
+        try {
+            Date d1 = sdf.parse(date1.replace("\"", ""));
+            Date d2 = sdf.parse(date2.replace("\"", ""));
+            return d1.compareTo(d2) > 0;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

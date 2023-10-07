@@ -39,7 +39,6 @@ public class InsertionSortAttendance {
         criarCasoMelhor();
         criarCasoMedio();
         criarCasoPior();
-
         ordenarEImprimirTempo(outputMelhor);
         ordenarEImprimirTempo(outputMedio);
         ordenarEImprimirTempo(outputPior);

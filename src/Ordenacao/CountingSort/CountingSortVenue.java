@@ -1,13 +1,14 @@
 package Ordenacao.CountingSort;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * A classe {@code CountingSortVenue} realiza a ordenação de dados em arquivos
- * CSV usando o algoritmo de ordenação Counting Sort.
+ * A classe {@code CountingSortVenue} realiza a ordenação de dados em
+ * arquivos CSV usando o algoritmo de ordenação Counting Sort.
  * Ela é projetada para criar três casos de ordenação (melhor, médio e pior) e
  * medir o tempo de execução.
  * Os resultados ordenados são escritos nos arquivos de saída correspondentes.
@@ -22,17 +23,17 @@ public class CountingSortVenue {
     private int venueIndex = 7;
 
     /**
-     * Cria uma nova instância de {@code CountingSortVenue} com o arquivo de entrada
-     * especificado.
+     * Cria uma nova instância do CountingSortVenue.
      *
-     * @param inputFile O arquivo de entrada a ser ordenado.
+     * @param inputFile O arquivo de entrada contendo os dados de venues a serem
+     *                  ordenados.
      */
     public CountingSortVenue(String inputFile) {
         this.inputFile = inputFile;
     }
 
     /**
-     * Realiza a ordenação dos dados nos casos de melhor, médio e pior e imprime os
+     * Realiza a ordenação dos casos de melhor, médio e pior cenários e imprime os
      * tempos de execução.
      */
     public void ordenar() {
@@ -46,76 +47,46 @@ public class CountingSortVenue {
     }
 
     /**
-     * Cria o caso de ordenação médio copiando o conteúdo do arquivo de entrada para
-     * o arquivo de saída.
+     * Cria um arquivo de caso médio que é uma cópia do arquivo de entrada.
      */
     private void criarCasoMedio() {
-        try (BufferedReader br = new BufferedReader(new FileReader(inputFile));
-                FileWriter writer = new FileWriter(outputMedio)) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                writer.write(line + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        copiarArquivo(inputFile, outputMedio);
     }
 
     /**
-     * Cria o caso de ordenação melhor ordenando o arquivo de entrada de forma
-     * crescente.
+     * Cria um arquivo de melhor caso ordenando os dados em ordem crescente de
+     * venues.
      */
     private void criarCasoMelhor() {
-        ordenacao(inputFile, outputMelhor, false, true);
+        String[][] data = carregarArquivoEmArray(inputFile);
+        countingSort(data, venueIndex);
+        escreverDados(data, outputMelhor);
     }
 
     /**
-     * Cria o caso de ordenação pior ordenando o arquivo de entrada de forma
-     * decrescente.
+     * Cria um arquivo de pior caso ordenando os dados em ordem decrescente de
+     * venues.
      */
     private void criarCasoPior() {
-        ordenacao(inputFile, outputPior, true, false);
+        String[][] data = carregarArquivoEmArray(inputFile);
+        countingSort(data, venueIndex);
+        inverterDados(data);
+        escreverDados(data, outputPior);
     }
 
     /**
-     * Ordena os dados no arquivo especificado e imprime o tempo de execução.
+     * Copia um arquivo de origem para um arquivo de destino.
      *
-     * @param fileToOrder O arquivo a ser ordenado.
+     * @param origem  O arquivo de origem.
+     * @param destino O arquivo de destino.
      */
-    private void ordenarEImprimirTempo(String fileToOrder) {
-        try {
-            // Contar linhas do arquivo
-            int rowCount = 0;
-            try (BufferedReader counter = new BufferedReader(new FileReader(fileToOrder))) {
-                while (counter.readLine() != null)
-                    rowCount++;
-            }
-
-            String[][] data = new String[rowCount][14];
-
-            // Carregar arquivo em um array
-            int index = 0;
-            try (BufferedReader br = new BufferedReader(new FileReader(fileToOrder))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    data[index++] = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-                }
-            }
-
-            // Início da medição de tempo
-            long startTime = System.currentTimeMillis();
-
-            countingSort(data, venueIndex);
-
-            // Fim da medição de tempo
-            long endTime = System.currentTimeMillis();
-            System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
-
-            // Escrever no arquivo ordenado
-            try (FileWriter writer = new FileWriter(fileToOrder)) {
-                for (int i = 0; i < rowCount; i++) {
-                    writer.write(String.join(",", data[i]) + "\n");
-                }
+    private void copiarArquivo(String origem, String destino) {
+        try (BufferedReader br = new BufferedReader(new FileReader(origem));
+                BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                writer.write(line);
+                writer.newLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -123,129 +94,151 @@ public class CountingSortVenue {
     }
 
     /**
-     * Implementa o algoritmo Counting Sort para ordenar um array bidimensional de
-     * strings.
+     * Carrega os dados de um arquivo CSV em um array bidimensional.
+     *
+     * @param file O arquivo CSV a ser carregado.
+     * @return Um array bidimensional contendo os dados do arquivo.
+     */
+    private String[][] carregarArquivoEmArray(String file) {
+        String[][] data;
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            data = br.lines().skip(1).map(line -> line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1))
+                    .toArray(String[][]::new);
+        } catch (IOException e) {
+            e.printStackTrace();
+            data = new String[0][];
+        }
+        return data;
+    }
+
+    /**
+     * Escreve os dados de um array em um arquivo CSV.
+     *
+     * @param data       O array contendo os dados.
+     * @param outputFile O arquivo de saída para escrever os dados.
+     */
+    private void escreverDados(String[][] data, String outputFile) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+            // Escreva o cabeçalho
+            writer.write(
+                    "id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,home_goal_scorers,away_goal_scorers,full_date");
+            writer.newLine();
+
+            // Escreva os dados
+            for (int i = 0; i < data.length; i++) {
+                writer.write(String.join(",", data[i]));
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Inverte os dados em um array.
+     *
+     * @param data O array a ser invertido.
+     */
+    private void inverterDados(String[][] data) {
+        for (int i = 0; i < data.length / 2; i++) {
+            String[] temp = data[i];
+            data[i] = data[data.length - i - 1];
+            data[data.length - i - 1] = temp;
+        }
+    }
+
+    /**
+     * Realiza a ordenação Counting Sort em um arquivo especificado, mede o tempo de
+     * execução e imprime-o.
+     *
+     * @param fileToOrder O arquivo a ser ordenado e medido.
+     */
+    private void ordenarEImprimirTempo(String fileToOrder) {
+        // Carrega os dados do arquivo em um array
+        String[][] data = carregarArquivoEmArray(fileToOrder);
+
+        // Inicia a contagem do tempo
+        long startTime = System.currentTimeMillis();
+
+        // Realiza a ordenação Counting Sort nos dados usando o índice da coluna de
+        // venues
+        countingSort(data, venueIndex);
+
+        // Finaliza a contagem do tempo
+        long endTime = System.currentTimeMillis();
+
+        // Calcula e imprime o tempo de execução
+        System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+    }
+
+    /**
+     * Realiza a ordenação Counting Sort em um array de acordo com o índice da
+     * coluna do venue.
      *
      * @param data       O array a ser ordenado.
-     * @param venueIndex O índice da coluna usada como chave de ordenação.
+     * @param venueIndex O índice da coluna pela qual os dados serão ordenados.
      */
     private void countingSort(String[][] data, int venueIndex) {
-        int rowCount = data.length;
-        int maxVenue = Integer.MIN_VALUE;
-        int minVenue = Integer.MAX_VALUE;
+        int maxVenue = getMaxVenue(data, venueIndex);
+        int minVenue = getMinVenue(data, venueIndex);
+        int range = maxVenue - minVenue + 1;
 
-        // Encontrar o valor máximo e mínimo em venueIndex
-        for (int i = 0; i < rowCount; i++) {
+        int[] countingArray = new int[range];
+        String[][] outputArray = new String[data.length][];
+
+        for (int i = 0; i < data.length; i++) {
+            int venueValue = Integer.parseInt(data[i][venueIndex]);
+            countingArray[venueValue - minVenue]++;
+        }
+
+        for (int i = 1; i < range; i++) {
+            countingArray[i] += countingArray[i - 1];
+        }
+
+        for (int i = data.length - 1; i >= 0; i--) {
+            int venueValue = Integer.parseInt(data[i][venueIndex]);
+            outputArray[countingArray[venueValue - minVenue] - 1] = data[i];
+            countingArray[venueValue - minVenue]--;
+        }
+
+        for (int i = 0; i < data.length; i++) {
+            data[i] = outputArray[i];
+        }
+    }
+
+    /**
+     * Obtém o valor máximo na coluna de venues.
+     *
+     * @param data       O array contendo os dados.
+     * @param venueIndex O índice da coluna de venues.
+     * @return O valor máximo na coluna de venues.
+     */
+    private int getMaxVenue(String[][] data, int venueIndex) {
+        int maxVenue = Integer.MIN_VALUE;
+        for (int i = 0; i < data.length; i++) {
             int venueValue = Integer.parseInt(data[i][venueIndex]);
             if (venueValue > maxVenue) {
                 maxVenue = venueValue;
             }
+        }
+        return maxVenue;
+    }
+
+    /**
+     * Obtém o valor mínimo na coluna de venues.
+     *
+     * @param data       O array contendo os dados.
+     * @param venueIndex O índice da coluna de venues.
+     * @return O valor mínimo na coluna de venues.
+     */
+    private int getMinVenue(String[][] data, int venueIndex) {
+        int minVenue = Integer.MAX_VALUE;
+        for (int i = 0; i < data.length; i++) {
+            int venueValue = Integer.parseInt(data[i][venueIndex]);
             if (venueValue < minVenue) {
                 minVenue = venueValue;
             }
         }
-
-        int range = maxVenue - minVenue + 1;
-        int[] countArray = new int[range];
-        String[][] outputArray = new String[rowCount][14];
-
-        // Inicializar o array de contagem
-        for (int i = 0; i < rowCount; i++) {
-            int venueValue = Integer.parseInt(data[i][venueIndex]);
-            countArray[venueValue - minVenue]++;
-        }
-
-        // Atualizar o array de contagem com as contagens acumulativas
-        for (int i = 1; i < range; i++) {
-            countArray[i] += countArray[i - 1];
-        }
-
-        // Construir o array de saída
-        for (int i = rowCount - 1; i >= 0; i--) {
-            int venueValue = Integer.parseInt(data[i][venueIndex]);
-            outputArray[countArray[venueValue - minVenue] - 1] = data[i];
-            countArray[venueValue - minVenue]--;
-        }
-
-        // Copiar o array de saída de volta para o array original
-        System.arraycopy(outputArray, 0, data, 0, rowCount);
-    }
-
-    /**
-     * Realiza a ordenação do arquivo de entrada especificado e escreve os
-     * resultados no arquivo de saída correspondente.
-     *
-     * @param inputFile  O arquivo de entrada a ser ordenado.
-     * @param outputFile O arquivo de saída onde o resultado ordenado será escrito.
-     * @param inverter   Indica se os dados devem ser invertidos.
-     * @param melhorCaso Indica se este é o caso de melhor ordenação.
-     */
-    private void ordenacao(String inputFile, String outputFile, boolean inverter, boolean melhorCaso) {
-        try (BufferedReader br = new BufferedReader(new FileReader(inputFile));
-                FileWriter writer = new FileWriter(outputFile, true)) {
-
-            String line;
-            if ((line = br.readLine()) != null) {
-                writer.write(line + "\n");
-            }
-
-            int rowCount = 0;
-
-            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            while (reader.readLine() != null)
-                rowCount++;
-            reader.close();
-
-            String[][] data = new String[rowCount][14];
-
-            rowCount = 0;
-            while ((line = br.readLine()) != null) {
-                String[] values = new String[14];
-                StringBuilder sb = new StringBuilder();
-                int valueCount = 0;
-                boolean insideQuotes = false;
-                for (char c : line.toCharArray()) {
-                    if (c == '"') {
-                        insideQuotes = !insideQuotes;
-                    } else if (c == ',' && !insideQuotes) {
-                        values[valueCount++] = sb.toString();
-                        sb.setLength(0);
-                    } else {
-                        sb.append(c);
-                    }
-                }
-                values[valueCount] = sb.toString();
-                data[rowCount++] = values;
-            }
-
-            countingSort(data, venueIndex);
-
-            if (inverter) {
-                String[][] dataInvertida = new String[rowCount][14];
-                for (int i = 0; i < rowCount; i++) {
-                    dataInvertida[i] = data[rowCount - i - 1];
-                }
-                data = dataInvertida;
-            }
-
-            for (int i = 0; i < rowCount; i++) {
-                StringBuilder sb = new StringBuilder();
-                for (int j = 0; j < data[i].length; j++) {
-                    String value = data[i][j];
-                    if (value.contains(",")) {
-                        sb.append('"').append(value).append('"');
-                    } else {
-                        sb.append(value);
-                    }
-                    if (j < data[i].length - 1) {
-                        sb.append(",");
-                    }
-                }
-                writer.write(sb.toString() + "\n");
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return minVenue;
     }
 }

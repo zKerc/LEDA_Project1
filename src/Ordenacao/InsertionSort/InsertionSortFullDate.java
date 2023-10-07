@@ -1,36 +1,39 @@
-package Ordenacao.SelectionSort;
+package Ordenacao.InsertionSort;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
- * A classe {@code SelectionSortVenue} realiza a ordenação de dados em
- * arquivos
- * CSV usando o algoritmo de ordenação Selection Sort.
+ * A classe {@code InsertionSortFullDate} realiza a ordenação de dados em
+ * arquivos CSV usando o algoritmo de ordenação Insertion Sort.
  * Ela é projetada para criar três casos de ordenação (melhor, médio e pior) e
  * medir o tempo de execução.
  * Os resultados ordenados são escritos nos arquivos de saída correspondentes.
  */
-public class SelectionSortVenue {
+public class InsertionSortFullDate {
 
     private String inputFile;
-    private String path = "src/OrdenacaoResultados/SelectionSort/";
-    private String outputMedio = path + "matches_t2_venues_selectionSort_medioCaso.csv";
-    private String outputMelhor = path + "matches_t2_venues_selectionSort_melhorCaso.csv";
-    private String outputPior = path + "matches_t2_venues_selectionSort_piorCaso.csv";
-    private int venueIndex = 7;
+    private String path = "src/OrdenacaoResultados/InsertionSort/";
+    private String outputMedio = path + "matches_t2_full_date_insertionSort_medioCaso.csv";
+    private String outputMelhor = path + "matches_t2_full_date_insertionSort_melhorCaso.csv";
+    private String outputPior = path + "matches_t2_full_date_insertionSort_piorCaso.csv";
+    private int fullDateIndex = 13;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
-     * Cria uma nova instância de SelectionSortVenue com o caminho do arquivo de
+     * Cria uma nova instância de InsertionSortFullDate com o caminho do arquivo de
      * entrada especificado.
      *
      * @param inputFile O caminho do arquivo de entrada contendo os dados a serem
      *                  ordenados.
      */
-    public SelectionSortVenue(String inputFile) {
+    public InsertionSortFullDate(String inputFile) {
         this.inputFile = inputFile;
     }
 
@@ -58,24 +61,24 @@ public class SelectionSortVenue {
     }
 
     /**
-     * Cria o caso de cenário melhor ordenando os dados com o algoritmo Selection
+     * Cria o caso de cenário melhor ordenando os dados com o algoritmo Insertion
      * Sort
      * e, em seguida, escreve os resultados no arquivo de saída correspondente.
      */
     private void criarCasoMelhor() {
         String[][] data = carregarArquivoEmArray(inputFile);
-        selectionSort(data, venueIndex);
+        ordenarArray(data, fullDateIndex);
         escreverDados(data, outputMelhor);
     }
 
     /**
-     * Cria o caso de cenário pior ordenando os dados com o algoritmo Selection Sort
+     * Cria o caso de cenário pior ordenando os dados com o algoritmo Insertion Sort
      * em ordem decrescente e, em seguida, escreve os resultados no arquivo de saída
      * correspondente.
      */
     private void criarCasoPior() {
         String[][] data = carregarArquivoEmArray(inputFile);
-        selectionSort(data, venueIndex);
+        ordenarArray(data, fullDateIndex);
         inverterDados(data);
         escreverDados(data, outputPior);
     }
@@ -154,7 +157,7 @@ public class SelectionSortVenue {
     }
 
     /**
-     * Realiza a ordenação e mede o tempo de execução usando o algoritmo Selection
+     * Realiza a ordenação e mede o tempo de execução usando o algoritmo Insertion
      * Sort.
      * O tempo de execução é impresso no console.
      *
@@ -164,33 +167,49 @@ public class SelectionSortVenue {
         String[][] data = carregarArquivoEmArray(fileToOrder);
 
         long startTime = System.currentTimeMillis();
-        selectionSort(data, venueIndex);
+        ordenarArray(data, fullDateIndex);
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
     }
 
     /**
-     * Realiza a ordenação de um conjunto de dados usando o algoritmo Selection
+     * Realiza a ordenação de um conjunto de dados usando o algoritmo Insertion
      * Sort.
      *
-     * @param data       O array bidimensional contendo os dados a serem ordenados.
-     * @param venueIndex O índice da coluna de locais (venue) nos dados.
+     * @param data        O array bidimensional contendo os dados a serem ordenados.
+     * @param columnIndex O índice da coluna de datas completas (full_date) nos
+     *                    dados.
      */
-    private void selectionSort(String[][] data, int venueIndex) {
-        int n = data.length;
+    private void ordenarArray(String[][] data, int columnIndex) {
+        for (int i = 1; i < data.length; i++) {
+            String[] key = data[i];
+            int j = i - 1;
 
-        for (int i = 0; i < n - 1; i++) {
-            int minIndex = i;
-            for (int j = i + 1; j < n; j++) {
-                if (data[j][venueIndex].compareTo(data[minIndex][venueIndex]) < 0) {
-                    minIndex = j;
-                }
+            while (j >= 0 && isDateGreater(data[j][columnIndex], key[columnIndex])) {
+                data[j + 1] = data[j];
+                j--;
             }
+            data[j + 1] = key;
+        }
+    }
 
-            String[] temp = data[minIndex];
-            data[minIndex] = data[i];
-            data[i] = temp;
+    /**
+     * Verifica se uma data é maior do que outra.
+     *
+     * @param date1 A primeira data a ser comparada.
+     * @param date2 A segunda data a ser comparada.
+     * @return true se a primeira data for maior que a segunda; caso contrário,
+     *         false.
+     */
+    private boolean isDateGreater(String date1, String date2) {
+        try {
+            Date d1 = sdf.parse(date1.replace("\"", ""));
+            Date d2 = sdf.parse(date2.replace("\"", ""));
+            return d1.compareTo(d2) > 0;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

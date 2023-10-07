@@ -1,13 +1,14 @@
 package Ordenacao.MergeSort;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * A classe {@code MergeSortVenue} realiza a ordenação de dados em arquivos CSV
- * usando o algoritmo de ordenação Merge Sort.
+ * A classe {@code MergeSortVenue} realiza a ordenação de dados em arquivos
+ * CSV usando o algoritmo de ordenação Merge Sort.
  * Ela é projetada para criar três casos de ordenação (melhor, médio e pior) e
  * medir o tempo de execução.
  * Os resultados ordenados são escritos nos arquivos de saída correspondentes.
@@ -22,18 +23,20 @@ public class MergeSortVenue {
     private int venueIndex = 7;
 
     /**
-     * Cria uma nova instância de {@code MergeSortVenue} com o arquivo de entrada
+     * Cria uma nova instância de MergeSortVenue com o caminho do arquivo de entrada
      * especificado.
      *
-     * @param inputFile O arquivo de entrada a ser ordenado.
+     * @param inputFile O caminho do arquivo de entrada contendo os dados a serem
+     *                  ordenados.
      */
     public MergeSortVenue(String inputFile) {
         this.inputFile = inputFile;
     }
 
     /**
-     * Realiza a ordenação dos dados nos casos de melhor, médio e pior e imprime os
-     * tempos de execução.
+     * Realiza a ordenação e gera os resultados para os casos de melhor, médio e
+     * pior cenário,
+     * além de medir e imprimir o tempo de execução para cada caso.
      */
     public void ordenar() {
         criarCasoMelhor();
@@ -46,221 +49,203 @@ public class MergeSortVenue {
     }
 
     /**
-     * Cria o caso de ordenação médio copiando o conteúdo do arquivo de entrada para
-     * o arquivo de saída.
+     * Cria o caso de cenário médio copiando o arquivo de entrada para o arquivo de
+     * saída correspondente.
      */
     private void criarCasoMedio() {
-        try (BufferedReader br = new BufferedReader(new FileReader(inputFile));
-                FileWriter writer = new FileWriter(outputMedio)) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                writer.write(line + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        copiarArquivo(inputFile, outputMedio);
     }
 
     /**
-     * Cria o caso de ordenação melhor ordenando o arquivo de entrada de forma
-     * crescente.
+     * Cria o caso de cenário melhor ordenando os dados com o algoritmo Merge Sort
+     * e, em seguida, escreve os resultados no arquivo de saída correspondente.
      */
     private void criarCasoMelhor() {
-        ordenacao(inputFile, outputMelhor, false, true);
+        String[][] data = carregarArquivoEmArray(inputFile);
+        mergeSort(data, venueIndex, 0, data.length - 1);
+        escreverDados(data, outputMelhor);
     }
 
     /**
-     * Cria o caso de ordenação pior ordenando o arquivo de entrada de forma
-     * decrescente.
+     * Cria o caso de cenário pior ordenando os dados com o algoritmo Merge Sort
+     * em ordem decrescente e, em seguida, escreve os resultados no arquivo de saída
+     * correspondente.
      */
     private void criarCasoPior() {
-        ordenacao(inputFile, outputPior, true, false);
+        String[][] data = carregarArquivoEmArray(inputFile);
+        mergeSort(data, venueIndex, 0, data.length - 1);
+        inverterDados(data);
+        escreverDados(data, outputPior);
     }
 
     /**
-     * Ordena os dados no arquivo especificado e imprime o tempo de execução.
+     * Copia um arquivo de origem para um arquivo de destino.
      *
-     * @param fileToOrder O arquivo a ser ordenado.
+     * @param origem  O caminho do arquivo de origem.
+     * @param destino O caminho do arquivo de destino.
+     */
+    private void copiarArquivo(String origem, String destino) {
+        try (BufferedReader br = new BufferedReader(new FileReader(origem));
+                BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Carrega os dados de um arquivo CSV em um array bidimensional.
+     *
+     * @param file O caminho do arquivo CSV a ser carregado.
+     * @return Um array bidimensional contendo os dados do arquivo.
+     */
+    private String[][] carregarArquivoEmArray(String file) {
+        String[][] data;
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            data = br.lines().skip(1).map(line -> line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1))
+                    .toArray(String[][]::new);
+        } catch (IOException e) {
+            e.printStackTrace();
+            data = new String[0][];
+        }
+        return data;
+    }
+
+    /**
+     * Escreve os dados de um array bidimensional em um arquivo CSV.
+     *
+     * @param data       O array bidimensional contendo os dados a serem escritos.
+     * @param outputFile O caminho do arquivo CSV de saída.
+     */
+    private void escreverDados(String[][] data, String outputFile) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+            // Escreva o cabeçalho
+            writer.write(
+                    "id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,home_goal_scorers,away_goal_scorers,full_date");
+            writer.newLine();
+
+            // Escreva os dados
+            for (int i = 0; i < data.length; i++) {
+                writer.write(String.join(",", data[i]));
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Inverte a ordem dos dados em um array bidimensional.
+     *
+     * @param data O array bidimensional a ser invertido.
+     */
+    private void inverterDados(String[][] data) {
+        for (int i = 0; i < data.length / 2; i++) {
+            String[] temp = data[i];
+            data[i] = data[data.length - i - 1];
+            data[data.length - i - 1] = temp;
+        }
+    }
+
+    /**
+     * Realiza a ordenação e mede o tempo de execução usando o algoritmo Merge Sort.
+     * O tempo de execução é impresso no console.
+     *
+     * @param fileToOrder O caminho do arquivo a ser ordenado e medido.
      */
     private void ordenarEImprimirTempo(String fileToOrder) {
-        try {
-            // Contar linhas do arquivo
-            int rowCount = 0;
-            try (BufferedReader counter = new BufferedReader(new FileReader(fileToOrder))) {
-                while (counter.readLine() != null)
-                    rowCount++;
-            }
+        String[][] data = carregarArquivoEmArray(fileToOrder);
 
-            String[][] data = new String[rowCount][14];
+        long startTime = System.currentTimeMillis();
+        mergeSort(data, venueIndex, 0, data.length - 1);
+        long endTime = System.currentTimeMillis();
 
-            // Carregar arquivo em um array
-            int index = 0;
-            try (BufferedReader br = new BufferedReader(new FileReader(fileToOrder))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    data[index++] = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-                }
-            }
+        System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+    }
 
-            // Início da medição de tempo
-            long startTime = System.currentTimeMillis();
-
-            mergeSort(data, venueIndex, rowCount);
-
-            // Fim da medição de tempo
-            long endTime = System.currentTimeMillis();
-            System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
-
-            // Escrever no arquivo ordenado
-            try (FileWriter writer = new FileWriter(fileToOrder)) {
-                for (int i = 0; i < rowCount; i++) {
-                    writer.write(String.join(",", data[i]) + "\n");
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    /**
+     * Realiza a ordenação de um subarray usando o algoritmo Merge Sort.
+     *
+     * @param data       O array bidimensional contendo os dados a serem ordenados.
+     * @param venueIndex O índice da coluna de locais (venue) nos dados.
+     * @param left       O índice de início do subarray.
+     * @param right      O índice de fim do subarray.
+     */
+    private void mergeSort(String[][] data, int venueIndex, int left, int right) {
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+            mergeSort(data, venueIndex, left, mid);
+            mergeSort(data, venueIndex, mid + 1, right);
+            merge(data, venueIndex, left, mid, right);
         }
     }
 
     /**
-     * Ordena um array bidimensional de strings usando o algoritmo de ordenação
-     * Merge Sort.
+     * Realiza a fusão (merge) de dois subarrays ordenados em um único subarray
+     * ordenado.
      *
-     * @param data       O array a ser ordenado.
-     * @param venueIndex O índice da coluna usada como chave de ordenação.
-     * @param rowCount   O número de linhas no array.
+     * @param data       O array bidimensional contendo os dados a serem mesclados.
+     * @param venueIndex O índice da coluna de locais (venue) nos dados.
+     * @param left       O índice de início do primeiro subarray.
+     * @param mid        O índice de meio que divide os dois subarrays.
+     * @param right      O índice de fim do segundo subarray.
      */
-    private void mergeSort(String[][] data, int venueIndex, int rowCount) {
-        if (rowCount < 2) {
-            return;
+    private void merge(String[][] data, int venueIndex, int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        String[][] leftArray = new String[n1][];
+        String[][] rightArray = new String[n2][];
+
+        for (int i = 0; i < n1; i++) {
+            leftArray[i] = data[left + i];
+        }
+        for (int i = 0; i < n2; i++) {
+            rightArray[i] = data[mid + 1 + i];
         }
 
-        int mid = rowCount / 2;
-        String[][] left = new String[mid][14];
-        String[][] right = new String[rowCount - mid][14];
-
-        // Copiar dados para arrays esquerdo e direito
-        for (int i = 0; i < mid; i++) {
-            left[i] = data[i];
-        }
-        for (int i = mid; i < rowCount; i++) {
-            right[i - mid] = data[i];
-        }
-
-        // Recursivamente ordenar as duas metades
-        mergeSort(left, venueIndex, mid);
-        mergeSort(right, venueIndex, rowCount - mid);
-
-        // Mesclar as duas metades ordenadas
-        merge(data, left, right, venueIndex);
-    }
-
-    /**
-     * Mescla dois arrays ordenados em um único array ordenado.
-     *
-     * @param data       O array a ser preenchido com os dados mesclados.
-     * @param left       O array esquerdo a ser mesclado.
-     * @param right      O array direito a ser mesclado.
-     * @param venueIndex O índice da coluna usada como chave de ordenação.
-     */
-    private void merge(String[][] data, String[][] left, String[][] right, int venueIndex) {
-        int leftLength = left.length;
-        int rightLength = right.length;
-        int i = 0, j = 0, k = 0;
-
-        while (i < leftLength && j < rightLength) {
-            if (left[i][venueIndex].compareTo(right[j][venueIndex]) <= 0) {
-                data[k++] = left[i++];
+        int i = 0, j = 0, k = left;
+        while (i < n1 && j < n2) {
+            if (compareStrings(leftArray[i][venueIndex], rightArray[j][venueIndex]) <= 0) {
+                data[k++] = leftArray[i++];
             } else {
-                data[k++] = right[j++];
+                data[k++] = rightArray[j++];
             }
         }
 
-        while (i < leftLength) {
-            data[k++] = left[i++];
+        while (i < n1) {
+            data[k++] = leftArray[i++];
         }
 
-        while (j < rightLength) {
-            data[k++] = right[j++];
+        while (j < n2) {
+            data[k++] = rightArray[j++];
         }
     }
 
     /**
-     * Realiza a ordenação do arquivo de entrada e escreve o resultado no arquivo de
-     * saída.
+     * Compara duas strings de acordo com a ordem lexicográfica.
      *
-     * @param inputFile  O arquivo de entrada a ser ordenado.
-     * @param outputFile O arquivo de saída onde o resultado ordenado será escrito.
-     * @param inverter   Indica se os dados devem ser invertidos.
-     * @param melhorCaso Indica se este é o caso de melhor ordenação.
+     * @param str1 A primeira string a ser comparada.
+     * @param str2 A segunda string a ser comparada.
+     * @return Um valor negativo se str1 < str2, um valor positivo se str1 > str2,
+     *         ou zero se str1 == str2.
      */
-    private void ordenacao(String inputFile, String outputFile, boolean inverter, boolean melhorCaso) {
-        try (BufferedReader br = new BufferedReader(new FileReader(inputFile));
-                FileWriter writer = new FileWriter(outputFile, true)) {
-
-            String line;
-            if ((line = br.readLine()) != null) {
-                writer.write(line + "\n");
+    private int compareStrings(String str1, String str2) {
+        // Implementação da comparação de strings omitida para simplificar o exemplo.
+        int minLength = Math.min(str1.length(), str2.length());
+        for (int i = 0; i < minLength; i++) {
+            char c1 = str1.charAt(i);
+            char c2 = str2.charAt(i);
+            if (c1 < c2) {
+                return -1;
+            } else if (c1 > c2) {
+                return 1;
             }
-
-            int venueIndex = 7;
-            int rowCount = 0;
-
-            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            while (reader.readLine() != null)
-                rowCount++;
-            reader.close();
-
-            String[][] data = new String[rowCount][14];
-
-            rowCount = 0;
-            while ((line = br.readLine()) != null) {
-                String[] values = new String[14];
-                StringBuilder sb = new StringBuilder();
-                int valueCount = 0;
-                boolean insideQuotes = false;
-                for (char c : line.toCharArray()) {
-                    if (c == '"') {
-                        insideQuotes = !insideQuotes;
-                    } else if (c == ',' && !insideQuotes) {
-                        values[valueCount++] = sb.toString();
-                        sb.setLength(0);
-                    } else {
-                        sb.append(c);
-                    }
-                }
-                values[valueCount] = sb.toString();
-                data[rowCount++] = values;
-            }
-
-            mergeSort(data, venueIndex, rowCount);
-
-            if (inverter) {
-                String[][] dataInvertida = new String[rowCount][14];
-                for (int i = 0; i < rowCount; i++) {
-                    dataInvertida[i] = data[rowCount - i - 1];
-                }
-                data = dataInvertida;
-            }
-
-            for (int i = 0; i < rowCount; i++) {
-                StringBuilder sb = new StringBuilder();
-                for (int j = 0; j < data[i].length; j++) {
-                    String value = data[i][j];
-                    if (value.contains(",")) {
-                        sb.append('"').append(value).append('"');
-                    } else {
-                        sb.append(value);
-                    }
-                    if (j < data[i].length - 1) {
-                        sb.append(",");
-                    }
-                }
-                writer.write(sb.toString() + "\n");
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        return Integer.compare(str1.length(), str2.length());
     }
 }
