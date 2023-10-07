@@ -34,16 +34,14 @@ public class InsertionSortVenue {
     }
 
     private void criarCasoMelhor() {
-        int rowCount = contarLinhas(inputFile);
-        String[][] data = carregarArquivoEmArray(inputFile, rowCount);
-        ordenarArray(data, venueIndex, rowCount);
+        String[][] data = carregarArquivoEmArray(inputFile);
+        ordenarArray(data, venueIndex);
         escreverDados(data, outputMelhor);
     }
 
     private void criarCasoPior() {
-        int rowCount = contarLinhas(inputFile);
-        String[][] data = carregarArquivoEmArray(inputFile, rowCount);
-        ordenarArray(data, venueIndex, rowCount);
+        String[][] data = carregarArquivoEmArray(inputFile);
+        ordenarArray(data, venueIndex);
         inverterDados(data);
         escreverDados(data, outputPior);
     }
@@ -61,27 +59,13 @@ public class InsertionSortVenue {
         }
     }
 
-    private int contarLinhas(String file) {
-        int rowCount = 0;
-        try (BufferedReader counter = new BufferedReader(new FileReader(file))) {
-            while (counter.readLine() != null) rowCount++;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return rowCount;
-    }
-
-    private String[][] carregarArquivoEmArray(String file, int rowCount) {
-        String[][] data = new String[rowCount - 1][]; // Excluindo o cabeçalho na contagem
-        int index = 0;
+    private String[][] carregarArquivoEmArray(String file) {
+        String[][] data;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            br.readLine(); // Leitura da primeira linha (cabeçalho) sem adicionar ao array
-            String line;
-            while ((line = br.readLine()) != null) {
-                data[index++] = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-            }
+            data = br.lines().skip(1).map(line -> line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1)).toArray(String[][]::new);
         } catch (IOException e) {
             e.printStackTrace();
+            data = new String[0][];
         }
         return data;
     }    
@@ -111,18 +95,17 @@ public class InsertionSortVenue {
     }
 
     private void ordenarEImprimirTempo(String fileToOrder) {
-        int rowCount = contarLinhas(fileToOrder);
-        String[][] data = carregarArquivoEmArray(fileToOrder, rowCount);
+        String[][] data = carregarArquivoEmArray(fileToOrder);
 
         long startTime = System.currentTimeMillis();
-        ordenarArray(data, venueIndex, rowCount);
+        ordenarArray(data, venueIndex);
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
     }
 
-    private void ordenarArray(String[][] data, int columnIndex, int rowCount) {
-        for (int i = 1; i < rowCount; i++) {
+    private void ordenarArray(String[][] data, int columnIndex) {
+        for (int i = 1; i < data.length; i++) {
             String[] key = data[i];
             int j = i - 1;
     
