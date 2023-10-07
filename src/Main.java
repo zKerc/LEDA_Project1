@@ -247,15 +247,23 @@ public class Main {
                 if (algorithmChoice == 0) break;
 
                 switch (fieldChoice) {
-                    case 1:
-                        InsertionSortVenue insertion = new InsertionSortVenue(outputMatchesT2);
-                        insertion.ordenar();
+                    case 1: // Ordenar por 'venue'
+                        if (algorithmChoice == 1) { // Usar InsertionSort
+                            InsertionSortVenue insertionVenue = new InsertionSortVenue(outputMatchesT2);
+                            insertionVenue.ordenar();
+                        }
+                    case 2: // Ordenar por 'attendance'
+                        if (algorithmChoice == 1) { // Usar InsertionSort
+                            InsertionSortAttendance insertionAttendance = new InsertionSortAttendance(outputMatchesT2);
+                            insertionAttendance.ordenar();
+                        }
+                        // Adicione as lógicas para outros algoritmos aqui
                         break;
-                    case 2:
-                        // Chame a função de ordenação correspondente para 'attendance' e o algoritmo escolhido aqui
-                        break;
-                    case 3:
-                        // Chame a função de ordenação correspondente para 'full_date' e o algoritmo escolhido aqui
+                    case 3: // Ordenar por 'full_date'
+                        if(algorithmChoice == 1){
+                            InsertionSortFullDate insertionFullDate = new InsertionSortFullDate(outputMatchesT2);
+                            insertionFullDate.ordenar();
+                        }
                         break;
                 }
 
