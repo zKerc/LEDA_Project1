@@ -13,9 +13,9 @@ public class InsertionSortFullDate {
 
     private String inputFile;
     private String path = "src/OrdenacaoResultados/InsertionSort/";
-    private String outputMedio = path + "matches_t2_fullDate_insertionSort_medioCaso.csv";
-    private String outputMelhor = path + "matches_t2_fullDate_insertionSort_melhorCaso.csv";
-    private String outputPior = path + "matches_t2_fullDate_insertionSort_piorCaso.csv";
+    private String outputMedio = path + "matches_t2_full_date_insertionSort_medioCaso.csv";
+    private String outputMelhor = path + "matches_t2_full_date_insertionSort_melhorCaso.csv";
+    private String outputPior = path + "matches_t2_full_date_insertionSort_piorCaso.csv";
     private int fullDateIndex = 13;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
