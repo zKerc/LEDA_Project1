@@ -72,9 +72,10 @@ public class InsertionSortVenue {
     }
 
     private String[][] carregarArquivoEmArray(String file, int rowCount) {
-        String[][] data = new String[rowCount][];
+        String[][] data = new String[rowCount - 1][]; // Excluindo o cabeçalho na contagem
         int index = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            br.readLine(); // Leitura da primeira linha (cabeçalho) sem adicionar ao array
             String line;
             while ((line = br.readLine()) != null) {
                 data[index++] = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
@@ -83,10 +84,15 @@ public class InsertionSortVenue {
             e.printStackTrace();
         }
         return data;
-    }
+    }    
 
     private void escreverDados(String[][] data, String outputFile) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+            // Escreva o cabeçalho
+            writer.write("id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,home_goal_scorers,away_goal_scorers,full_date");
+            writer.newLine();
+            
+            // Escreva os dados
             for (int i = 0; i < data.length; i++) {
                 writer.write(String.join(",", data[i]));
                 writer.newLine();
