@@ -6,10 +6,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Scanner;
+import java.lang.Thread;
+
 import Ordenacao.InsertionSort.*;
+import Ordenacao.MergeSort.*;
+import Ordenacao.CountingSort.*;
+import Ordenacao.SelectionSort.*;
+import Ordenacao.HeapSort.*;
+import Ordenacao.QuickSort.*;
+import Ordenacao.QuickSortMediana3.*;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         String inputMatches = "src/data/matches.csv";
         String outputMatchesT1 = "src/TransformaçõesResultados/matches_T1.csv";
         String[] columnsToKeep = {"id", "home", "away", "date", "year", "time (utc)", "attendance", "venue", "league", "home_score", "away_score", "home_goal_scorers", "away_goal_scorers"};
@@ -80,7 +88,10 @@ public class Main {
                 }
                 writer.write("\n");
             }
-            
+            /*
+            System.out.println("Criando arquivo " + outputMatchesT1);
+            Thread.sleep(3000);  // Pause de 3 segundos*/
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -126,7 +137,10 @@ public class Main {
 
                 writer.write(line + "," + fullDate + "\n");
             }
-
+            /*
+            System.out.println("Criando arquivo " + outputMatchesT2);
+            Thread.sleep(3000);  // Pause de 3 segundos*/
+            
         } catch (IOException | java.text.ParseException e) {
             e.printStackTrace();
         }
@@ -169,6 +183,9 @@ public class Main {
                     writer.write(line + "\n");
                 }
             }
+/*
+            System.out.println("Criando arquivo " + outputMatchesF1);
+            Thread.sleep(3000);  // Pause de 3 segundos*/
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -216,6 +233,9 @@ public class Main {
                     }
                 }
             }
+            /*
+            System.out.println("Criando arquivo " + outputMatchesF2);
+            Thread.sleep(3000);  // Pause de 3 segundos*/
 
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
@@ -244,28 +264,110 @@ public class Main {
                 System.out.println("5- MergeSort");
                 System.out.println("6- QuickSort");
                 System.out.println("7- QuickSortMediana3");
-                System.out.print("0- Voltar");
+                System.out.println("0- Voltar");
+                System.out.print("Sua escolha: ");
                 algorithmChoice = scanner.nextInt();
 
                 if (algorithmChoice == 0) break;
 
                 switch (fieldChoice) {
-                    case 1: // Ordenar por 'venue'
-                        if (algorithmChoice == 1) { // Usar InsertionSort
-                            InsertionSortVenue insertionVenue = new InsertionSortVenue(outputMatchesT2);
-                            insertionVenue.ordenar();
+                    case 1: 
+                        switch (algorithmChoice) {
+                            case 1:
+                                InsertionSortVenue insertionVenue = new InsertionSortVenue(outputMatchesT2);
+                                insertionVenue.ordenar();
+                                break;
+                            case 2:
+                                SelectionSortVenue selectionVenue = new SelectionSortVenue(outputMatchesT2);
+                                selectionVenue.ordenar();
+                                break;
+                            case 3:
+                                CountingSortVenue countingVenue = new CountingSortVenue(outputMatchesT2);
+                                countingVenue.ordenar();
+                                break;
+                            case 4:
+                                HeapSortVenue heapVenue = new HeapSortVenue(outputMatchesT2);
+                                heapVenue.ordenar();
+                                break;
+                            case 5:
+                                MergeSortVenue mergeVenue = new MergeSortVenue(outputMatchesT2);
+                                mergeVenue.ordenar();
+                                break;
+                            case 6:
+                                QuickSortVenue quickVenue = new QuickSortVenue(outputMatchesT2);
+                                quickVenue.ordenar();
+                                break;
+                            case 7:
+                                QuickSortMediana3Venue quickMediana3Venue = new QuickSortMediana3Venue(outputMatchesT2);
+                                quickMediana3Venue.ordenar();
+                                break;
+
                         }
-                    case 2: // Ordenar por 'attendance'
-                        if (algorithmChoice == 1) { // Usar InsertionSort
-                            InsertionSortAttendance insertionAttendance = new InsertionSortAttendance(outputMatchesT2);
-                            insertionAttendance.ordenar();
-                        }
-                        // Adicione as lógicas para outros algoritmos aqui
                         break;
-                    case 3: // Ordenar por 'full_date'
-                        if(algorithmChoice == 1){
-                            InsertionSortFullDate insertionFullDate = new InsertionSortFullDate(outputMatchesT2);
-                            insertionFullDate.ordenar();
+
+                    case 2:
+                        switch (algorithmChoice) {
+                            case 1:
+                                InsertionSortAttendance insertionAttendance = new InsertionSortAttendance(outputMatchesT2);
+                                insertionAttendance.ordenar();
+                                break;
+                            case 2:
+                                SelectionSortAttendance selectionAttendance = new SelectionSortAttendance(outputMatchesT2);
+                                selectionAttendance.ordenar();
+                                break;
+                            case 3:
+                                CountingSortAttendance countingAttendance = new CountingSortAttendance(outputMatchesT2);
+                                countingAttendance.ordenar();
+                                break;
+                            case 4:
+                                HeapSortAttendance heapAttendance = new HeapSortAttendance(outputMatchesT2);
+                                heapAttendance.ordenar();
+                                break;
+                            case 5:
+                                MergeSortAttendance mergeAttendance = new MergeSortAttendance(outputMatchesT2);
+                                mergeAttendance.ordenar();
+                                break;
+                            case 6:
+                                QuickSortAttendance quickAttendance = new QuickSortAttendance(outputMatchesT2);
+                                quickAttendance.ordenar();
+                                break;
+                            case 7:
+                                QuickSortMediana3Attendance quickMediana3Attendance = new QuickSortMediana3Attendance(outputMatchesT2);
+                                quickMediana3Attendance.ordenar();
+                                break;
+                        }
+                        break;
+
+                    case 3:
+                        switch (algorithmChoice) {
+                            case 1:
+                                InsertionSortFullDate insertionFullDate = new InsertionSortFullDate(outputMatchesT2);
+                                insertionFullDate.ordenar();
+                                break;
+                            case 2:
+                                SelectionSortFullDate selectionFullDate = new SelectionSortFullDate(outputMatchesT2);
+                                selectionFullDate.ordenar();
+                                break;
+                            case 3:
+                                CountingSortFullDate countingFullDate = new CountingSortFullDate(outputMatchesT2);
+                                countingFullDate.ordenar();
+                                break;
+                            case 4:
+                                HeapSortFullDate heapFullDate = new HeapSortFullDate(outputMatchesT2);
+                                heapFullDate.ordenar();
+                                break;
+                            case 5:
+                                MergeSortFullDate mergeFullDate = new MergeSortFullDate(outputMatchesT2);
+                                mergeFullDate.ordenar();
+                                break;
+                            case 6:
+                                QuickSortFullDate quickFullDate = new QuickSortFullDate(outputMatchesT2);
+                                quickFullDate.ordenar();
+                                break;
+                            case 7:
+                                QuickSortMediana3FullDate quickMediana3FullDate = new QuickSortMediana3FullDate(outputMatchesT2);
+                                quickMediana3FullDate.ordenar();
+                                break;
                         }
                         break;
                 }
