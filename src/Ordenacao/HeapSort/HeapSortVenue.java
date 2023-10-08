@@ -9,9 +9,9 @@ import java.io.IOException;
 /**
  * A classe {@code HeapSortVenue} realiza a ordenação de dados em arquivos
  * CSV usando o algoritmo de ordenação Heap Sort.
- * Ela é projetada para criar três casos de ordenação (melhor, médio e pior) e
+ * Ela é projetada para criar três cenários de teste (melhor, médio e pior) e
  * medir o tempo de execução.
- * Os resultados ordenados são escritos nos arquivos de saída correspondentes.
+ * Os dados ordenados são escritos nos arquivos de saída correspondentes.
  */
 public class HeapSortVenue {
 
@@ -23,8 +23,7 @@ public class HeapSortVenue {
     private int venueIndex = 7;
 
     /**
-     * Cria uma nova instância da classe HeapSortVenue com o arquivo de entrada
-     * especificado.
+     * Construtor que inicializa uma nova instância da classe HeapSortVenue com o arquivo de entrada especificado.
      *
      * @param inputFile O arquivo de entrada contendo os dados a serem ordenados.
      */
@@ -33,8 +32,8 @@ public class HeapSortVenue {
     }
 
     /**
-     * Realiza a ordenação em cenários de melhor, médio e pior caso,
-     * mede o tempo de execução e imprime-o no console.
+     * Ordena os dados nos cenários de melhor, médio e pior caso,
+     * medindo o tempo de execução e imprimindo-o no console.
      */
     public void ordenar() {
         criarCasoMelhor();
@@ -167,11 +166,10 @@ public class HeapSortVenue {
     }
 
     /**
-     * Realiza a ordenação Heap Sort em um conjunto de dados com base no índice da
-     * coluna de venues.
+     * Ordena um conjunto de dados usando o algoritmo Heap Sort baseado na coluna venue.
      *
      * @param data       O conjunto de dados a ser ordenado.
-     * @param venueIndex O índice da coluna de venues.
+     * @param venueIndex O índice da coluna venue.
      */
     private void heapSort(String[][] data, int venueIndex) {
         int n = data.length;
@@ -195,18 +193,18 @@ public class HeapSortVenue {
      * @param data       O conjunto de dados a ser heapificado.
      * @param n          O tamanho do heap.
      * @param i          O índice do elemento raiz.
-     * @param venueIndex O índice da coluna de venues.
+     * @param venueIndex O índice da coluna venue.
      */
     private void heapify(String[][] data, int n, int i, int venueIndex) {
         int largest = i;
         int left = 2 * i + 1;
         int right = 2 * i + 2;
 
-        if (left < n && data[left][venueIndex].compareTo(data[largest][venueIndex]) > 0) {
+        if (left < n && sanitize(data[left][venueIndex]).compareTo(sanitize(data[largest][venueIndex])) > 0) {
             largest = left;
         }
 
-        if (right < n && data[right][venueIndex].compareTo(data[largest][venueIndex]) > 0) {
+        if (right < n && sanitize(data[right][venueIndex]).compareTo(sanitize(data[largest][venueIndex])) > 0) {
             largest = right;
         }
 
@@ -217,5 +215,15 @@ public class HeapSortVenue {
 
             heapify(data, n, largest, venueIndex);
         }
+    }
+
+    /**
+     * Sanitiza uma string removendo as aspas e convertendo-a para letras minúsculas.
+     *
+     * @param str A string a ser sanitizada.
+     * @return A string sanitizada.
+     */
+    private String sanitize(String str) {
+        return str.replace("\"", "").toLowerCase();
     }
 }

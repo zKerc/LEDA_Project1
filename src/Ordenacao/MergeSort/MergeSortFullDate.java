@@ -9,13 +9,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * A classe {@code MergeSortFullDate} realiza a ordenação de dados em arquivos
- * CSV usando o algoritmo de ordenação Merge Sort.
- * Ela é projetada para criar três casos de ordenação (melhor, médio e pior) e
- * medir o tempo de execução.
- * Os resultados ordenados são escritos nos arquivos de saída correspondentes.
- */
 public class MergeSortFullDate {
 
     private String inputFile;
@@ -27,57 +20,52 @@ public class MergeSortFullDate {
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
-     * Cria uma nova instância de MergeSortFullDate com o caminho do arquivo de
-     * entrada especificado.
-     *
-     * @param inputFile O caminho do arquivo de entrada contendo os dados a serem
-     *                  ordenados.
+     * Construtor que inicializa a classe com o arquivo de entrada fornecido.
+     * @param inputFile O arquivo de entrada contendo os dados a serem ordenados.
      */
     public MergeSortFullDate(String inputFile) {
         this.inputFile = inputFile;
     }
 
     /**
-     * Realiza a ordenação e gera os resultados para os casos de melhor, médio e
-     * pior cenário,
-     * além de medir e imprimir o tempo de execução para cada caso.
+     * Realiza a ordenação dos dados nos casos de melhor, médio e pior e imprime os
+     * tempos de execução.
      */
     public void ordenar() {
         criarCasoMelhor();
         criarCasoMedio();
         criarCasoPior();
-
+        
         ordenarEImprimirTempo(outputMelhor);
         ordenarEImprimirTempo(outputMedio);
         ordenarEImprimirTempo(outputPior);
     }
 
     /**
-     * Cria o caso de cenário médio copiando o arquivo de entrada para o arquivo de
-     * saída correspondente.
+     * Cria o caso de ordenação médio copiando o conteúdo do arquivo de entrada para
+     * o arquivo de saída.
      */
     private void criarCasoMedio() {
         copiarArquivo(inputFile, outputMedio);
     }
 
     /**
-     * Cria o caso de cenário melhor ordenando os dados com o algoritmo Merge Sort
-     * e, em seguida, escreve os resultados no arquivo de saída correspondente.
+     * Cria o caso de ordenação melhor ordenando o arquivo de entrada usando o
+     * algoritmo MergeSort.
      */
     private void criarCasoMelhor() {
         String[][] data = carregarArquivoEmArray(inputFile);
-        mergeSort(data, fullDateIndex);
+        mergeSort(data, fullDateIndex, 0, data.length - 1);
         escreverDados(data, outputMelhor);
     }
 
     /**
-     * Cria o caso de cenário pior ordenando os dados com o algoritmo Merge Sort
-     * em ordem decrescente e, em seguida, escreve os resultados no arquivo de saída
-     * correspondente.
+     * Cria o caso de ordenação pior ordenando o arquivo de entrada usando o
+     * algoritmo MergeSort e depois invertendo a ordem dos dados.
      */
     private void criarCasoPior() {
         String[][] data = carregarArquivoEmArray(inputFile);
-        mergeSort(data, fullDateIndex);
+        mergeSort(data, fullDateIndex, 0, data.length - 1);
         inverterDados(data);
         escreverDados(data, outputPior);
     }
@@ -85,12 +73,12 @@ public class MergeSortFullDate {
     /**
      * Copia um arquivo de origem para um arquivo de destino.
      *
-     * @param origem  O caminho do arquivo de origem.
-     * @param destino O caminho do arquivo de destino.
+     * @param origem  O arquivo de origem a ser copiado.
+     * @param destino O arquivo de destino onde o conteúdo será copiado.
      */
     private void copiarArquivo(String origem, String destino) {
         try (BufferedReader br = new BufferedReader(new FileReader(origem));
-                BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
+             BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
             String line;
             while ((line = br.readLine()) != null) {
                 writer.write(line);
@@ -104,34 +92,32 @@ public class MergeSortFullDate {
     /**
      * Carrega os dados de um arquivo CSV em um array bidimensional.
      *
-     * @param file O caminho do arquivo CSV a ser carregado.
+     * @param file O arquivo CSV a ser carregado.
      * @return Um array bidimensional contendo os dados do arquivo.
      */
     private String[][] carregarArquivoEmArray(String file) {
         String[][] data;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            data = br.lines().skip(1).map(line -> line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1))
-                    .toArray(String[][]::new);
+            data = br.lines().skip(1).map(line -> line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1)).toArray(String[][]::new);
         } catch (IOException e) {
             e.printStackTrace();
             data = new String[0][];
         }
         return data;
-    }
+    }    
 
     /**
      * Escreve os dados de um array bidimensional em um arquivo CSV.
      *
-     * @param data       O array bidimensional contendo os dados a serem escritos.
-     * @param outputFile O caminho do arquivo CSV de saída.
+     * @param data       O array bidimensional contendo os dados.
+     * @param outputFile O arquivo onde os dados serão escritos.
      */
     private void escreverDados(String[][] data, String outputFile) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
             // Escreva o cabeçalho
-            writer.write(
-                    "id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,home_goal_scorers,away_goal_scorers,full_date");
+            writer.write("id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,home_goal_scorers,away_goal_scorers,full_date");
             writer.newLine();
-
+            
             // Escreva os dados
             for (int i = 0; i < data.length; i++) {
                 writer.write(String.join(",", data[i]));
@@ -145,7 +131,7 @@ public class MergeSortFullDate {
     /**
      * Inverte a ordem dos dados em um array bidimensional.
      *
-     * @param data O array bidimensional a ser invertido.
+     * @param data O array bidimensional cujos dados serão invertidos.
      */
     private void inverterDados(String[][] data) {
         for (int i = 0; i < data.length / 2; i++) {
@@ -156,47 +142,62 @@ public class MergeSortFullDate {
     }
 
     /**
-     * Realiza a ordenação e mede o tempo de execução usando o algoritmo Merge Sort.
-     * O tempo de execução é impresso no console.
+     * Ordena os dados no arquivo especificado usando o algoritmo MergeSort e 
+     * imprime o tempo de execução.
      *
-     * @param fileToOrder O caminho do arquivo a ser ordenado e medido.
+     * @param fileToOrder O arquivo a ser ordenado.
      */
     private void ordenarEImprimirTempo(String fileToOrder) {
         String[][] data = carregarArquivoEmArray(fileToOrder);
 
         long startTime = System.currentTimeMillis();
-        mergeSort(data, fullDateIndex);
+        mergeSort(data, fullDateIndex, 0, data.length - 1);
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
     }
 
     /**
-     * Realiza a ordenação de um conjunto de dados usando o algoritmo Merge Sort.
-     *
-     * @param data        O array bidimensional contendo os dados a serem ordenados.
-     * @param columnIndex O índice da coluna de datas completas (full_date) nos
-     *                    dados.
+     * Utiliza o algoritmo MergeSort para ordenar uma subparte do array bidimensional, 
+     * especificada pelos índices left e right, com base na coluna fornecida.
+     * 
+     * @param data        O array bidimensional a ser ordenado.
+     * @param columnIndex O índice da coluna pela qual os dados serão ordenados.
+     * @param left        O índice inicial do subarray para ordenação.
+     * @param right       O índice final do subarray para ordenação.
      */
-    private void merge(String[][] data, int columnIndex, int l, int m, int r) {
-        int n1 = m - l + 1;
-        int n2 = r - m;
+    private void mergeSort(String[][] data, int columnIndex, int left, int right) {
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+            mergeSort(data, columnIndex, left, mid);
+            mergeSort(data, columnIndex, mid + 1, right);
+            merge(data, columnIndex, left, mid, right);
+        }
+    }
+
+    /**
+     * Combina duas subpartes ordenadas (esquerda e direita) do array bidimensional em um único subarray ordenado.
+     * 
+     * @param data        O array bidimensional que contém os subarrays a serem combinados.
+     * @param columnIndex O índice da coluna pela qual os dados são ordenados.
+     * @param left        O índice inicial do subarray esquerdo.
+     * @param mid         O índice final do subarray esquerdo.
+     * @param right       O índice final do subarray direito.
+     */
+    private void merge(String[][] data, int columnIndex, int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
 
         String[][] L = new String[n1][];
         String[][] R = new String[n2][];
 
-        for (int i = 0; i < n1; i++) {
-            L[i] = data[l + i];
-        }
-        for (int j = 0; j < n2; j++) {
-            R[j] = data[m + 1 + j];
-        }
+        System.arraycopy(data, left, L, 0, n1);
+        System.arraycopy(data, mid + 1, R, 0, n2);
 
         int i = 0, j = 0;
-        int k = l;
-
+        int k = left;
         while (i < n1 && j < n2) {
-            if (isDateGreater(L[i][columnIndex], R[j][columnIndex])) {
+            if (!isDateGreater(L[i][columnIndex], R[j][columnIndex])) {
                 data[k] = L[i];
                 i++;
             } else {
@@ -220,43 +221,11 @@ public class MergeSortFullDate {
     }
 
     /**
-     * Realiza a ordenação Merge Sort em um subconjunto de dados.
-     *
-     * @param data        O array bidimensional contendo os dados a serem ordenados.
-     * @param columnIndex O índice da coluna de datas completas (full_date) nos
-     *                    dados.
-     * @param l           O índice de início do subconjunto.
-     * @param r           O índice de fim do subconjunto.
-     */
-    private void mergeSort(String[][] data, int columnIndex, int l, int r) {
-        if (l < r) {
-            int m = l + (r - l) / 2;
-            mergeSort(data, columnIndex, l, m);
-            mergeSort(data, columnIndex, m + 1, r);
-            merge(data, columnIndex, l, m, r);
-        }
-    }
-
-    /**
-     * Realiza a ordenação Merge Sort em um conjunto de dados especificado usando um
-     * índice de coluna para a data.
-     *
-     * @param data        O array bidimensional contendo os dados a serem ordenados.
-     * @param columnIndex O índice da coluna de datas completas (full_date) nos
-     *                    dados.
-     */
-    private void mergeSort(String[][] data, int columnIndex) {
-        int n = data.length;
-        mergeSort(data, columnIndex, 0, n - 1);
-    }
-
-    /**
-     * Verifica se uma data é maior do que outra.
-     *
+     * Compara duas datas e retorna true se a primeira data é posterior à segunda.
+     * 
      * @param date1 A primeira data a ser comparada.
      * @param date2 A segunda data a ser comparada.
-     * @return true se a primeira data for maior que a segunda; caso contrário,
-     *         false.
+     * @return      {@code true} se date1 for posterior a date2, caso contrário {@code false}.
      */
     private boolean isDateGreater(String date1, String date2) {
         try {

@@ -61,11 +61,20 @@ public class HeapSortAttendance {
             int rowCount = contarLinhas(inputFile);
             String[][] data = carregarArquivoEmArray(inputFile, rowCount);
 
-            heapSort(data, attendanceIndex, rowCount); // Ordena o array
-
+            // Salvando o cabeçalho antes da ordenação
+            String[] header = data[0];
+            
+            // Criando um novo array sem o cabeçalho para a ordenação
+            String[][] dataArray = new String[rowCount - 1][];
+            System.arraycopy(data, 1, dataArray, 0, rowCount - 1);
+            
+            heapSort(dataArray, attendanceIndex, rowCount - 1); // Ordena o array
+            
+            // Escrevendo o resultado no arquivo, incluindo o cabeçalho
             try (FileWriter writer = new FileWriter(outputMelhor)) {
-                for (int i = 0; i < rowCount; i++) {
-                    writer.write(String.join(",", data[i]) + "\n");
+                writer.write(String.join(",", header) + "\n");
+                for (int i = 0; i < rowCount - 1; i++) {
+                    writer.write(String.join(",", dataArray[i]) + "\n");
                 }
             }
         } catch (IOException e) {
@@ -222,7 +231,23 @@ public class HeapSortAttendance {
     }
 
     /**
-     * Transforma um array em um heap binário.
+     * Limpa e converte a string de atendimento em um número inteiro.
+     *
+     * @param attendance A string de atendimento a ser limpa e convertida.
+     * @return O valor numérico do atendimento.
+     */
+    private int sanitizeAttendance(String attendance) {
+        if (attendance == null || attendance.isEmpty()) {
+            return 0;
+        }
+
+        // Remove as aspas extras e substitui vírgulas.
+        attendance = attendance.replace("\"", "").replace(",", "");
+        return Integer.parseInt(attendance);
+    }
+
+    /**
+     * Transforma um array em um heap binário, usando a coluna de atendimento como critério de ordenação.
      *
      * @param data        O array a ser transformado em um heap.
      * @param columnIndex O índice da coluna pela qual os dados são comparados.
@@ -234,13 +259,14 @@ public class HeapSortAttendance {
         int left = 2 * root + 1;
         int right = 2 * root + 2;
 
+        // Usa a função sanitizeAttendance para limpar e converter a string de atendimento em um inteiro.
         if (left < rowCount
-                && Integer.parseInt(data[left][columnIndex]) > Integer.parseInt(data[largest][columnIndex])) {
+                && sanitizeAttendance(data[left][columnIndex]) > sanitizeAttendance(data[largest][columnIndex])) {
             largest = left;
         }
 
         if (right < rowCount
-                && Integer.parseInt(data[right][columnIndex]) > Integer.parseInt(data[largest][columnIndex])) {
+                && sanitizeAttendance(data[right][columnIndex]) > sanitizeAttendance(data[largest][columnIndex])) {
             largest = right;
         }
 

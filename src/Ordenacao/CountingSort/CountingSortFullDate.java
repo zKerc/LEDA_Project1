@@ -5,9 +5,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 
 /**
  * A classe {@code CountingSortFullDate} realiza a ordenação de dados em
@@ -24,7 +22,6 @@ public class CountingSortFullDate {
     private String outputMelhor = path + "matches_t2_full_date_countingSort_melhorCaso.csv";
     private String outputPior = path + "matches_t2_full_date_countingSort_piorCaso.csv";
     private int fullDateIndex = 13;
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
      * Cria uma nova instância de CountingSortFullDate com o caminho do arquivo de
@@ -180,42 +177,41 @@ public class CountingSortFullDate {
      * @param columnIndex O índice da coluna de datas completas (full_date) nos
      *                    dados.
      */
-    private void countingSort(String[][] data, int columnIndex) {
-        int n = data.length;
-        String[][] output = new String[n][];
-        int[] count = new int[n];
-        for (int i = 0; i < n; i++) {
-            count[i] = 0;
+    private void countingSort(String[][] data, int fullDateIndex) {
+        int maxDate = Integer.MIN_VALUE;
+        int minDate = Integer.MAX_VALUE;
+
+        // Convert dates to integers and find min and max
+        int[] datesAsIntegers = new int[data.length];
+        for (int i = 0; i < data.length; i++) {
+            datesAsIntegers[i] = dateToInt(data[i][fullDateIndex]);
+            if (datesAsIntegers[i] > maxDate) maxDate = datesAsIntegers[i];
+            if (datesAsIntegers[i] < minDate) minDate = datesAsIntegers[i];
         }
 
-        for (int i = 0; i < n; i++) {
-            String[] key = data[i];
-            String keyData = key[columnIndex].replace("\"", "");
-            Date keyDate;
-            try {
-                keyDate = sdf.parse(keyData);
-                for (int j = 0; j < n; j++) {
-                    if (i != j) {
-                        String currentData = data[j][columnIndex].replace("\"", "");
-                        Date currentDate = sdf.parse(currentData);
-                        if (keyDate.compareTo(currentDate) > 0) {
-                            count[i]++;
-                        } else {
-                            count[j]++;
-                        }
-                    }
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+        int range = maxDate - minDate + 1;
+        int[] countArray = new int[range];
+        String[][] outputArray = new String[data.length][];
+
+        for (int i = 0; i < data.length; i++) {
+            countArray[datesAsIntegers[i] - minDate]++;
         }
 
-        for (int i = 0; i < n; i++) {
-            output[count[i]] = data[i];
+        for (int i = 1; i < range; i++) {
+            countArray[i] += countArray[i - 1];
         }
 
-        for (int i = 0; i < n; i++) {
-            data[i] = output[i];
+        for (int i = data.length - 1; i >= 0; i--) {
+            outputArray[countArray[datesAsIntegers[i] - minDate] - 1] = data[i];
+            countArray[datesAsIntegers[i] - minDate]--;
         }
+
+        for (int i = 0; i < data.length; i++) {
+            data[i] = outputArray[i];
+        }
+    }
+
+    private int dateToInt(String date) {
+        return date.isEmpty() ? 0 : Integer.parseInt(date.replace("/", ""));
     }
 }

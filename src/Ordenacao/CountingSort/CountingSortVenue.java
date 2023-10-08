@@ -6,13 +6,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-/**
- * A classe {@code CountingSortVenue} realiza a ordenação de dados em
- * arquivos CSV usando o algoritmo de ordenação Counting Sort.
- * Ela é projetada para criar três casos de ordenação (melhor, médio e pior) e
- * medir o tempo de execução.
- * Os resultados ordenados são escritos nos arquivos de saída correspondentes.
- */
 public class CountingSortVenue {
 
     private String inputFile;
@@ -22,20 +15,10 @@ public class CountingSortVenue {
     private String outputPior = path + "matches_t2_venues_countingSort_piorCaso.csv";
     private int venueIndex = 7;
 
-    /**
-     * Cria uma nova instância do CountingSortVenue.
-     *
-     * @param inputFile O arquivo de entrada contendo os dados de venues a serem
-     *                  ordenados.
-     */
     public CountingSortVenue(String inputFile) {
         this.inputFile = inputFile;
     }
 
-    /**
-     * Realiza a ordenação dos casos de melhor, médio e pior cenários e imprime os
-     * tempos de execução.
-     */
     public void ordenar() {
         criarCasoMelhor();
         criarCasoMedio();
@@ -46,43 +29,26 @@ public class CountingSortVenue {
         ordenarEImprimirTempo(outputPior);
     }
 
-    /**
-     * Cria um arquivo de caso médio que é uma cópia do arquivo de entrada.
-     */
     private void criarCasoMedio() {
         copiarArquivo(inputFile, outputMedio);
     }
 
-    /**
-     * Cria um arquivo de melhor caso ordenando os dados em ordem crescente de
-     * venues.
-     */
     private void criarCasoMelhor() {
         String[][] data = carregarArquivoEmArray(inputFile);
-        countingSort(data, venueIndex);
+        sortByVenueString(data, venueIndex);
         escreverDados(data, outputMelhor);
     }
 
-    /**
-     * Cria um arquivo de pior caso ordenando os dados em ordem decrescente de
-     * venues.
-     */
     private void criarCasoPior() {
         String[][] data = carregarArquivoEmArray(inputFile);
-        countingSort(data, venueIndex);
+        sortByVenueString(data, venueIndex);
         inverterDados(data);
         escreverDados(data, outputPior);
     }
 
-    /**
-     * Copia um arquivo de origem para um arquivo de destino.
-     *
-     * @param origem  O arquivo de origem.
-     * @param destino O arquivo de destino.
-     */
     private void copiarArquivo(String origem, String destino) {
         try (BufferedReader br = new BufferedReader(new FileReader(origem));
-                BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
+             BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
             String line;
             while ((line = br.readLine()) != null) {
                 writer.write(line);
@@ -93,12 +59,6 @@ public class CountingSortVenue {
         }
     }
 
-    /**
-     * Carrega os dados de um arquivo CSV em um array bidimensional.
-     *
-     * @param file O arquivo CSV a ser carregado.
-     * @return Um array bidimensional contendo os dados do arquivo.
-     */
     private String[][] carregarArquivoEmArray(String file) {
         String[][] data;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -111,20 +71,10 @@ public class CountingSortVenue {
         return data;
     }
 
-    /**
-     * Escreve os dados de um array em um arquivo CSV.
-     *
-     * @param data       O array contendo os dados.
-     * @param outputFile O arquivo de saída para escrever os dados.
-     */
     private void escreverDados(String[][] data, String outputFile) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-            // Escreva o cabeçalho
-            writer.write(
-                    "id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,home_goal_scorers,away_goal_scorers,full_date");
+            writer.write("id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,home_goal_scorers,away_goal_scorers,full_date");
             writer.newLine();
-
-            // Escreva os dados
             for (int i = 0; i < data.length; i++) {
                 writer.write(String.join(",", data[i]));
                 writer.newLine();
@@ -134,11 +84,6 @@ public class CountingSortVenue {
         }
     }
 
-    /**
-     * Inverte os dados em um array.
-     *
-     * @param data O array a ser invertido.
-     */
     private void inverterDados(String[][] data) {
         for (int i = 0; i < data.length / 2; i++) {
             String[] temp = data[i];
@@ -147,48 +92,25 @@ public class CountingSortVenue {
         }
     }
 
-    /**
-     * Realiza a ordenação Counting Sort em um arquivo especificado, mede o tempo de
-     * execução e imprime-o.
-     *
-     * @param fileToOrder O arquivo a ser ordenado e medido.
-     */
     private void ordenarEImprimirTempo(String fileToOrder) {
-        // Carrega os dados do arquivo em um array
         String[][] data = carregarArquivoEmArray(fileToOrder);
-
-        // Inicia a contagem do tempo
         long startTime = System.currentTimeMillis();
-
-        // Realiza a ordenação Counting Sort nos dados usando o índice da coluna de
-        // venues
         countingSort(data, venueIndex);
-
-        // Finaliza a contagem do tempo
         long endTime = System.currentTimeMillis();
-
-        // Calcula e imprime o tempo de execução
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
     }
 
-    /**
-     * Realiza a ordenação Counting Sort em um array de acordo com o índice da
-     * coluna do venue.
-     *
-     * @param data       O array a ser ordenado.
-     * @param venueIndex O índice da coluna pela qual os dados serão ordenados.
-     */
-    private void countingSort(String[][] data, int venueIndex) {
-        int maxVenue = getMaxVenue(data, venueIndex);
-        int minVenue = getMinVenue(data, venueIndex);
-        int range = maxVenue - minVenue + 1;
+    private void countingSort(String[][] data, int columnIndex) {
+        int maxLen = getMaxStringLen(data, columnIndex);
+        int minLen = getMinStringLen(data, columnIndex);
+        int range = maxLen - minLen + 1;
 
         int[] countingArray = new int[range];
         String[][] outputArray = new String[data.length][];
 
         for (int i = 0; i < data.length; i++) {
-            int venueValue = Integer.parseInt(data[i][venueIndex]);
-            countingArray[venueValue - minVenue]++;
+            int len = sanitizedLength(data[i][columnIndex]);
+            countingArray[len - minLen]++;
         }
 
         for (int i = 1; i < range; i++) {
@@ -196,9 +118,9 @@ public class CountingSortVenue {
         }
 
         for (int i = data.length - 1; i >= 0; i--) {
-            int venueValue = Integer.parseInt(data[i][venueIndex]);
-            outputArray[countingArray[venueValue - minVenue] - 1] = data[i];
-            countingArray[venueValue - minVenue]--;
+            int len = sanitizedLength(data[i][columnIndex]);
+            outputArray[countingArray[len - minLen] - 1] = data[i];
+            countingArray[len - minLen]--;
         }
 
         for (int i = 0; i < data.length; i++) {
@@ -206,39 +128,53 @@ public class CountingSortVenue {
         }
     }
 
-    /**
-     * Obtém o valor máximo na coluna de venues.
-     *
-     * @param data       O array contendo os dados.
-     * @param venueIndex O índice da coluna de venues.
-     * @return O valor máximo na coluna de venues.
-     */
-    private int getMaxVenue(String[][] data, int venueIndex) {
-        int maxVenue = Integer.MIN_VALUE;
+    private int getMaxStringLen(String[][] data, int columnIndex) {
+        int maxLen = Integer.MIN_VALUE;
         for (int i = 0; i < data.length; i++) {
-            int venueValue = Integer.parseInt(data[i][venueIndex]);
-            if (venueValue > maxVenue) {
-                maxVenue = venueValue;
+            int len = sanitizedLength(data[i][columnIndex]);
+            if (len > maxLen) {
+                maxLen = len;
             }
         }
-        return maxVenue;
+        return maxLen;
     }
 
-    /**
-     * Obtém o valor mínimo na coluna de venues.
-     *
-     * @param data       O array contendo os dados.
-     * @param venueIndex O índice da coluna de venues.
-     * @return O valor mínimo na coluna de venues.
-     */
-    private int getMinVenue(String[][] data, int venueIndex) {
-        int minVenue = Integer.MAX_VALUE;
+    private int getMinStringLen(String[][] data, int columnIndex) {
+        int minLen = Integer.MAX_VALUE;
         for (int i = 0; i < data.length; i++) {
-            int venueValue = Integer.parseInt(data[i][venueIndex]);
-            if (venueValue < minVenue) {
-                minVenue = venueValue;
+            int len = sanitizedLength(data[i][columnIndex]);
+            if (len < minLen) {
+                minLen = len;
             }
         }
-        return minVenue;
+        return minLen;
+    }
+
+    private int sanitizedLength(String str) {
+        return str.toLowerCase().replace("\"", "").length();
+    }
+
+    private void sortByVenueString(String[][] data, int columnIndex) {
+        for (int i = 1; i < data.length; i++) {
+            String[] key = data[i];
+            int j = i - 1;
+
+            String currentData = sanitize(data[j][columnIndex]);
+            String keyData = sanitize(key[columnIndex]);
+
+            while (j >= 0 && currentData.compareTo(keyData) > 0) {
+                data[j + 1] = data[j];
+                j--;
+
+                if (j >= 0) {
+                    currentData = sanitize(data[j][columnIndex]);
+                }
+            }
+            data[j + 1] = key;
+        }
+    }
+
+    private String sanitize(String str) {
+        return str.toLowerCase().replace("\"", "");
     }
 }

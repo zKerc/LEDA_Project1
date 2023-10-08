@@ -6,8 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * A classe {@code MergeSortAttendance} realiza a ordenação de dados em arquivos
- * CSV usando o algoritmo de ordenação Merge Sort.
+ * A classe {@code MergeSortAttendance} realiza a ordenação de dados em
+ * arquivos CSV usando o algoritmo de ordenação Merge Sort.
  * Ela é projetada para criar três casos de ordenação (melhor, médio e pior) e
  * medir o tempo de execução.
  * Os resultados ordenados são escritos nos arquivos de saída correspondentes.
@@ -39,7 +39,6 @@ public class MergeSortAttendance {
         criarCasoMelhor();
         criarCasoMedio();
         criarCasoPior();
-
         ordenarEImprimirTempo(outputMelhor);
         ordenarEImprimirTempo(outputMedio);
         ordenarEImprimirTempo(outputPior);
@@ -55,72 +54,23 @@ public class MergeSortAttendance {
 
     /**
      * Cria o caso de ordenação melhor ordenando o arquivo de entrada de forma
-     * crescente.
+     * crescente usando o algoritmo Merge Sort.
      */
     private void criarCasoMelhor() {
-        try {
-            // Contar linhas do arquivo
-            int rowCount = contarLinhas(inputFile);
-
-            String[][] data = carregarArquivoEmArray(inputFile, rowCount);
-
-            mergeSort(data, attendanceIndex, rowCount); // Ordenando o array
-
-            // Escrevendo no arquivo de saída
-            try (FileWriter writer = new FileWriter(outputMelhor)) {
-                for (int i = 0; i < rowCount; i++) {
-                    writer.write(String.join(",", data[i]) + "\n");
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String[][] data = carregarArquivoEmArray(inputFile);
+        mergeSort(data, attendanceIndex, 0, data.length - 1);
+        escreverDados(data, outputMelhor);
     }
 
     /**
      * Cria o caso de ordenação pior ordenando o arquivo de entrada de forma
-     * decrescente.
+     * decrescente usando o algoritmo Merge Sort.
      */
     private void criarCasoPior() {
-        try (BufferedReader br = new BufferedReader(new FileReader(inputFile));
-                FileWriter writer = new FileWriter(outputPior, false)) {
-
-            int rowCount = 0;
-            while (br.readLine() != null)
-                rowCount++;
-
-            br.close();
-
-            String[][] data = new String[rowCount][14];
-
-            BufferedReader newBr = new BufferedReader(new FileReader(inputFile));
-            int index = 0;
-            String line;
-            while ((line = newBr.readLine()) != null) {
-                data[index++] = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-            }
-            newBr.close();
-
-            String[] header = data[0]; // Separando o cabeçalho
-            String[][] dataArray = new String[rowCount - 1][14]; // Array para os dados sem cabeçalho
-            System.arraycopy(data, 1, dataArray, 0, rowCount - 1); // Copiando os dados sem o cabeçalho
-
-            mergeSort(dataArray, attendanceIndex, rowCount - 1);
-
-            for (int i = 0; i < dataArray.length / 2; i++) {
-                String[] temp = dataArray[i];
-                dataArray[i] = dataArray[dataArray.length - i - 1];
-                dataArray[dataArray.length - i - 1] = temp;
-            }
-
-            writer.write(String.join(",", header) + "\n"); // Escrevendo o cabeçalho primeiro
-            for (int i = 0; i < rowCount - 1; i++) { // Escrevendo os dados invertidos
-                writer.write(String.join(",", dataArray[i]) + "\n");
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String[][] data = carregarArquivoEmArray(inputFile);
+        mergeSort(data, attendanceIndex, 0, data.length - 1);
+        inverterDados(data);
+        escreverDados(data, outputPior);
     }
 
     /**
@@ -131,7 +81,7 @@ public class MergeSortAttendance {
      */
     private void copiarArquivo(String origem, String destino) {
         try (BufferedReader br = new BufferedReader(new FileReader(origem));
-                FileWriter writer = new FileWriter(destino)) {
+             FileWriter writer = new FileWriter(destino)) {
             String line;
             while ((line = br.readLine()) != null) {
                 writer.write(line + "\n");
@@ -142,133 +92,164 @@ public class MergeSortAttendance {
     }
 
     /**
-     * Ordena os dados no arquivo especificado e imprime o tempo de execução.
+     * Carrega os dados de um arquivo CSV em um array bidimensional.
      *
-     * @param fileToOrder O arquivo a ser ordenado.
+     * @param file O arquivo CSV a ser carregado.
+     * @return Um array bidimensional contendo os dados do arquivo.
      */
-    private void ordenarEImprimirTempo(String fileToOrder) {
-        try {
-            // Contar linhas do arquivo
-            int rowCount = contarLinhas(fileToOrder);
+    private String[][] carregarArquivoEmArray(String file) {
+        String[][] data;
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            data = br.lines().skip(1).map(line -> line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1))
+                    .toArray(String[][]::new);
+        } catch (IOException e) {
+            e.printStackTrace();
+            data = new String[0][];
+        }
+        return data;
+    }
 
-            String[][] data = carregarArquivoEmArray(fileToOrder, rowCount);
+    /**
+     * Escreve os dados de um array bidimensional em um arquivo CSV.
+     *
+     * @param data       O array bidimensional contendo os dados a serem escritos.
+     * @param outputFile O arquivo CSV de saída.
+     */
+    private void escreverDados(String[][] data, String outputFile) {
+        try (FileWriter writer = new FileWriter(outputFile)) {
+            // Escreva o cabeçalho
+            writer.write(
+                    "id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,home_goal_scorers,away_goal_scorers,full_date\n");
 
-            String[][] dataArray = new String[rowCount - 1][14]; // Array para os dados sem cabeçalho
-            System.arraycopy(data, 1, dataArray, 0, rowCount - 1); // Copiando os dados sem o cabeçalho
-
-            // Início da medição de tempo
-            long startTime = System.currentTimeMillis();
-
-            mergeSort(dataArray, attendanceIndex, rowCount - 1);
-
-            // Fim da medição de tempo
-            long endTime = System.currentTimeMillis();
-            System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
-
-            // NÃO gravaremos os dados ordenados no arquivo para manter os casos como estão
+            // Escreva os dados
+            for (int i = 0; i < data.length; i++) {
+                writer.write(String.join(",", data[i]) + "\n");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Conta o número de linhas em um arquivo.
+     * Inverte a ordem dos dados em um array bidimensional.
      *
-     * @param fileToOrder O arquivo para o qual as linhas serão contadas.
-     * @return O número de linhas no arquivo.
-     * @throws IOException Se ocorrer um erro de leitura do arquivo.
+     * @param data O array bidimensional a ser invertido.
      */
-    private int contarLinhas(String fileToOrder) throws IOException {
-        int rowCount = 0;
-        try (BufferedReader counter = new BufferedReader(new FileReader(fileToOrder))) {
-            while (counter.readLine() != null)
-                rowCount++;
+    private void inverterDados(String[][] data) {
+        for (int i = 0; i < data.length / 2; i++) {
+            String[] temp = data[i];
+            data[i] = data[data.length - i - 1];
+            data[data.length - i - 1] = temp;
         }
-        return rowCount;
     }
 
     /**
-     * Carrega os dados de um arquivo CSV em um array bidimensional.
+     * Realiza a ordenação e mede o tempo de execução usando o algoritmo Merge Sort.
+     * O tempo de execução é impresso no console.
      *
-     * @param fileToOrder O arquivo CSV a ser carregado.
-     * @param rowCount    O número de linhas no arquivo.
-     * @return Um array bidimensional contendo os dados do arquivo.
-     * @throws IOException Se ocorrer um erro de leitura do arquivo.
+     * @param fileToOrder O arquivo a ser ordenado.
      */
-    private String[][] carregarArquivoEmArray(String fileToOrder, int rowCount) throws IOException {
-        String[][] data = new String[rowCount][14];
+    private void ordenarEImprimirTempo(String fileToOrder) {
+        String[][] data = carregarArquivoEmArray(fileToOrder);
 
-        int index = 0;
-        try (BufferedReader br = new BufferedReader(new FileReader(fileToOrder))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                data[index++] = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-            }
-        }
-        return data;
+        long startTime = System.currentTimeMillis();
+        mergeSort(data, attendanceIndex, 0, data.length - 1);
+        long endTime = System.currentTimeMillis();
+
+        System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
     }
 
     /**
-     * Ordena um array bidimensional com base em uma coluna específica usando o
-     * algoritmo Merge Sort.
+     * Realiza a ordenação de um subarray usando o algoritmo Merge Sort.
      *
-     * @param data        O array bidimensional a ser ordenado.
+     * @param data       O array bidimensional contendo os dados a serem ordenados.
      * @param columnIndex O índice da coluna pela qual os dados serão ordenados.
-     * @param rowCount    O número de linhas no array.
+     * @param left       O índice de início do subarray.
+     * @param right      O índice de fim do subarray.
      */
-    private void mergeSort(String[][] data, int columnIndex, int rowCount) {
-        if (rowCount < 2) {
-            return;
+    private void mergeSort(String[][] data, int columnIndex, int left, int right) {
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+            mergeSort(data, columnIndex, left, mid);
+            mergeSort(data, columnIndex, mid + 1, right);
+            merge(data, columnIndex, left, mid, right);
         }
-
-        int mid = rowCount / 2;
-        String[][] left = new String[mid][14];
-        String[][] right = new String[rowCount - mid][14];
-
-        // Copiar dados para arrays esquerdo e direito
-        for (int i = 0; i < mid; i++) {
-            left[i] = data[i];
-        }
-        for (int i = mid; i < rowCount; i++) {
-            right[i - mid] = data[i];
-        }
-
-        // Recursivamente ordenar as duas metades
-        mergeSort(left, columnIndex, mid);
-        mergeSort(right, columnIndex, rowCount - mid);
-
-        // Mesclar as duas metades ordenadas
-        merge(data, left, right, columnIndex);
     }
 
     /**
-     * Mescla duas metades de um array em ordem ordenada com base em uma coluna
-     * específica.
+     * Esta função realiza a fusão (merge) de dois subarrays ordenados em um único subarray ordenado.
+     * O processo de fusão é um passo fundamental no algoritmo de ordenação Merge Sort.
      *
-     * @param data        O array a ser mesclado.
-     * @param left        O array da metade esquerda.
-     * @param right       O array da metade direita.
-     * @param columnIndex O índice da coluna pela qual os dados serão mesclados.
+     * @param data       O array bidimensional contendo os dados a serem mesclados.
+     * @param columnIndex O índice da coluna pela qual os dados serão ordenados.
+     * @param left       O índice de início do primeiro subarray.
+     * @param mid        O índice de meio que divide os dois subarrays.
+     * @param right      O índice de fim do segundo subarray.
      */
-    private void merge(String[][] data, String[][] left, String[][] right, int columnIndex) {
-        int leftLength = left.length;
-        int rightLength = right.length;
-        int i = 0, j = 0, k = 0;
-
-        while (i < leftLength && j < rightLength) {
-            if (left[i][columnIndex].compareTo(right[j][columnIndex]) <= 0) {
-                data[k++] = left[i++];
+    private void merge(String[][] data, int columnIndex, int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+    
+        String[][] leftArray = new String[n1][];
+        String[][] rightArray = new String[n2][];
+    
+        for (int i = 0; i < n1; i++) {
+            leftArray[i] = data[left + i];
+        }
+        for (int i = 0; i < n2; i++) {
+            rightArray[i] = data[mid + 1 + i];
+        }
+    
+        int i = 0, j = 0, k = left;
+        while (i < n1 && j < n2) {
+            int leftVal = parseToInt(leftArray[i][columnIndex]);
+            int rightVal = parseToInt(rightArray[j][columnIndex]);
+    
+            if (leftVal <= rightVal) {
+                data[k++] = leftArray[i++];
             } else {
-                data[k++] = right[j++];
+                data[k++] = rightArray[j++];
             }
         }
-
-        while (i < leftLength) {
-            data[k++] = left[i++];
+    
+        while (i < n1) {
+            data[k++] = leftArray[i++];
         }
+    
+        while (j < n2) {
+            data[k++] = rightArray[j++];
+        }
+    }
 
-        while (j < rightLength) {
-            data[k++] = right[j++];
+    /**
+     * Converte uma string em um número inteiro. 
+     * Se a string estiver vazia ou não for numérica, retorna 0.
+     * O valor pode ter aspas duplas e vírgulas, que são removidas antes da conversão.
+     *
+     * @param value A string a ser convertida em um número inteiro.
+     * @return O valor inteiro correspondente à string ou 0 se a string não for numérica.
+     */
+    private int parseToInt(String value) {
+        value = value.replace("\"", "").replace(",", "");
+        if (value.isEmpty() || !isNumeric(value)) {
+            return 0;
+        }
+        return Integer.parseInt(value);
+    }
+    
+    /**
+     * Verifica se uma string pode ser convertida em um número inteiro.
+     * Esta função é usada para garantir que tentativas de conversão sejam seguras.
+     *
+     * @param str A string a ser verificada.
+     * @return {@code true} se a string for um número inteiro válido, caso contrário {@code false}.
+     */
+    private boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 }

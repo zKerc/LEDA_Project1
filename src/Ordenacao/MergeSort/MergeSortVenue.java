@@ -86,7 +86,7 @@ public class MergeSortVenue {
      */
     private void copiarArquivo(String origem, String destino) {
         try (BufferedReader br = new BufferedReader(new FileReader(origem));
-                BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
+             BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
             String line;
             while ((line = br.readLine()) != null) {
                 writer.write(line);
@@ -227,7 +227,8 @@ public class MergeSortVenue {
     }
 
     /**
-     * Compara duas strings de acordo com a ordem lexicográfica.
+     * Compara duas strings de acordo com a ordem lexicográfica, mas de forma insensível
+     * a maiúsculas/minúsculas e ignorando as aspas duplas.
      *
      * @param str1 A primeira string a ser comparada.
      * @param str2 A segunda string a ser comparada.
@@ -235,7 +236,10 @@ public class MergeSortVenue {
      *         ou zero se str1 == str2.
      */
     private int compareStrings(String str1, String str2) {
-        // Implementação da comparação de strings omitida para simplificar o exemplo.
+        // Removendo as aspas duplas e convertendo as strings para minúsculas
+        str1 = str1.replace("\"", "").toLowerCase();
+        str2 = str2.replace("\"", "").toLowerCase();
+        
         int minLength = Math.min(str1.length(), str2.length());
         for (int i = 0; i < minLength; i++) {
             char c1 = str1.charAt(i);

@@ -26,10 +26,22 @@ public class HeapSortFullDate {
     private int fullDateIndex = 13;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
+    /**
+     * Cria uma nova instância de HeapSortFullDate com o caminho do arquivo de
+     * entrada especificado.
+     *
+     * @param inputFile O caminho do arquivo de entrada contendo os dados a serem
+     *                  ordenados.
+     */
     public HeapSortFullDate(String inputFile) {
         this.inputFile = inputFile;
     }
 
+    /**
+     * Realiza a ordenação e gera os resultados para os casos de melhor, médio e
+     * pior cenário,
+     * além de medir e imprimir o tempo de execução para cada caso.
+     */
     public void ordenar() {
         criarCasoMelhor();
         criarCasoMedio();
@@ -40,16 +52,29 @@ public class HeapSortFullDate {
         ordenarEImprimirTempo(outputPior);
     }
 
+    /**
+     * Cria o caso de cenário médio copiando o arquivo de entrada para o arquivo de
+     * saída correspondente.
+     */
     private void criarCasoMedio() {
         copiarArquivo(inputFile, outputMedio);
     }
 
+    /**
+     * Cria o caso de cenário melhor ordenando os dados com o algoritmo Heap Sort
+     * e, em seguida, escreve os resultados no arquivo de saída correspondente.
+     */
     private void criarCasoMelhor() {
         String[][] data = carregarArquivoEmArray(inputFile);
         heapSort(data, fullDateIndex);
         escreverDados(data, outputMelhor);
     }
 
+    /**
+     * Cria o caso de cenário pior ordenando os dados com o algoritmo Heap Sort
+     * em ordem decrescente e, em seguida, escreve os resultados no arquivo de saída
+     * correspondente.
+     */
     private void criarCasoPior() {
         String[][] data = carregarArquivoEmArray(inputFile);
         heapSort(data, fullDateIndex);
@@ -57,9 +82,15 @@ public class HeapSortFullDate {
         escreverDados(data, outputPior);
     }
 
+    /**
+     * Copia um arquivo de origem para um arquivo de destino.
+     *
+     * @param origem  O caminho do arquivo de origem.
+     * @param destino O caminho do arquivo de destino.
+     */
     private void copiarArquivo(String origem, String destino) {
         try (BufferedReader br = new BufferedReader(new FileReader(origem));
-                BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
+             BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
             String line;
             while ((line = br.readLine()) != null) {
                 writer.write(line);
@@ -70,25 +101,35 @@ public class HeapSortFullDate {
         }
     }
 
+    /**
+     * Carrega os dados de um arquivo CSV em um array bidimensional.
+     *
+     * @param file O caminho do arquivo CSV a ser carregado.
+     * @return Um array bidimensional contendo os dados do arquivo.
+     */
     private String[][] carregarArquivoEmArray(String file) {
         String[][] data;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            data = br.lines().skip(1).map(line -> line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1))
-                    .toArray(String[][]::new);
+            data = br.lines().skip(1).map(line -> line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1)).toArray(String[][]::new);
         } catch (IOException e) {
             e.printStackTrace();
             data = new String[0][];
         }
         return data;
-    }
+    }    
 
+    /**
+     * Escreve os dados de um array bidimensional em um arquivo CSV.
+     *
+     * @param data       O array bidimensional contendo os dados a serem escritos.
+     * @param outputFile O caminho do arquivo CSV de saída.
+     */
     private void escreverDados(String[][] data, String outputFile) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
             // Escreva o cabeçalho
-            writer.write(
-                    "id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,home_goal_scorers,away_goal_scorers,full_date");
+            writer.write("id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,home_goal_scorers,away_goal_scorers,full_date");
             writer.newLine();
-
+            
             // Escreva os dados
             for (int i = 0; i < data.length; i++) {
                 writer.write(String.join(",", data[i]));
@@ -99,6 +140,11 @@ public class HeapSortFullDate {
         }
     }
 
+    /**
+     * Inverte a ordem dos dados em um array bidimensional.
+     *
+     * @param data O array bidimensional a ser invertido.
+     */
     private void inverterDados(String[][] data) {
         for (int i = 0; i < data.length / 2; i++) {
             String[] temp = data[i];
@@ -107,6 +153,12 @@ public class HeapSortFullDate {
         }
     }
 
+    /**
+     * Realiza a ordenação e mede o tempo de execução usando o algoritmo Heap Sort.
+     * O tempo de execução é impresso no console.
+     *
+     * @param fileToOrder O caminho do arquivo a ser ordenado e medido.
+     */
     private void ordenarEImprimirTempo(String fileToOrder) {
         String[][] data = carregarArquivoEmArray(fileToOrder);
 
@@ -117,16 +169,47 @@ public class HeapSortFullDate {
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
     }
 
-    private void heapify(String[][] data, int n, int i, int columnIndex) {
+    /**
+     * Ordena os dados usando o algoritmo Heap Sort.
+     * Este método usa o método heapify para criar uma estrutura de heap e, em seguida, 
+     * ordena os dados usando a propriedade de heap.
+     *
+     * @param data        O array bidimensional contendo os dados a serem ordenados.
+     * @param columnIndex O índice da coluna pela qual os dados serão ordenados.
+     */
+    private void heapSort(String[][] data, int columnIndex) {
+        int rowCount = data.length;
+        for (int i = rowCount / 2 - 1; i >= 0; i--) {
+            heapify(data, columnIndex, rowCount, i);
+        }
+
+        for (int i = rowCount - 1; i > 0; i--) {
+            String[] temp = data[0];
+            data[0] = data[i];
+            data[i] = temp;
+
+            heapify(data, columnIndex, i, 0);
+        }
+    }
+
+    /**
+     * Método auxiliar do algoritmo Heap Sort para garantir a propriedade do heap.
+     *
+     * @param data        O array bidimensional contendo os dados.
+     * @param columnIndex O índice da coluna pela qual os dados serão ordenados.
+     * @param rowCount    O número total de linhas.
+     * @param i           O índice do nó atual.
+     */
+    private void heapify(String[][] data, int columnIndex, int rowCount, int i) {
         int largest = i;
         int left = 2 * i + 1;
         int right = 2 * i + 2;
 
-        if (left < n && isDateGreater(data[left][columnIndex], data[largest][columnIndex])) {
+        if (left < rowCount && isDateGreater(data[left][columnIndex], data[largest][columnIndex])) {
             largest = left;
         }
 
-        if (right < n && isDateGreater(data[right][columnIndex], data[largest][columnIndex])) {
+        if (right < rowCount && isDateGreater(data[right][columnIndex], data[largest][columnIndex])) {
             largest = right;
         }
 
@@ -135,26 +218,18 @@ public class HeapSortFullDate {
             data[i] = data[largest];
             data[largest] = swap;
 
-            heapify(data, n, largest, columnIndex);
+            heapify(data, columnIndex, rowCount, largest);
         }
     }
 
-    private void heapSort(String[][] data, int columnIndex) {
-        int n = data.length;
-
-        for (int i = n / 2 - 1; i >= 0; i--) {
-            heapify(data, n, i, columnIndex);
-        }
-
-        for (int i = n - 1; i >= 0; i--) {
-            String[] swap = data[0];
-            data[0] = data[i];
-            data[i] = swap;
-
-            heapify(data, i, 0, columnIndex);
-        }
-    }
-
+    /**
+     * Determina se uma data é maior do que outra.
+     * Utiliza o formato "dd/MM/yyyy" para comparar as datas.
+     *
+     * @param date1 A primeira data.
+     * @param date2 A segunda data.
+     * @return true se a primeira data for maior do que a segunda, false caso contrário.
+     */
     private boolean isDateGreater(String date1, String date2) {
         try {
             Date d1 = sdf.parse(date1.replace("\"", ""));
