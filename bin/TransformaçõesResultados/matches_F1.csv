@@ -3,7 +3,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 451003,Burnley,Swansea City,"Saturday, August 13",2016,14:00,"19,126","Turf Moor, Burnley, England",2016/2017 English Premier League,0,1,,Leroy Fer,13/08/2016
 451006,Crystal Palace,West Bromwich Albion,"Saturday, August 13",2016,14:00,"24,490","Selhurst Park, London, England",2016/2017 English Premier League,0,1,,Salomón Rondón,13/08/2016
 451004,Everton,Tottenham Hotspur,"Saturday, August 13",2016,14:00,"39,494","Goodison Park, Liverpool, England",2016/2017 English Premier League,1,1,Ross Barkley,Erik Lamela,13/08/2016
-451001,Middlesbrough,Stoke City,"Saturday, August 13",2016,14:00,"32,110","Riverside Stadium, Middlesbrough, England",2016/2017 English Premier League,1,1,Álvaro Negredo,Xherdan Shaqiri,13/08/2016
+451001,Middlesbrough,Stoke City,"Saturday, August 13",2016,14:00,"32,110","Riverside Stadium, Middlesbrough, England",2016/2017 English Premier League,1,1,�?lvaro Negredo,Xherdan Shaqiri,13/08/2016
 451005,Southampton,Watford,"Saturday, August 13",2016,14:00,"31,488","St. Mary's Stadium, Southampton, England",2016/2017 English Premier League,1,1,Nathan Redmond,Étienne Capoue,13/08/2016
 451002,Manchester City,Sunderland,"Saturday, August 13",2016,16:30,"54,362","Etihad Stadium, Manchester, England",2016/2017 English Premier League,2,1,Sergio Agüero:Paddy McNair,Jermain Defoe,13/08/2016
 451000,AFC Bournemouth,Manchester United,"Sunday, August 14",2016,12:30,"11,355","Vitality Stadium, Bournemouth, England",2016/2017 English Premier League,1,3,Adam Smith,Juan Mata:Wayne Rooney:Zlatan Ibrahimovic,14/08/2016
@@ -121,7 +121,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 450890,West Bromwich Albion,Burnley,"Monday, November 21",2016,20:00,"23,016","The Hawthorns, West Bromwich, England",2016/2017 English Premier League,4,0,Matt Phillips:James Morrison:Darren Fletcher:Salomón Rondón,,21/11/2016
 450881,Burnley,Manchester City,"Saturday, November 26",2016,12:30,"21,794","Turf Moor, Burnley, England",2016/2017 English Premier League,1,2,Dean Marney,Sergio Agüero:Sergio Agüero,26/11/2016
 450886,Hull City,West Bromwich Albion,"Saturday, November 26",2016,15:00,"18,086","KCOM Stadium, Hull, England",2016/2017 English Premier League,1,1,Michael Dawson,Gareth McAuley,26/11/2016
-450882,Leicester City,Middlesbrough,"Saturday, November 26",2016,15:00,"32,058","King Power Stadium, Leicester, England",2016/2017 English Premier League,2,2,Riyad Mahrez:Islam Slimani,Álvaro Negredo:Álvaro Negredo,26/11/2016
+450882,Leicester City,Middlesbrough,"Saturday, November 26",2016,15:00,"32,058","King Power Stadium, Leicester, England",2016/2017 English Premier League,2,2,Riyad Mahrez:Islam Slimani,�?lvaro Negredo:�?lvaro Negredo,26/11/2016
 450884,Liverpool,Sunderland,"Saturday, November 26",2016,15:00,"53,114","Anfield, Liverpool, England",2016/2017 English Premier League,2,0,Divock Origi:James Milner,,26/11/2016
 450879,Swansea City,Crystal Palace,"Saturday, November 26",2016,15:00,"20,276","Liberty Stadium, Swansea, Wales",2016/2017 English Premier League,5,4,Gylfi Sigurdsson:Leroy Fer:Leroy Fer:Fernando Llorente:Fernando Llorente,Wilfried Zaha:James Tomkins:Jack Cork:Christian Benteke,26/11/2016
 450885,Chelsea,Tottenham Hotspur,"Saturday, November 26",2016,17:30,"41,513","Stamford Bridge, London, England",2016/2017 English Premier League,2,1,Pedro:Victor Moses,Christian Eriksen,26/11/2016
@@ -160,7 +160,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 450848,Tottenham Hotspur,Hull City,"Wednesday, December 14",2016,20:00,"31,347","White Hart Lane, England",2016/2017 English Premier League,3,0,Christian Eriksen:Christian Eriksen:Victor Wanyama,,14/12/2016
 450853,West Bromwich Albion,Swansea City,"Wednesday, December 14",2016,20:00,"21,467","The Hawthorns, West Bromwich, England",2016/2017 English Premier League,3,1,Salomón Rondón:Salomón Rondón:Salomón Rondón,Wayne Routledge,14/12/2016
 450840,Crystal Palace,Chelsea,"Saturday, December 17",2016,12:30,"25,259","Selhurst Park, London, England",2016/2017 English Premier League,0,1,,Diego Costa,17/12/2016
-450846,Middlesbrough,Swansea City,"Saturday, December 17",2016,15:00,"28,302","Riverside Stadium, Middlesbrough, England",2016/2017 English Premier League,3,0,Álvaro Negredo:Álvaro Negredo:Marten de Roon,,17/12/2016
+450846,Middlesbrough,Swansea City,"Saturday, December 17",2016,15:00,"28,302","Riverside Stadium, Middlesbrough, England",2016/2017 English Premier League,3,0,�?lvaro Negredo:�?lvaro Negredo:Marten de Roon,,17/12/2016
 450842,Stoke City,Leicester City,"Saturday, December 17",2016,15:00,"27,663","bet365 Stadium, Stoke-on-Trent, England",2016/2017 English Premier League,2,2,Bojan Krkic:Joe Allen,Leonardo Ulloa:Daniel Amartey,17/12/2016
 450847,Sunderland,Watford,"Saturday, December 17",2016,15:00,"40,267","Stadium of Light, Sunderland, England",2016/2017 English Premier League,1,0,Patrick van Aanholt,,17/12/2016
 450841,West Ham United,Hull City,"Saturday, December 17",2016,15:00,"56,952","London Stadium, London, England",2016/2017 English Premier League,1,0,Mark Noble,,17/12/2016
@@ -222,7 +222,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 450781,AFC Bournemouth,Crystal Palace,"Tuesday, January 31",2016,19:45,"11,286","Vitality Stadium, Bournemouth, England",2016/2017 English Premier League,0,2,,Scott Dann:Christian Benteke,31/01/2016
 450786,Arsenal,Watford,"Tuesday, January 31",2016,19:45,"60,035","Emirates Stadium, London, England",2016/2017 English Premier League,1,2,Alex Iwobi,Younes Kaboul:Troy Deeney,31/01/2016
 450782,Burnley,Leicester City,"Tuesday, January 31",2016,19:45,"19,202","Turf Moor, Burnley, England",2016/2017 English Premier League,1,0,Sam Vokes,,31/01/2016
-450787,Middlesbrough,West Bromwich Albion,"Tuesday, January 31",2016,19:45,"27,316","Riverside Stadium, Middlesbrough, England",2016/2017 English Premier League,1,1,Álvaro Negredo,James Morrison,31/01/2016
+450787,Middlesbrough,West Bromwich Albion,"Tuesday, January 31",2016,19:45,"27,316","Riverside Stadium, Middlesbrough, England",2016/2017 English Premier League,1,1,�?lvaro Negredo,James Morrison,31/01/2016
 450785,Sunderland,Tottenham Hotspur,"Tuesday, January 31",2016,19:45,"40,058","Stadium of Light, Sunderland, England",2016/2017 English Premier League,0,0,,,31/01/2016
 450784,Swansea City,Southampton,"Tuesday, January 31",2016,19:45,"20,359","Liberty Stadium, Swansea, Wales",2016/2017 English Premier League,2,1,Alfie Mawson:Gylfi Sigurdsson,Shane Long,31/01/2016
 450778,Liverpool,Chelsea,"Tuesday, January 31",2016,20:00,"53,157","Anfield, Liverpool, England",2016/2017 English Premier League,1,1,Georginio Wijnaldum,David Luiz,31/01/2016
@@ -297,7 +297,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 450706,Watford,West Bromwich Albion,"Tuesday, April 4",2016,18:45,"20,090","Vicarage Road, Watford, England",2016/2017 English Premier League,2,0,M'Baye Niang:Troy Deeney,,04/04/2016
 450701,Manchester United,Everton,"Tuesday, April 4",2016,19:00,"75,272","Old Trafford, Manchester, England",2016/2017 English Premier League,1,1,Zlatan Ibrahimovic,Phil Jagielka,04/04/2016
 450707,Arsenal,West Ham United,"Wednesday, April 5",2016,18:45,"59,961","Emirates Stadium, London, England",2016/2017 English Premier League,3,0,Mesut Özil:Theo Walcott:Olivier Giroud,,05/04/2016
-450702,Hull City,Middlesbrough,"Wednesday, April 5",2016,18:45,"20,380","KCOM Stadium, Hull, England",2016/2017 English Premier League,4,2,Lazar Markovic:Oumar Niasse:Abel Hernández:Harry Maguire,Álvaro Negredo:Marten de Roon,05/04/2016
+450702,Hull City,Middlesbrough,"Wednesday, April 5",2016,18:45,"20,380","KCOM Stadium, Hull, England",2016/2017 English Premier League,4,2,Lazar Markovic:Oumar Niasse:Abel Hernández:Harry Maguire,�?lvaro Negredo:Marten de Roon,05/04/2016
 450699,Southampton,Crystal Palace,"Wednesday, April 5",2016,18:45,"29,968","St. Mary's Stadium, Southampton, England",2016/2017 English Premier League,3,1,Nathan Redmond:Maya Yoshida:James Ward-Prowse,Christian Benteke,05/04/2016
 450705,Swansea City,Tottenham Hotspur,"Wednesday, April 5",2016,18:45,"20,855","Liberty Stadium, Swansea, Wales",2016/2017 English Premier League,1,3,Wayne Routledge,Dele Alli:Son Heung-Min:Christian Eriksen,05/04/2016
 450700,Chelsea,Manchester City,"Wednesday, April 5",2016,19:00,"41,528","Stamford Bridge, London, England",2016/2017 English Premier League,2,1,Eden Hazard:Eden Hazard,Sergio Agüero,05/04/2016
@@ -321,7 +321,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 450685,Southampton,Manchester City,"Saturday, April 15",2016,16:30,"31,850","St. Mary's Stadium, Southampton, England",2016/2017 English Premier League,0,3,,Vincent Kompany:Leroy Sané:Sergio Agüero,15/04/2016
 450684,West Bromwich Albion,Liverpool,"Sunday, April 16",2016,12:30,"25,669","The Hawthorns, West Bromwich, England",2016/2017 English Premier League,0,1,,Roberto Firmino,16/04/2016
 450681,Manchester United,Chelsea,"Sunday, April 16",2016,15:00,"75,272","Old Trafford, Manchester, England",2016/2017 English Premier League,2,0,Marcus Rashford:Ander Herrera,,16/04/2016
-450678,Middlesbrough,Arsenal,"Monday, April 17",2016,19:00,"31,298","Riverside Stadium, Middlesbrough, England",2016/2017 English Premier League,1,2,Álvaro Negredo,Alexis Sánchez:Mesut Özil,17/04/2016
+450678,Middlesbrough,Arsenal,"Monday, April 17",2016,19:00,"31,298","Riverside Stadium, Middlesbrough, England",2016/2017 English Premier League,1,2,�?lvaro Negredo,Alexis Sánchez:Mesut Özil,17/04/2016
 450671,AFC Bournemouth,Middlesbrough,"Saturday, April 22",2016,14:00,"10,890","Vitality Stadium, Bournemouth, England",2016/2017 English Premier League,4,0,Joshua King:Benik Afobe:Marc Pugh:Charlie Daniels,,22/04/2016
 450676,Hull City,Watford,"Saturday, April 22",2016,14:00,"20,432","KCOM Stadium, Hull, England",2016/2017 English Premier League,2,0,Lazar Markovic:Sam Clucas,,22/04/2016
 450673,Swansea City,Stoke City,"Saturday, April 22",2016,14:00,"20,566","Liberty Stadium, Swansea, Wales",2016/2017 English Premier League,2,0,Fernando Llorente:Thomas Carroll,,22/04/2016
@@ -340,7 +340,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 450660,Crystal Palace,Burnley,"Saturday, April 29",2016,16:30,"25,013","Selhurst Park, London, England",2016/2017 English Premier League,0,2,,Ashley Barnes:Andre Gray,29/04/2016
 450666,Manchester United,Swansea City,"Sunday, April 30",2016,11:00,"75,271","Old Trafford, Manchester, England",2016/2017 English Premier League,1,1,Wayne Rooney,Gylfi Sigurdsson,30/04/2016
 450661,Everton,Chelsea,"Sunday, April 30",2016,13:05,"39,595","Goodison Park, Liverpool, England",2016/2017 English Premier League,0,3,,Pedro:Gary Cahill:Willian,30/04/2016
-450665,Middlesbrough,Manchester City,"Sunday, April 30",2016,13:05,"29,763","Riverside Stadium, Middlesbrough, England",2016/2017 English Premier League,2,2,Álvaro Negredo:Calum Chambers,Sergio Agüero:Gabriel Jesus,30/04/2016
+450665,Middlesbrough,Manchester City,"Sunday, April 30",2016,13:05,"29,763","Riverside Stadium, Middlesbrough, England",2016/2017 English Premier League,2,2,�?lvaro Negredo:Calum Chambers,Sergio Agüero:Gabriel Jesus,30/04/2016
 450658,Tottenham Hotspur,Arsenal,"Sunday, April 30",2016,15:30,"31,811","White Hart Lane, England",2016/2017 English Premier League,2,0,Dele Alli:Harry Kane,,30/04/2016
 450664,Watford,Liverpool,"Monday, May 1",2016,19:00,"20,959","Vicarage Road, Watford, England",2016/2017 English Premier League,0,1,,Emre Can,01/05/2016
 450655,West Ham United,Tottenham Hotspur,"Friday, May 5",2016,19:00,"56,992","London Stadium, London, England",2016/2017 English Premier League,1,0,Manuel Lanzini,,05/05/2016
@@ -381,7 +381,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 450631,Watford,Manchester City,"Sunday, May 21",2016,14:00,"20,829","Vicarage Road, Watford, England",2016/2017 English Premier League,0,5,,Vincent Kompany:Sergio Agüero:Sergio Agüero:Fernandinho:Gabriel Jesus,21/05/2016
 480899,Arsenal,Leicester City,"Friday, August 11",2017,18:45,"59,387","Emirates Stadium, London, England",2017/2018 English Premier League,4,3,Alexandre Lacazette:Danny Welbeck:Aaron Ramsey:Olivier Giroud,Shinji Okazaki:Jamie Vardy:Jamie Vardy,11/08/2017
 480900,Watford,Liverpool,"Saturday, August 12",2017,11:30,"20,407","Vicarage Road, Watford, England",2017/2018 English Premier League,3,3,Stefano Okaka:Abdoulaye Doucouré:Miguel Britos,Sadio Mané:Roberto Firmino:Mohamed Salah,12/08/2017
-480897,Chelsea,Burnley,"Saturday, August 12",2017,14:00,"41,616","Stamford Bridge, London, England",2017/2018 English Premier League,2,3,Álvaro Morata:David Luiz,Sam Vokes:Sam Vokes:Stephen Ward,12/08/2017
+480897,Chelsea,Burnley,"Saturday, August 12",2017,14:00,"41,616","Stamford Bridge, London, England",2017/2018 English Premier League,2,3,�?lvaro Morata:David Luiz,Sam Vokes:Sam Vokes:Stephen Ward,12/08/2017
 480898,Crystal Palace,Huddersfield Town,"Saturday, August 12",2017,14:00,"25,448","Selhurst Park, London, England",2017/2018 English Premier League,0,3,,Joel Ward:Steve Mounié:Steve Mounié,12/08/2017
 480902,Everton,Stoke City,"Saturday, August 12",2017,14:00,"39,045","Goodison Park, Liverpool, England",2017/2018 English Premier League,1,0,Wayne Rooney,,12/08/2017
 480903,Southampton,Swansea City,"Saturday, August 12",2017,14:00,"31,447","St. Mary's Stadium, Southampton, England",2017/2018 English Premier League,0,0,,,12/08/2017
@@ -405,7 +405,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 480885,Newcastle United,West Ham United,"Saturday, August 26",2017,14:00,"52,093","St. James' Park, Newcastle-upon-Tyne, England",2017/2018 English Premier League,3,0,Joselu:Ciaran Clark:Aleksandar Mitrovic,,26/08/2017
 480877,Watford,Brighton & Hove Albion,"Saturday, August 26",2017,14:00,"20,181","Vicarage Road, Watford, England",2017/2018 English Premier League,0,0,,,26/08/2017
 480880,Manchester United,Leicester City,"Saturday, August 26",2017,16:30,"75,021","Old Trafford, Manchester, England",2017/2018 English Premier League,2,0,Marcus Rashford:Marouane Fellaini,,26/08/2017
-480879,Chelsea,Everton,"Sunday, August 27",2017,12:30,"41,382","Stamford Bridge, London, England",2017/2018 English Premier League,2,0,Cesc Fàbregas:Álvaro Morata,,27/08/2017
+480879,Chelsea,Everton,"Sunday, August 27",2017,12:30,"41,382","Stamford Bridge, London, England",2017/2018 English Premier League,2,0,Cesc Fàbregas:�?lvaro Morata,,27/08/2017
 480883,West Bromwich Albion,Stoke City,"Sunday, August 27",2017,12:30,"22,704","The Hawthorns, West Bromwich, England",2017/2018 English Premier League,1,1,Jay Rodriguez,Peter Crouch,27/08/2017
 480876,Liverpool,Arsenal,"Sunday, August 27",2017,15:00,"53,206","Anfield, Liverpool, England",2017/2018 English Premier League,4,0,Roberto Firmino:Sadio Mané:Mohamed Salah:Daniel Sturridge,,27/08/2017
 480878,Tottenham Hotspur,Burnley,"Sunday, August 27",2017,15:00,"67,862","Wembley Stadium, London, England",2017/2018 English Premier League,1,1,Dele Alli,Chris Wood,27/08/2017
@@ -413,7 +413,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 480866,Arsenal,AFC Bournemouth,"Saturday, September 9",2017,14:00,"59,262","Emirates Stadium, London, England",2017/2018 English Premier League,3,0,Danny Welbeck:Danny Welbeck:Alexandre Lacazette,,09/09/2017
 480875,Brighton & Hove Albion,West Bromwich Albion,"Saturday, September 9",2017,14:00,"30,381","Amex Stadium, Falmer, England",2017/2018 English Premier League,3,1,Pascal Gross:Pascal Gross:Tomer Hemed,James Morrison,09/09/2017
 480873,Everton,Tottenham Hotspur,"Saturday, September 9",2017,14:00,"38,835","Goodison Park, Liverpool, England",2017/2018 English Premier League,0,3,,Harry Kane:Harry Kane:Christian Eriksen,09/09/2017
-480867,Leicester City,Chelsea,"Saturday, September 9",2017,14:00,"31,923","King Power Stadium, Leicester, England",2017/2018 English Premier League,1,2,Jamie Vardy,Álvaro Morata:N'Golo Kanté,09/09/2017
+480867,Leicester City,Chelsea,"Saturday, September 9",2017,14:00,"31,923","King Power Stadium, Leicester, England",2017/2018 English Premier League,1,2,Jamie Vardy,�?lvaro Morata:N'Golo Kanté,09/09/2017
 480874,Southampton,Watford,"Saturday, September 9",2017,14:00,"31,435","St. Mary's Stadium, Southampton, England",2017/2018 English Premier League,0,2,,Abdoulaye Doucouré:Daryl Janmaat,09/09/2017
 480871,Stoke City,Manchester United,"Saturday, September 9",2017,16:30,"29,320","bet365 Stadium, Stoke-on-Trent, England",2017/2018 English Premier League,2,2,Eric Maxim Choupo-Moting:Eric Maxim Choupo-Moting,Marcus Rashford:Romelu Lukaku,09/09/2017
 480868,Burnley,Crystal Palace,"Sunday, September 10",2017,12:30,"18,862","Turf Moor, Burnley, England",2017/2018 English Premier League,1,0,Chris Wood,,10/09/2017
@@ -434,7 +434,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 480846,Everton,AFC Bournemouth,"Saturday, September 23",2017,14:00,"38,133","Goodison Park, Liverpool, England",2017/2018 English Premier League,2,1,Oumar Niasse:Oumar Niasse,Joshua King,23/09/2017
 480848,Manchester City,Crystal Palace,"Saturday, September 23",2017,14:00,"53,526","Etihad Stadium, Manchester, England",2017/2018 English Premier League,5,0,Leroy Sané:Raheem Sterling:Raheem Sterling:Sergio Agüero:Fabian Delph,,23/09/2017
 480851,Southampton,Manchester United,"Saturday, September 23",2017,14:00,"31,930","St. Mary's Stadium, Southampton, England",2017/2018 English Premier League,0,1,,Romelu Lukaku,23/09/2017
-480847,Stoke City,Chelsea,"Saturday, September 23",2017,14:00,"29,661","bet365 Stadium, Stoke-on-Trent, England",2017/2018 English Premier League,0,4,,Álvaro Morata:Álvaro Morata:Álvaro Morata:Pedro,23/09/2017
+480847,Stoke City,Chelsea,"Saturday, September 23",2017,14:00,"29,661","bet365 Stadium, Stoke-on-Trent, England",2017/2018 English Premier League,0,4,,�?lvaro Morata:�?lvaro Morata:�?lvaro Morata:Pedro,23/09/2017
 480854,Swansea City,Watford,"Saturday, September 23",2017,14:00,"20,372","Liberty Stadium, Swansea, Wales",2017/2018 English Premier League,1,2,Tammy Abraham,Andre Gray:Richarlison,23/09/2017
 480850,Leicester City,Liverpool,"Saturday, September 23",2017,16:30,"32,004","King Power Stadium, Leicester, England",2017/2018 English Premier League,2,3,Shinji Okazaki:Jamie Vardy,Mohamed Salah:Philippe Coutinho:Jordan Henderson,23/09/2017
 480852,Brighton & Hove Albion,Newcastle United,"Sunday, September 24",2017,15:00,"30,468","Amex Stadium, Falmer, England",2017/2018 English Premier League,1,0,Tomer Hemed,,24/09/2017
@@ -487,7 +487,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 480802,West Ham United,Liverpool,"Saturday, November 4",2017,17:30,"56,961","London Stadium, London, England",2017/2018 English Premier League,1,4,Manuel Lanzini,Mohamed Salah:Mohamed Salah:Joël Matip:Alex Oxlade-Chamberlain,04/11/2017
 480800,Tottenham Hotspur,Crystal Palace,"Sunday, November 5",2017,12:00,"65,270","Wembley Stadium, London, England",2017/2018 English Premier League,1,0,Son Heung-Min,,05/11/2017
 480796,Manchester City,Arsenal,"Sunday, November 5",2017,14:15,"54,286","Etihad Stadium, Manchester, England",2017/2018 English Premier League,3,1,Kevin De Bruyne:Sergio Agüero:Gabriel Jesus,Alexandre Lacazette,05/11/2017
-480803,Chelsea,Manchester United,"Sunday, November 5",2017,16:30,"41,615","Stamford Bridge, London, England",2017/2018 English Premier League,1,0,Álvaro Morata,,05/11/2017
+480803,Chelsea,Manchester United,"Sunday, November 5",2017,16:30,"41,615","Stamford Bridge, London, England",2017/2018 English Premier League,1,0,�?lvaro Morata,,05/11/2017
 480804,Everton,Watford,"Sunday, November 5",2017,16:30,"38,609","Goodison Park, Liverpool, England",2017/2018 English Premier League,3,2,Oumar Niasse:Dominic Calvert-Lewin:Leighton Baines,Richarlison:Christian Kabasele,05/11/2017
 480794,Arsenal,Tottenham Hotspur,"Saturday, November 18",2017,12:30,"59,530","Emirates Stadium, London, England",2017/2018 English Premier League,2,0,Shkodran Mustafi:Alexis Sánchez,,18/11/2017
 480788,AFC Bournemouth,Huddersfield Town,"Saturday, November 18",2017,15:00,"10,879","Vitality Stadium, Bournemouth, England",2017/2018 English Premier League,4,0,Callum Wilson:Callum Wilson:Callum Wilson:Harry Arter,,18/11/2017
@@ -495,7 +495,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 480787,Crystal Palace,Everton,"Saturday, November 18",2017,15:00,"25,526","Selhurst Park, London, England",2017/2018 English Premier League,2,2,James McArthur:Wilfried Zaha,Leighton Baines:Oumar Niasse,18/11/2017
 480789,Leicester City,Manchester City,"Saturday, November 18",2017,15:00,"31,908","King Power Stadium, Leicester, England",2017/2018 English Premier League,0,2,,Gabriel Jesus:Kevin De Bruyne,18/11/2017
 480791,Liverpool,Southampton,"Saturday, November 18",2017,15:00,"53,256","Anfield, Liverpool, England",2017/2018 English Premier League,3,0,Mohamed Salah:Mohamed Salah:Philippe Coutinho,,18/11/2017
-480786,West Bromwich Albion,Chelsea,"Saturday, November 18",2017,15:00,"23,592","The Hawthorns, West Bromwich, England",2017/2018 English Premier League,0,4,,Álvaro Morata:Eden Hazard:Eden Hazard:Marcos Alonso,18/11/2017
+480786,West Bromwich Albion,Chelsea,"Saturday, November 18",2017,15:00,"23,592","The Hawthorns, West Bromwich, England",2017/2018 English Premier League,0,4,,�?lvaro Morata:Eden Hazard:Eden Hazard:Marcos Alonso,18/11/2017
 480790,Manchester United,Newcastle United,"Saturday, November 18",2017,17:30,"75,035","Old Trafford, Manchester, England",2017/2018 English Premier League,4,1,Anthony Martial:Chris Smalling:Paul Pogba:Romelu Lukaku,Dwight Gayle,18/11/2017
 480795,Watford,West Ham United,"Sunday, November 19",2017,16:00,"20,018","Vicarage Road, Watford, England",2017/2018 English Premier League,2,0,Will Hughes:Richarlison,,19/11/2017
 480792,Brighton & Hove Albion,Stoke City,"Monday, November 20",2017,20:00,"29,676","Amex Stadium, Falmer, England",2017/2018 English Premier League,2,2,Pascal Gross:José Izquierdo,Eric Maxim Choupo-Moting:Kurt Zouma,20/11/2017
@@ -519,7 +519,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 480769,Everton,West Ham United,"Wednesday, November 29",2017,20:00,"38,242","Goodison Park, Liverpool, England",2017/2018 English Premier League,4,0,Wayne Rooney:Wayne Rooney:Wayne Rooney:Ashley Williams,,29/11/2017
 480767,Manchester City,Southampton,"Wednesday, November 29",2017,20:00,"53,407","Etihad Stadium, Manchester, England",2017/2018 English Premier League,2,1,Kevin De Bruyne:Raheem Sterling,Oriol Romeu,29/11/2017
 480766,Stoke City,Liverpool,"Wednesday, November 29",2017,20:00,"29,423","bet365 Stadium, Stoke-on-Trent, England",2017/2018 English Premier League,0,3,,Sadio Mané:Mohamed Salah:Mohamed Salah,29/11/2017
-480761,Chelsea,Newcastle United,"Saturday, December 2",2017,12:30,"41,538","Stamford Bridge, London, England",2017/2018 English Premier League,3,1,Eden Hazard:Eden Hazard:Álvaro Morata,Dwight Gayle,02/12/2017
+480761,Chelsea,Newcastle United,"Saturday, December 2",2017,12:30,"41,538","Stamford Bridge, London, England",2017/2018 English Premier League,3,1,Eden Hazard:Eden Hazard:�?lvaro Morata,Dwight Gayle,02/12/2017
 480759,Brighton & Hove Albion,Liverpool,"Saturday, December 2",2017,15:00,"30,634","Amex Stadium, Falmer, England",2017/2018 English Premier League,1,5,Glenn Murray,Emre Can:Roberto Firmino:Roberto Firmino:Philippe Coutinho:Lewis Dunk,02/12/2017
 480758,Everton,Huddersfield Town,"Saturday, December 2",2017,15:00,"39,167","Goodison Park, Liverpool, England",2017/2018 English Premier League,2,0,Gylfi Sigurdsson:Dominic Calvert-Lewin,,02/12/2017
 480756,Leicester City,Burnley,"Saturday, December 2",2017,15:00,"30,714","King Power Stadium, Leicester, England",2017/2018 English Premier League,1,0,Demarai Gray,,02/12/2017
@@ -571,7 +571,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 480721,Leicester City,Manchester United,"Saturday, December 23",2017,19:45,"32,202","King Power Stadium, Leicester, England",2017/2018 English Premier League,2,2,Jamie Vardy:Harry Maguire,Juan Mata:Juan Mata,23/12/2017
 480712,Tottenham Hotspur,Southampton,"Tuesday, December 26",2017,12:30,"57,297","Wembley Stadium, London, England",2017/2018 English Premier League,5,2,Harry Kane:Harry Kane:Harry Kane:Dele Alli:Son Heung-Min,Sofiane Boufal:Dusan Tadic,26/12/2017
 480715,AFC Bournemouth,West Ham United,"Tuesday, December 26",2017,15:00,"10,596","Vitality Stadium, Bournemouth, England",2017/2018 English Premier League,3,3,Dan Gosling:Nathan Aké:Callum Wilson,James Collins:Marko Arnautovic:Marko Arnautovic,26/12/2017
-480707,Chelsea,Brighton & Hove Albion,"Tuesday, December 26",2017,15:00,"41,568","Stamford Bridge, London, England",2017/2018 English Premier League,2,0,Álvaro Morata:Marcos Alonso,,26/12/2017
+480707,Chelsea,Brighton & Hove Albion,"Tuesday, December 26",2017,15:00,"41,568","Stamford Bridge, London, England",2017/2018 English Premier League,2,0,�?lvaro Morata:Marcos Alonso,,26/12/2017
 480713,Huddersfield Town,Stoke City,"Tuesday, December 26",2017,15:00,"24,047","John Smith's Stadium, Huddersfield, England",2017/2018 English Premier League,1,1,Tom Ince,Ramadan Sobhi,26/12/2017
 480708,Manchester United,Burnley,"Tuesday, December 26",2017,15:00,"75,046","Old Trafford, Manchester, England",2017/2018 English Premier League,2,2,Jesse Lingard:Jesse Lingard,Ashley Barnes:Steven Defour,26/12/2017
 480710,Watford,Leicester City,"Tuesday, December 26",2017,15:00,"20,308","Vicarage Road, Watford, England",2017/2018 English Premier League,2,1,Molla Wagué:Kasper Schmeichel,Riyad Mahrez,26/12/2017
@@ -692,7 +692,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 480893,West Ham United,Southampton,"Saturday, March 31",2017,14:00,"56,882","London Stadium, London, England",2017/2018 English Premier League,3,0,João Mário:Marko Arnautovic:Marko Arnautovic,,31/03/2017
 480591,Everton,Manchester City,"Saturday, March 31",2017,16:30,"39,221","Goodison Park, Liverpool, England",2017/2018 English Premier League,1,3,Yannick Bolasie,Leroy Sané:Gabriel Jesus:Raheem Sterling,31/03/2017
 480592,Arsenal,Stoke City,"Sunday, April 1",2017,12:30,"59,371","Emirates Stadium, London, England",2017/2018 English Premier League,3,0,Pierre-Emerick Aubameyang:Pierre-Emerick Aubameyang:Alexandre Lacazette,,01/04/2017
-480594,Chelsea,Tottenham Hotspur,"Sunday, April 1",2017,15:00,"41,364","Stamford Bridge, London, England",2017/2018 English Premier League,1,3,Álvaro Morata,Christian Eriksen:Dele Alli:Dele Alli,01/04/2017
+480594,Chelsea,Tottenham Hotspur,"Sunday, April 1",2017,15:00,"41,364","Stamford Bridge, London, England",2017/2018 English Premier League,1,3,�?lvaro Morata,Christian Eriksen:Dele Alli:Dele Alli,01/04/2017
 480579,Everton,Liverpool,"Saturday, April 7",2017,11:30,"39,220","Goodison Park, Liverpool, England",2017/2018 English Premier League,0,0,,,07/04/2017
 480577,AFC Bournemouth,Crystal Palace,"Saturday, April 7",2017,14:00,"10,730","Vitality Stadium, Bournemouth, England",2017/2018 English Premier League,2,2,Lys Mousset:Joshua King,Luka Milivojevic:Wilfried Zaha,07/04/2017
 480578,Brighton & Hove Albion,Huddersfield Town,"Saturday, April 7",2017,14:00,"30,501","Amex Stadium, Falmer, England",2017/2018 English Premier League,1,1,Jonas Lössl,Steve Mounié,07/04/2017
@@ -774,7 +774,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 513829,Leicester City,Wolverhampton Wanderers,"Saturday, August 18",2018,14:00,"32,043","King Power Stadium, Leicester, England",2018/2019 English Premier League,2,0,Matt Doherty:James Maddison,,18/08/2018
 513822,Tottenham Hotspur,Fulham,"Saturday, August 18",2018,14:00,"58,297","Wembley Stadium, London, England",2018/2019 English Premier League,3,1,Lucas Moura:Kieran Trippier:Harry Kane,Aleksandar Mitrovic,18/08/2018
 513821,West Ham United,AFC Bournemouth,"Saturday, August 18",2018,14:00,"56,888","London Stadium, London, England",2018/2019 English Premier League,1,2,Marko Arnautovic,Callum Wilson:Steve Cook,18/08/2018
-513820,Chelsea,Arsenal,"Saturday, August 18",2018,16:30,"40,491","Stamford Bridge, London, England",2018/2019 English Premier League,3,2,Pedro:Álvaro Morata:Marcos Alonso,Henrikh Mkhitaryan:Alex Iwobi,18/08/2018
+513820,Chelsea,Arsenal,"Saturday, August 18",2018,16:30,"40,491","Stamford Bridge, London, England",2018/2019 English Premier League,3,2,Pedro:�?lvaro Morata:Marcos Alonso,Henrikh Mkhitaryan:Alex Iwobi,18/08/2018
 513828,Burnley,Watford,"Sunday, August 19",2018,12:30,"18,822","Turf Moor, Burnley, England",2018/2019 English Premier League,1,3,James Tarkowski,Andre Gray:Troy Deeney:Will Hughes,19/08/2018
 513823,Manchester City,Huddersfield Town,"Sunday, August 19",2018,12:30,"54,021","Etihad Stadium, Manchester, England",2018/2019 English Premier League,6,1,Sergio Agüero:Sergio Agüero:Sergio Agüero:Gabriel Jesus:David Silva:Terence Kongolo,Jon Gorenc Stankovic,19/08/2018
 513825,Brighton & Hove Albion,Manchester United,"Sunday, August 19",2018,15:00,"30,592","Amex Stadium, Falmer, England",2018/2019 English Premier League,3,2,Glenn Murray:Shane Duffy:Pascal Gross,Romelu Lukaku:Paul Pogba,19/08/2018
@@ -837,7 +837,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 513761,Watford,AFC Bournemouth,"Saturday, October 6",2018,14:00,"20,139","Vicarage Road, Watford, England",2018/2019 English Premier League,0,4,,David Brooks:Joshua King:Joshua King:Callum Wilson,06/10/2018
 513767,Manchester United,Newcastle United,"Saturday, October 6",2018,16:30,"74,519","Old Trafford, Manchester, England",2018/2019 English Premier League,3,2,Juan Mata:Anthony Martial:Alexis Sánchez,Kenedy:Yoshinori Muto,06/10/2018
 513760,Fulham,Arsenal,"Sunday, October 7",2018,11:00,"25,401","Craven Cottage, London, England",2018/2019 English Premier League,1,5,André Schürrle,Alexandre Lacazette:Alexandre Lacazette:Aaron Ramsey:Pierre-Emerick Aubameyang:Pierre-Emerick Aubameyang,07/10/2018
-513763,Southampton,Chelsea,"Sunday, October 7",2018,13:15,"27,077","St. Mary's Stadium, Southampton, England",2018/2019 English Premier League,0,3,,Eden Hazard:Ross Barkley:Álvaro Morata,07/10/2018
+513763,Southampton,Chelsea,"Sunday, October 7",2018,13:15,"27,077","St. Mary's Stadium, Southampton, England",2018/2019 English Premier League,0,3,,Eden Hazard:Ross Barkley:�?lvaro Morata,07/10/2018
 513766,Liverpool,Manchester City,"Sunday, October 7",2018,15:30,"52,117","Anfield, Liverpool, England",2018/2019 English Premier League,0,0,,,07/10/2018
 513756,Chelsea,Manchester United,"Saturday, October 20",2018,11:30,"40,721","Stamford Bridge, London, England",2018/2019 English Premier League,2,2,Antonio Rüdiger:Ross Barkley,Anthony Martial:Anthony Martial,20/10/2018
 513757,AFC Bournemouth,Southampton,"Saturday, October 20",2018,14:00,"10,986","Vitality Stadium, Bournemouth, England",2018/2019 English Premier League,0,0,,,20/10/2018
@@ -855,7 +855,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 513747,Southampton,Newcastle United,"Saturday, October 27",2018,14:00,"30,736","St. Mary's Stadium, Southampton, England",2018/2019 English Premier League,0,0,,,27/10/2018
 513745,Watford,Huddersfield Town,"Saturday, October 27",2018,14:00,"20,457","Vicarage Road, Watford, England",2018/2019 English Premier League,3,0,Roberto Pereyra:Gerard Deulofeu:Isaac Success,,27/10/2018
 513748,Leicester City,West Ham United,"Saturday, October 27",2018,16:30,"31,848","King Power Stadium, Leicester, England",2018/2019 English Premier League,1,1,Wilfred Ndidi,Fabián Balbuena,27/10/2018
-513743,Burnley,Chelsea,"Sunday, October 28",2018,13:30,"21,430","Turf Moor, Burnley, England",2018/2019 English Premier League,0,4,,Álvaro Morata:Ross Barkley:Willian:Ruben Loftus-Cheek,28/10/2018
+513743,Burnley,Chelsea,"Sunday, October 28",2018,13:30,"21,430","Turf Moor, Burnley, England",2018/2019 English Premier League,0,4,,�?lvaro Morata:Ross Barkley:Willian:Ruben Loftus-Cheek,28/10/2018
 513740,Crystal Palace,Arsenal,"Sunday, October 28",2018,13:30,"25,718","Selhurst Park, London, England",2018/2019 English Premier League,2,2,Luka Milivojevic:Luka Milivojevic,Granit Xhaka:Pierre-Emerick Aubameyang,28/10/2018
 513744,Manchester United,Everton,"Sunday, October 28",2018,16:00,"74,525","Old Trafford, Manchester, England",2018/2019 English Premier League,2,1,Paul Pogba:Anthony Martial,Gylfi Sigurdsson,28/10/2018
 513746,Tottenham Hotspur,Manchester City,"Monday, October 29",2018,20:00,"56,854","Wembley Stadium, London, England",2018/2019 English Premier League,0,1,,Riyad Mahrez,29/10/2018
@@ -867,7 +867,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 513735,Arsenal,Liverpool,"Saturday, November 3",2018,17:30,"59,993","Emirates Stadium, London, England",2018/2019 English Premier League,1,1,Alexandre Lacazette,James Milner,03/11/2018
 513738,Wolverhampton Wanderers,Tottenham Hotspur,"Saturday, November 3",2018,19:45,"31,185","Molineux Stadium, Wolverhampton, England",2018/2019 English Premier League,2,3,Rúben Neves:Raúl Jiménez,Erik Lamela:Lucas Moura:Harry Kane,03/11/2018
 513737,Manchester City,Southampton,"Sunday, November 4",2018,15:00,"53,916","Etihad Stadium, Manchester, England",2018/2019 English Premier League,6,1,Wesley Hoedt:Sergio Agüero:David Silva:Raheem Sterling:Raheem Sterling:Leroy Sané,Danny Ings,04/11/2018
-513732,Chelsea,Crystal Palace,"Sunday, November 4",2018,16:00,"40,407","Stamford Bridge, London, England",2018/2019 English Premier League,3,1,Álvaro Morata:Álvaro Morata:Pedro,Andros Townsend,04/11/2018
+513732,Chelsea,Crystal Palace,"Sunday, November 4",2018,16:00,"40,407","Stamford Bridge, London, England",2018/2019 English Premier League,3,1,�?lvaro Morata:�?lvaro Morata:Pedro,Andros Townsend,04/11/2018
 513733,Huddersfield Town,Fulham,"Monday, November 5",2018,20:00,"17,082","John Smith's Stadium, Huddersfield, England",2018/2019 English Premier League,1,0,Timothy Fosu-Mensah,,05/11/2018
 513721,Cardiff City,Brighton & Hove Albion,"Saturday, November 10",2018,12:30,"29,402","Cardiff City Stadium, Cardiff, Wales",2018/2019 English Premier League,2,1,Callum Paterson:Sol Bamba,Lewis Dunk,10/11/2018
 513728,Huddersfield Town,West Ham United,"Saturday, November 10",2018,15:00,"24,069","John Smith's Stadium, Huddersfield, England",2018/2019 English Premier League,1,1,Alex Pritchard,Felipe Anderson,10/11/2018
@@ -2100,7 +2100,7 @@ id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,
 605831,Leeds United,Burnley,"Sunday, January 2",2021,14:00,"36,083","Elland Road, Leeds, England",2021-22 English Premier League,3,1,Jack Harrison:Stuart Dallas:Daniel James,Maxwel Cornet,02/01/2021
 605832,Chelsea,Liverpool,"Sunday, January 2",2021,16:30,"40,072","Stamford Bridge, London, England",2021-22 English Premier League,2,2,Mateo Kovacic:Christian Pulisic,Sadio Mané:Mohamed Salah,02/01/2021
 605838,Manchester United,Wolverhampton Wanderers,"Monday, January 3",2021,17:30,"73,045","Old Trafford, Manchester, England",2021-22 English Premier League,0,1,,João Moutinho,03/01/2021
-605860,Southampton,Brentford,"Tuesday, January 11",2021,19:45,"27,383","St. Mary's Stadium, Southampton, England",2021-22 English Premier League,4,1,Jan Bednarek:Álvaro Fernández:Armando Broja:Ché Adams,Vitaly Janelt,11/01/2021
+605860,Southampton,Brentford,"Tuesday, January 11",2021,19:45,"27,383","St. Mary's Stadium, Southampton, England",2021-22 English Premier League,4,1,Jan Bednarek:�?lvaro Fernández:Armando Broja:Ché Adams,Vitaly Janelt,11/01/2021
 605868,West Ham United,Norwich City,"Wednesday, January 12",2021,19:45,"59,775","London Stadium, London, England",2021-22 English Premier League,2,0,Jarrod Bowen:Jarrod Bowen,,12/01/2021
 605822,Brighton & Hove Albion,Crystal Palace,"Friday, January 14",2021,20:00,"30,675","Amex Stadium, Falmer, England",2021-22 English Premier League,1,1,Joachim Andersen,Conor Gallagher,14/01/2021
 605821,Manchester City,Chelsea,"Saturday, January 15",2021,12:30,"53,319","Etihad Stadium, Manchester, England",2021-22 English Premier League,1,0,Kevin De Bruyne,,15/01/2021
