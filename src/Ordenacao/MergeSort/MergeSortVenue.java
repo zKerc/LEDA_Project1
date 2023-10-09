@@ -5,6 +5,9 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 
 /**
  * A classe {@code MergeSortVenue} realiza a ordenação de dados em arquivos
@@ -43,9 +46,14 @@ public class MergeSortVenue {
         criarCasoMedio();
         criarCasoPior();
 
+        System.out.println("Ordenando utilizando o algoritmo Merge Sort...");
+
         ordenarEImprimirTempo(outputMelhor);
+
         ordenarEImprimirTempo(outputMedio);
+
         ordenarEImprimirTempo(outputPior);
+        System.out.println("\nOrdenação concluída com sucesso!");
     }
 
     /**
@@ -86,7 +94,7 @@ public class MergeSortVenue {
      */
     private void copiarArquivo(String origem, String destino) {
         try (BufferedReader br = new BufferedReader(new FileReader(origem));
-             BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
             String line;
             while ((line = br.readLine()) != null) {
                 writer.write(line);
@@ -165,6 +173,8 @@ public class MergeSortVenue {
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+        imprimirConsumoMemoria(); // Imprimir consumo de memória após a ordenação
+
     }
 
     /**
@@ -227,7 +237,8 @@ public class MergeSortVenue {
     }
 
     /**
-     * Compara duas strings de acordo com a ordem lexicográfica, mas de forma insensível
+     * Compara duas strings de acordo com a ordem lexicográfica, mas de forma
+     * insensível
      * a maiúsculas/minúsculas e ignorando as aspas duplas.
      *
      * @param str1 A primeira string a ser comparada.
@@ -239,7 +250,7 @@ public class MergeSortVenue {
         // Removendo as aspas duplas e convertendo as strings para minúsculas
         str1 = str1.replace("\"", "").toLowerCase();
         str2 = str2.replace("\"", "").toLowerCase();
-        
+
         int minLength = Math.min(str1.length(), str2.length());
         for (int i = 0; i < minLength; i++) {
             char c1 = str1.charAt(i);
@@ -251,5 +262,14 @@ public class MergeSortVenue {
             }
         }
         return Integer.compare(str1.length(), str2.length());
+    }
+
+    private void imprimirConsumoMemoria() {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
+
+        long usedMemory = heapMemoryUsage.getUsed();
+
+        System.out.println("Consumo de memória: " + usedMemory + " bytes");
     }
 }

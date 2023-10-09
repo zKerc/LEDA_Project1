@@ -6,6 +6,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 
 /**
  * A classe {@code QuickSortVenue} realiza a ordenação de dados em arquivos
@@ -44,9 +47,14 @@ public class QuickSortVenue {
         criarCasoMedio();
         criarCasoPior();
 
+        System.out.println("Ordenando utilizando o algoritmo Quick Sort...");
+
         ordenarEImprimirTempo(outputMelhor);
+
         ordenarEImprimirTempo(outputMedio);
+
         ordenarEImprimirTempo(outputPior);
+        System.out.println("\nOrdenação concluída com sucesso!");
     }
 
     /**
@@ -166,6 +174,8 @@ public class QuickSortVenue {
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+        imprimirConsumoMemoria(); // Imprimir consumo de memória após a ordenação
+
     }
 
     /**
@@ -226,5 +236,14 @@ public class QuickSortVenue {
         String[] temp = data[i];
         data[i] = data[j];
         data[j] = temp;
+    }
+
+    private void imprimirConsumoMemoria() {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
+
+        long usedMemory = heapMemoryUsage.getUsed();
+
+        System.out.println("Consumo de memória: " + usedMemory + " bytes");
     }
 }

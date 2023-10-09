@@ -5,6 +5,9 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 
 public class InsertionSortVenue {
 
@@ -24,9 +27,14 @@ public class InsertionSortVenue {
         criarCasoMedio();
         criarCasoPior();
 
+        System.out.println("Ordenando utilizando o algoritmo Insertion Sort...");
+
         ordenarEImprimirTempo(outputMelhor);
+
         ordenarEImprimirTempo(outputMedio);
+
         ordenarEImprimirTempo(outputPior);
+        System.out.println("\nOrdenação concluída com sucesso!");
     }
 
     private void criarCasoMedio() {
@@ -97,6 +105,7 @@ public class InsertionSortVenue {
     }
 
     private void ordenarEImprimirTempo(String fileToOrder) {
+
         String[][] data = carregarArquivoEmArray(fileToOrder);
 
         long startTime = System.currentTimeMillis();
@@ -104,6 +113,8 @@ public class InsertionSortVenue {
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+
+        imprimirConsumoMemoria(); // Imprimir consumo de memória após a ordenação
     }
 
     private void ordenarArray(String[][] data, int columnIndex) {
@@ -126,4 +137,14 @@ public class InsertionSortVenue {
             data[j + 1] = key;
         }
     }
+
+    private void imprimirConsumoMemoria() {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
+
+        long usedMemory = heapMemoryUsage.getUsed();
+
+        System.out.println("Consumo de memória: " + usedMemory + " bytes");
+    }
+
 }

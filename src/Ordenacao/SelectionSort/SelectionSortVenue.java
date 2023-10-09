@@ -5,10 +5,12 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 
 /**
- * A classe {@code SelectionSortVenue} realiza a ordenação de dados em
- * arquivos
+ * A classe {@code SelectionSortVenue} realiza a ordenação de dados em arquivos
  * CSV usando o algoritmo de ordenação Selection Sort.
  * Ela é projetada para criar três casos de ordenação (melhor, médio e pior) e
  * medir o tempo de execução.
@@ -24,10 +26,9 @@ public class SelectionSortVenue {
     private int venueIndex = 7;
 
     /**
-     * Cria uma nova instância de SelectionSortVenue com o caminho do arquivo de
-     * entrada especificado.
+     * Construtor da classe SelectionSortVenue.
      *
-     * @param inputFile O caminho do arquivo de entrada contendo os dados a serem
+     * @param inputFile O caminho do arquivo de entrada que contém os dados a serem
      *                  ordenados.
      */
     public SelectionSortVenue(String inputFile) {
@@ -35,32 +36,33 @@ public class SelectionSortVenue {
     }
 
     /**
-     * Realiza a ordenação e gera os resultados para os casos de melhor, médio e
-     * pior cenário,
-     * além de medir e imprimir o tempo de execução para cada caso.
+     * Ordena os dados nos cenários de melhor, médio e pior caso e imprime o tempo
+     * de execução.
      */
     public void ordenar() {
         criarCasoMelhor();
         criarCasoMedio();
         criarCasoPior();
 
+        System.out.println("Ordenando utilizando o algoritmo Selection Sort...");
+
         ordenarEImprimirTempo(outputMelhor);
         ordenarEImprimirTempo(outputMedio);
         ordenarEImprimirTempo(outputPior);
+
+        System.out.println("\nOrdenação concluída com sucesso!");
     }
 
     /**
-     * Cria o caso de cenário médio copiando o arquivo de entrada para o arquivo de
-     * saída correspondente.
+     * Cria o cenário de caso médio copiando o arquivo de entrada para o arquivo de
+     * saída.
      */
     private void criarCasoMedio() {
         copiarArquivo(inputFile, outputMedio);
     }
 
     /**
-     * Cria o caso de cenário melhor ordenando os dados com o algoritmo Selection
-     * Sort
-     * e, em seguida, escreve os resultados no arquivo de saída correspondente.
+     * Cria o cenário de melhor caso ordenando os dados em ordem crescente.
      */
     private void criarCasoMelhor() {
         String[][] data = carregarArquivoEmArray(inputFile);
@@ -69,13 +71,10 @@ public class SelectionSortVenue {
     }
 
     /**
-     * Cria o caso de cenário pior ordenando os dados com o algoritmo Selection Sort
-     * em ordem decrescente e, em seguida, escreve os resultados no arquivo de saída
-     * correspondente.
+     * Cria o cenário de pior caso invertendo a ordem dos dados previamente ordenados.
      */
     private void criarCasoPior() {
-        String[][] data = carregarArquivoEmArray(inputFile);
-        selectionSort(data, venueIndex);
+        String[][] data = carregarArquivoEmArray(outputMelhor); // Carrega os dados já ordenados do melhor caso
         inverterDados(data);
         escreverDados(data, outputPior);
     }
@@ -88,7 +87,7 @@ public class SelectionSortVenue {
      */
     private void copiarArquivo(String origem, String destino) {
         try (BufferedReader br = new BufferedReader(new FileReader(origem));
-                BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
+             BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
             String line;
             while ((line = br.readLine()) != null) {
                 writer.write(line);
@@ -100,10 +99,10 @@ public class SelectionSortVenue {
     }
 
     /**
-     * Carrega os dados de um arquivo CSV em um array bidimensional.
+     * Carrega os dados de um arquivo CSV em uma matriz bidimensional.
      *
      * @param file O caminho do arquivo CSV a ser carregado.
-     * @return Um array bidimensional contendo os dados do arquivo.
+     * @return Uma matriz bidimensional contendo os dados do arquivo CSV.
      */
     private String[][] carregarArquivoEmArray(String file) {
         String[][] data;
@@ -118,9 +117,9 @@ public class SelectionSortVenue {
     }
 
     /**
-     * Escreve os dados de um array bidimensional em um arquivo CSV.
+     * Escreve os dados de uma matriz bidimensional em um arquivo CSV.
      *
-     * @param data       O array bidimensional contendo os dados a serem escritos.
+     * @param data       A matriz bidimensional contendo os dados a serem escritos.
      * @param outputFile O caminho do arquivo CSV de saída.
      */
     private void escreverDados(String[][] data, String outputFile) {
@@ -141,9 +140,9 @@ public class SelectionSortVenue {
     }
 
     /**
-     * Inverte a ordem dos dados em um array bidimensional.
+     * Inverte a ordem dos dados em uma matriz bidimensional.
      *
-     * @param data O array bidimensional a ser invertido.
+     * @param data A matriz bidimensional a ser invertida.
      */
     private void inverterDados(String[][] data) {
         for (int i = 0; i < data.length / 2; i++) {
@@ -154,11 +153,9 @@ public class SelectionSortVenue {
     }
 
     /**
-     * Realiza a ordenação e mede o tempo de execução usando o algoritmo Selection
-     * Sort.
-     * O tempo de execução é impresso no console.
+     * Ordena os dados e imprime o tempo de execução.
      *
-     * @param fileToOrder O caminho do arquivo a ser ordenado e medido.
+     * @param fileToOrder O caminho do arquivo a ser ordenado.
      */
     private void ordenarEImprimirTempo(String fileToOrder) {
         String[][] data = carregarArquivoEmArray(fileToOrder);
@@ -168,29 +165,45 @@ public class SelectionSortVenue {
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+
+        imprimirConsumoMemoria(); // Imprimir consumo de memória após a ordenação
     }
 
     /**
-     * Realiza a ordenação de um conjunto de dados usando o algoritmo Selection
-     * Sort.
+     * Ordena os dados em uma matriz bidimensional usando o algoritmo Selection Sort.
      *
-     * @param data       O array bidimensional contendo os dados a serem ordenados.
-     * @param venueIndex O índice da coluna de locais (venue) nos dados.
+     * @param data        A matriz bidimensional contendo os dados a serem
+     *                    ordenados.
+     * @param columnIndex O índice da coluna a ser usada para a ordenação.
      */
-    private void selectionSort(String[][] data, int venueIndex) {
+    private void selectionSort(String[][] data, int columnIndex) {
         int n = data.length;
-
         for (int i = 0; i < n - 1; i++) {
-            int minIndex = i;
+            int min_idx = i;
             for (int j = i + 1; j < n; j++) {
-                if (data[j][venueIndex].compareTo(data[minIndex][venueIndex]) < 0) {
-                    minIndex = j;
+                String currentData = data[j][columnIndex].replace("\"", "").toUpperCase();
+                String minData = data[min_idx][columnIndex].replace("\"", "").toUpperCase();
+                if (currentData.compareTo(minData) < 0) {
+                    min_idx = j;
                 }
             }
 
-            String[] temp = data[minIndex];
-            data[minIndex] = data[i];
+            // Trocar o elemento mínimo encontrado pelo primeiro elemento
+            String[] temp = data[min_idx];
+            data[min_idx] = data[i];
             data[i] = temp;
         }
+    }
+
+    /**
+     * Imprime o consumo atual de memória.
+     */
+    private void imprimirConsumoMemoria() {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
+
+        long usedMemory = heapMemoryUsage.getUsed();
+
+        System.out.println("Consumo de memória: " + usedMemory + " bytes");
     }
 }

@@ -5,6 +5,9 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,6 +24,7 @@ public class MergeSortFullDate {
 
     /**
      * Construtor que inicializa a classe com o arquivo de entrada fornecido.
+     * 
      * @param inputFile O arquivo de entrada contendo os dados a serem ordenados.
      */
     public MergeSortFullDate(String inputFile) {
@@ -35,10 +39,15 @@ public class MergeSortFullDate {
         criarCasoMelhor();
         criarCasoMedio();
         criarCasoPior();
-        
+
+        System.out.println("Ordenando utilizando o algoritmo Merge Sort...");
+
         ordenarEImprimirTempo(outputMelhor);
+
         ordenarEImprimirTempo(outputMedio);
+
         ordenarEImprimirTempo(outputPior);
+        System.out.println("\nOrdenação concluída com sucesso!");
     }
 
     /**
@@ -78,7 +87,7 @@ public class MergeSortFullDate {
      */
     private void copiarArquivo(String origem, String destino) {
         try (BufferedReader br = new BufferedReader(new FileReader(origem));
-             BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
             String line;
             while ((line = br.readLine()) != null) {
                 writer.write(line);
@@ -98,13 +107,14 @@ public class MergeSortFullDate {
     private String[][] carregarArquivoEmArray(String file) {
         String[][] data;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            data = br.lines().skip(1).map(line -> line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1)).toArray(String[][]::new);
+            data = br.lines().skip(1).map(line -> line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1))
+                    .toArray(String[][]::new);
         } catch (IOException e) {
             e.printStackTrace();
             data = new String[0][];
         }
         return data;
-    }    
+    }
 
     /**
      * Escreve os dados de um array bidimensional em um arquivo CSV.
@@ -115,9 +125,10 @@ public class MergeSortFullDate {
     private void escreverDados(String[][] data, String outputFile) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
             // Escreva o cabeçalho
-            writer.write("id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,home_goal_scorers,away_goal_scorers,full_date");
+            writer.write(
+                    "id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,home_goal_scorers,away_goal_scorers,full_date");
             writer.newLine();
-            
+
             // Escreva os dados
             for (int i = 0; i < data.length; i++) {
                 writer.write(String.join(",", data[i]));
@@ -142,7 +153,7 @@ public class MergeSortFullDate {
     }
 
     /**
-     * Ordena os dados no arquivo especificado usando o algoritmo MergeSort e 
+     * Ordena os dados no arquivo especificado usando o algoritmo MergeSort e
      * imprime o tempo de execução.
      *
      * @param fileToOrder O arquivo a ser ordenado.
@@ -155,10 +166,13 @@ public class MergeSortFullDate {
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+        imprimirConsumoMemoria(); // Imprimir consumo de memória após a ordenação
+
     }
 
     /**
-     * Utiliza o algoritmo MergeSort para ordenar uma subparte do array bidimensional, 
+     * Utiliza o algoritmo MergeSort para ordenar uma subparte do array
+     * bidimensional,
      * especificada pelos índices left e right, com base na coluna fornecida.
      * 
      * @param data        O array bidimensional a ser ordenado.
@@ -176,9 +190,11 @@ public class MergeSortFullDate {
     }
 
     /**
-     * Combina duas subpartes ordenadas (esquerda e direita) do array bidimensional em um único subarray ordenado.
+     * Combina duas subpartes ordenadas (esquerda e direita) do array bidimensional
+     * em um único subarray ordenado.
      * 
-     * @param data        O array bidimensional que contém os subarrays a serem combinados.
+     * @param data        O array bidimensional que contém os subarrays a serem
+     *                    combinados.
      * @param columnIndex O índice da coluna pela qual os dados são ordenados.
      * @param left        O índice inicial do subarray esquerdo.
      * @param mid         O índice final do subarray esquerdo.
@@ -225,7 +241,8 @@ public class MergeSortFullDate {
      * 
      * @param date1 A primeira data a ser comparada.
      * @param date2 A segunda data a ser comparada.
-     * @return      {@code true} se date1 for posterior a date2, caso contrário {@code false}.
+     * @return {@code true} se date1 for posterior a date2, caso contrário
+     *         {@code false}.
      */
     private boolean isDateGreater(String date1, String date2) {
         try {
@@ -236,5 +253,14 @@ public class MergeSortFullDate {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private void imprimirConsumoMemoria() {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
+
+        long usedMemory = heapMemoryUsage.getUsed();
+
+        System.out.println("Consumo de memória: " + usedMemory + " bytes");
     }
 }

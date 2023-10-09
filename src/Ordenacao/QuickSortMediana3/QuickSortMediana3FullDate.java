@@ -8,11 +8,13 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 
 /**
- * A classe {@code QuickSortMediana3FullDate} realiza a ordenação de dados em
- * arquivos CSV usando o algoritmo de ordenação Quick Sort com escolha da
- * mediana de três.
+ * A classe {@code QuickSortMediana3FullDate} realiza a ordenação de dados em arquivos
+ * CSV usando o algoritmo de ordenação QuickSort com mediana de três.
  * Ela é projetada para criar três casos de ordenação (melhor, médio e pior) e
  * medir o tempo de execução.
  * Os resultados ordenados são escritos nos arquivos de saída correspondentes.
@@ -46,9 +48,14 @@ public class QuickSortMediana3FullDate {
         criarCasoMedio();
         criarCasoPior();
 
+        System.out.println("Ordenando utilizando o algoritmo Quick Sort com mediana de 3...");
+
         ordenarEImprimirTempo(outputMelhor);
+
         ordenarEImprimirTempo(outputMedio);
+
         ordenarEImprimirTempo(outputPior);
+        System.out.println("\nOrdenação concluída com sucesso!");
     }
 
     /**
@@ -64,7 +71,7 @@ public class QuickSortMediana3FullDate {
      */
     private void criarCasoMelhor() {
         String[][] data = carregarArquivoEmArray(inputFile);
-        quickSortMediana3(data, 0, data.length - 1, fullDateIndex);
+        quickSort(data, 0, data.length - 1, fullDateIndex);
         escreverDados(data, outputMelhor);
     }
 
@@ -73,7 +80,7 @@ public class QuickSortMediana3FullDate {
      */
     private void criarCasoPior() {
         String[][] data = carregarArquivoEmArray(inputFile);
-        quickSortMediana3(data, 0, data.length - 1, fullDateIndex);
+        quickSort(data, 0, data.length - 1, fullDateIndex);
         inverterDados(data);
         escreverDados(data, outputPior);
     }
@@ -161,15 +168,16 @@ public class QuickSortMediana3FullDate {
         String[][] data = carregarArquivoEmArray(fileToOrder);
 
         long startTime = System.currentTimeMillis();
-        quickSortMediana3(data, 0, data.length - 1, fullDateIndex);
+        quickSort(data, 0, data.length - 1, fullDateIndex);
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+        imprimirConsumoMemoria(); // Imprimir consumo de memória após a ordenação
+
     }
 
     /**
-     * Ordena os dados em uma matriz bidimensional usando o algoritmo Quick Sort com
-     * mediana de três elementos.
+     * Ordena os dados em uma matriz bidimensional usando o algoritmo QuickSort com mediana de três.
      *
      * @param data        A matriz bidimensional contendo os dados a serem
      *                    ordenados.
@@ -178,81 +186,113 @@ public class QuickSortMediana3FullDate {
      * @param columnIndex O índice da coluna de datas completas (full_date) nos
      *                    dados.
      */
-    private void quickSortMediana3(String[][] data, int low, int high, int columnIndex) {
+    private void quickSort(String[][] data, int low, int high, int columnIndex) {
         if (low < high) {
-            int pivotIndex = partitionMediana3(data, low, high, columnIndex);
-            quickSortMediana3(data, low, pivotIndex - 1, columnIndex);
-            quickSortMediana3(data, pivotIndex + 1, high, columnIndex);
+            int pi = partition(data, low, high, columnIndex);
+            quickSort(data, low, pi - 1, columnIndex);
+            quickSort(data, pi + 1, high, columnIndex);
         }
     }
 
     /**
-     * Particiona os dados em uma matriz bidimensional para a ordenação rápida com
-     * mediana de três elementos.
+     * Particiona os dados em uma matriz bidimensional para a ordenação rápida.
      *
-     * @param data        A matriz bidimensional contendo os dados a serem
-     *                    particionados.
+     * @param data        A matriz bidimensional contendo os dados a serem particionados.
      * @param low         O índice baixo inicial para a particionamento.
      * @param high        O índice alto inicial para a particionamento.
      * @param columnIndex O índice da coluna de datas completas (full_date) nos
      *                    dados.
      * @return O índice da posição de partição.
      */
-    private int partitionMediana3(String[][] data, int low, int high, int columnIndex) {
+    private int partition(String[][] data, int low, int high, int columnIndex) {
         int middle = (low + high) / 2;
-        if (isDateGreater(data[low][columnIndex], data[middle][columnIndex]))
-            swap(data, low, middle);
-        if (isDateGreater(data[low][columnIndex], data[high][columnIndex]))
-            swap(data, low, high);
-        if (isDateGreater(data[middle][columnIndex], data[high][columnIndex]))
-            swap(data, middle, high);
+        String pivotValue = medianOfThree(data[low][columnIndex], data[middle][columnIndex], data[high][columnIndex]);
+        int pivotIndex = (pivotValue.equals(data[low][columnIndex])) ? low :
+                         (pivotValue.equals(data[middle][columnIndex])) ? middle : high;
+        swap(data, pivotIndex, high);
 
-        String pivot = data[middle][columnIndex];
-        swap(data, middle, high - 1);
-        int i = low;
-        int j = high - 1;
-        while (true) {
-            while (isDateGreater(data[++i][columnIndex], pivot))
-                ;
-            while (isDateGreater(pivot, data[--j][columnIndex]))
-                ;
-            if (i < j)
+        String pivot = data[high][columnIndex];
+        int i = (low - 1);
+        for (int j = low; j < high; j++) {
+            if (isDateLess(data[j][columnIndex], pivot)) {
+                i++;
                 swap(data, i, j);
-            else
-                break;
+            }
         }
-        swap(data, i, high - 1);
-        return i;
+        swap(data, i + 1, high);
+        return i + 1;
     }
 
     /**
-     * Verifica se uma data1 é maior do que uma data2.
+     * Retorna a mediana entre três datas.
+     *
+     * @param date1 A primeira data.
+     * @param date2 A segunda data.
+     * @param date3 A terceira data.
+     * @return A mediana entre date1, date2 e date3.
+     */
+    private String medianOfThree(String date1, String date2, String date3) {
+        date1 = fixDateFormat(date1.replace("\"", ""));
+        date2 = fixDateFormat(date2.replace("\"", ""));
+        date3 = fixDateFormat(date3.replace("\"", ""));
+    
+        Date d1, d2, d3;
+    
+        try {
+            d1 = sdf.parse(date1);
+            d2 = sdf.parse(date2);
+            d3 = sdf.parse(date3);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return date1;  // Retorne a primeira data como padrão em caso de erro.
+        }
+    
+        if (d1.compareTo(d2) <= 0 && d1.compareTo(d3) >= 0 || d1.compareTo(d2) >= 0 && d1.compareTo(d3) <= 0) {
+            return date1;
+        } else if (d2.compareTo(d1) <= 0 && d2.compareTo(d3) >= 0 || d2.compareTo(d1) >= 0 && d2.compareTo(d3) <= 0) {
+            return date2;
+        } else {
+            return date3;
+        }
+    }
+
+    private void swap(String[][] data, int i, int j) {
+        String[] temp = data[i];
+        data[i] = data[j];
+        data[j] = temp;
+    }
+
+    private String fixDateFormat(String date) {
+        if (date.matches("\\d{8}")) {
+            return date.substring(0, 2) + "/" + date.substring(2, 4) + "/" + date.substring(4);
+        }
+        return date;
+    }
+    
+    /**
+     * Verifica se uma data1 é menor do que uma date2.
      *
      * @param date1 A primeira data a ser comparada.
      * @param date2 A segunda data a ser comparada.
-     * @return true se a data1 for maior que a data2, caso contrário, false.
+     * @return true se a date1 for menor que a date2, caso contrário, false.
      */
-    private boolean isDateGreater(String date1, String date2) {
+    private boolean isDateLess(String date1, String date2) {
         try {
-            Date d1 = sdf.parse(date1.replace("\"", ""));
-            Date d2 = sdf.parse(date2.replace("\"", ""));
-            return d1.compareTo(d2) > 0;
+            Date d1 = sdf.parse(fixDateFormat(date1.replace("\"", "")));
+            Date d2 = sdf.parse(fixDateFormat(date2.replace("\"", "")));
+            return d1.compareTo(d2) < 0;
         } catch (ParseException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    /**
-     * Troca dois elementos em uma matriz bidimensional.
-     *
-     * @param data   A matriz bidimensional contendo os elementos.
-     * @param index1 O índice do primeiro elemento a ser trocado.
-     * @param index2 O índice do segundo elemento a ser trocado.
-     */
-    private void swap(String[][] data, int index1, int index2) {
-        String[] temp = data[index1];
-        data[index1] = data[index2];
-        data[index2] = temp;
+    private void imprimirConsumoMemoria() {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
+
+        long usedMemory = heapMemoryUsage.getUsed();
+
+        System.out.println("Consumo de memória: " + usedMemory + " bytes");
     }
 }

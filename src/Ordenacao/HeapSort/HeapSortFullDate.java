@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 
 /**
  * A classe {@code HeapSortFullDate} realiza a ordenação de dados em arquivos
@@ -47,9 +50,14 @@ public class HeapSortFullDate {
         criarCasoMedio();
         criarCasoPior();
 
+        System.out.println("Ordenando utilizando o algoritmo Heap Sort...");
+
         ordenarEImprimirTempo(outputMelhor);
+
         ordenarEImprimirTempo(outputMedio);
+
         ordenarEImprimirTempo(outputPior);
+        System.out.println("\nOrdenação concluída com sucesso!");
     }
 
     /**
@@ -90,7 +98,7 @@ public class HeapSortFullDate {
      */
     private void copiarArquivo(String origem, String destino) {
         try (BufferedReader br = new BufferedReader(new FileReader(origem));
-             BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(destino))) {
             String line;
             while ((line = br.readLine()) != null) {
                 writer.write(line);
@@ -110,13 +118,14 @@ public class HeapSortFullDate {
     private String[][] carregarArquivoEmArray(String file) {
         String[][] data;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            data = br.lines().skip(1).map(line -> line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1)).toArray(String[][]::new);
+            data = br.lines().skip(1).map(line -> line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1))
+                    .toArray(String[][]::new);
         } catch (IOException e) {
             e.printStackTrace();
             data = new String[0][];
         }
         return data;
-    }    
+    }
 
     /**
      * Escreve os dados de um array bidimensional em um arquivo CSV.
@@ -127,9 +136,10 @@ public class HeapSortFullDate {
     private void escreverDados(String[][] data, String outputFile) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
             // Escreva o cabeçalho
-            writer.write("id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,home_goal_scorers,away_goal_scorers,full_date");
+            writer.write(
+                    "id,home,away,date,year,time (utc),attendance,venue,league,home_score,away_score,home_goal_scorers,away_goal_scorers,full_date");
             writer.newLine();
-            
+
             // Escreva os dados
             for (int i = 0; i < data.length; i++) {
                 writer.write(String.join(",", data[i]));
@@ -167,11 +177,14 @@ public class HeapSortFullDate {
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+        imprimirConsumoMemoria(); // Imprimir consumo de memória após a ordenação
+
     }
 
     /**
      * Ordena os dados usando o algoritmo Heap Sort.
-     * Este método usa o método heapify para criar uma estrutura de heap e, em seguida, 
+     * Este método usa o método heapify para criar uma estrutura de heap e, em
+     * seguida,
      * ordena os dados usando a propriedade de heap.
      *
      * @param data        O array bidimensional contendo os dados a serem ordenados.
@@ -228,7 +241,8 @@ public class HeapSortFullDate {
      *
      * @param date1 A primeira data.
      * @param date2 A segunda data.
-     * @return true se a primeira data for maior do que a segunda, false caso contrário.
+     * @return true se a primeira data for maior do que a segunda, false caso
+     *         contrário.
      */
     private boolean isDateGreater(String date1, String date2) {
         try {
@@ -239,5 +253,17 @@ public class HeapSortFullDate {
             e.printStackTrace();
             return false;
         }
+    }
+
+    /**
+     * Imprime o consumo de memória atual do sistema.
+     */
+    private void imprimirConsumoMemoria() {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
+
+        long usedMemory = heapMemoryUsage.getUsed();
+
+        System.out.println("Consumo de memória: " + usedMemory + " bytes");
     }
 }

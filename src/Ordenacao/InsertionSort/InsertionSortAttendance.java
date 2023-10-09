@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 
 /**
  * A classe {@code InsertionSortAttendance} realiza a ordenação de dados em
@@ -39,9 +42,15 @@ public class InsertionSortAttendance {
         criarCasoMelhor();
         criarCasoMedio();
         criarCasoPior();
+
+        System.out.println("Ordenando utilizando o algoritmo Insertion Sort...");
+
         ordenarEImprimirTempo(outputMelhor);
+
         ordenarEImprimirTempo(outputMedio);
+
         ordenarEImprimirTempo(outputPior);
+        System.out.println("\nOrdenação concluída com sucesso!");
     }
 
     /**
@@ -63,7 +72,7 @@ public class InsertionSortAttendance {
 
             String[][] data = carregarArquivoEmArray(inputFile, rowCount);
 
-            ordenarArray(data, attendanceIndex, rowCount); // Ordenando o array
+            insertionSort(data, attendanceIndex, rowCount); // Ordenando o array
 
             // Escrevendo no arquivo de saída
             try (FileWriter writer = new FileWriter(outputMelhor)) {
@@ -104,7 +113,7 @@ public class InsertionSortAttendance {
             String[][] dataArray = new String[rowCount - 1][14]; // Array para os dados sem cabeçalho
             System.arraycopy(data, 1, dataArray, 0, rowCount - 1); // Copiando os dados sem o cabeçalho
 
-            ordenarArray(dataArray, attendanceIndex, rowCount - 1);
+            insertionSort(dataArray, attendanceIndex, rowCount - 1);
 
             for (int i = 0; i < dataArray.length / 2; i++) {
                 String[] temp = dataArray[i];
@@ -158,11 +167,12 @@ public class InsertionSortAttendance {
             // Início da medição de tempo
             long startTime = System.currentTimeMillis();
 
-            ordenarArray(dataArray, attendanceIndex, rowCount - 1);
+            insertionSort(dataArray, attendanceIndex, rowCount - 1);
 
             // Fim da medição de tempo
             long endTime = System.currentTimeMillis();
             System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+            imprimirConsumoMemoria(); // Imprimir consumo de memória após a ordenação
 
             // NÃO gravaremos os dados ordenados no arquivo para manter os casos como estão
         } catch (IOException e) {
@@ -215,7 +225,7 @@ public class InsertionSortAttendance {
      * @param columnIndex O índice da coluna pela qual os dados serão ordenados.
      * @param rowCount    O número de linhas no array.
      */
-    private void ordenarArray(String[][] data, int columnIndex, int rowCount) {
+    private void insertionSort(String[][] data, int columnIndex, int rowCount) {
         for (int i = 0; i < rowCount; i++) {
             String[] key = data[i];
             int j = i - 1;
@@ -260,5 +270,14 @@ public class InsertionSortAttendance {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    private void imprimirConsumoMemoria() {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
+
+        long usedMemory = heapMemoryUsage.getUsed();
+
+        System.out.println("Consumo de memória: " + usedMemory + " bytes");
     }
 }

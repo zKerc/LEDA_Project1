@@ -5,7 +5,9 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 
 /**
  * A classe {@code CountingSortFullDate} realiza a ordenação de dados em
@@ -44,9 +46,14 @@ public class CountingSortFullDate {
         criarCasoMedio();
         criarCasoPior();
 
+        System.out.println("Ordenando utilizando o algoritmo Counting Sort...");
+
         ordenarEImprimirTempo(outputMelhor);
+
         ordenarEImprimirTempo(outputMedio);
+
         ordenarEImprimirTempo(outputPior);
+        System.out.println("\nOrdenação concluída com sucesso!");
     }
 
     /**
@@ -168,6 +175,7 @@ public class CountingSortFullDate {
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+        imprimirConsumoMemoria(); // Imprimir consumo de memória após a ordenação
     }
 
     /**
@@ -185,8 +193,10 @@ public class CountingSortFullDate {
         int[] datesAsIntegers = new int[data.length];
         for (int i = 0; i < data.length; i++) {
             datesAsIntegers[i] = dateToInt(data[i][fullDateIndex]);
-            if (datesAsIntegers[i] > maxDate) maxDate = datesAsIntegers[i];
-            if (datesAsIntegers[i] < minDate) minDate = datesAsIntegers[i];
+            if (datesAsIntegers[i] > maxDate)
+                maxDate = datesAsIntegers[i];
+            if (datesAsIntegers[i] < minDate)
+                minDate = datesAsIntegers[i];
         }
 
         int range = maxDate - minDate + 1;
@@ -213,5 +223,14 @@ public class CountingSortFullDate {
 
     private int dateToInt(String date) {
         return date.isEmpty() ? 0 : Integer.parseInt(date.replace("/", ""));
+    }
+
+    private void imprimirConsumoMemoria() {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
+
+        long usedMemory = heapMemoryUsage.getUsed();
+
+        System.out.println("Consumo de memória: " + usedMemory + " bytes");
     }
 }

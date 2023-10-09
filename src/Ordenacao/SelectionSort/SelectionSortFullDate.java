@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 
 /**
  * A classe {@code SelectionSortFullDate} realiza a ordenação de dados em
@@ -46,9 +49,14 @@ public class SelectionSortFullDate {
         criarCasoMedio();
         criarCasoPior();
 
+        System.out.println("Ordenando utilizando o algoritmo Selection Sort...");
+
         ordenarEImprimirTempo(outputMelhor);
+
         ordenarEImprimirTempo(outputMedio);
+
         ordenarEImprimirTempo(outputPior);
+        System.out.println("\nOrdenação concluída com sucesso!");
     }
 
     /**
@@ -166,29 +174,32 @@ public class SelectionSortFullDate {
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+        imprimirConsumoMemoria(); // Imprimir consumo de memória após a ordenação
+
     }
 
     /**
-     * Ordena os dados em uma matriz bidimensional usando o algoritmo Selection
-     * Sort.
+     * Ordena um array bidimensional com base em uma coluna específica usando o
+     * algoritmo Selection Sort.
      *
-     * @param data        A matriz bidimensional de dados a ser ordenada.
-     * @param columnIndex O índice da coluna de datas completas.
+     * @param data        O array bidimensional a ser ordenado.
+     * @param columnIndex O índice da coluna pela qual os dados serão ordenados.
      */
     private void selectionSort(String[][] data, int columnIndex) {
         int n = data.length;
-        for (int i = 0; i < n - 1; i++) {
-            int minIndex = i;
-            for (int j = i + 1; j < n; j++) {
-                if (isDateGreater(data[j][columnIndex], data[minIndex][columnIndex])) {
-                    minIndex = j;
+
+        for (int i = 0; i < n-1; i++) {
+            int min_idx = i;
+
+            for (int j = i+1; j < n; j++) {
+                if (isDateGreater(data[min_idx][columnIndex], data[j][columnIndex])) {
+                    min_idx = j;
                 }
             }
-            if (minIndex != i) {
-                String[] temp = data[i];
-                data[i] = data[minIndex];
-                data[minIndex] = temp;
-            }
+
+            String[] temp = data[min_idx];
+            data[min_idx] = data[i];
+            data[i] = temp;
         }
     }
 
@@ -208,5 +219,14 @@ public class SelectionSortFullDate {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private void imprimirConsumoMemoria() {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
+
+        long usedMemory = heapMemoryUsage.getUsed();
+
+        System.out.println("Consumo de memória: " + usedMemory + " bytes");
     }
 }

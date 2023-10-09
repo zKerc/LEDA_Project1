@@ -5,6 +5,9 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 
 /**
  * A classe {@code HeapSortVenue} realiza a ordenação de dados em arquivos
@@ -23,7 +26,8 @@ public class HeapSortVenue {
     private int venueIndex = 7;
 
     /**
-     * Construtor que inicializa uma nova instância da classe HeapSortVenue com o arquivo de entrada especificado.
+     * Construtor que inicializa uma nova instância da classe HeapSortVenue com o
+     * arquivo de entrada especificado.
      *
      * @param inputFile O arquivo de entrada contendo os dados a serem ordenados.
      */
@@ -40,9 +44,14 @@ public class HeapSortVenue {
         criarCasoMedio();
         criarCasoPior();
 
+        System.out.println("Ordenando utilizando o algoritmo Heap Sort...");
+
         ordenarEImprimirTempo(outputMelhor);
+
         ordenarEImprimirTempo(outputMedio);
+
         ordenarEImprimirTempo(outputPior);
+        System.out.println("\nOrdenação concluída com sucesso!");
     }
 
     /**
@@ -163,10 +172,13 @@ public class HeapSortVenue {
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+        imprimirConsumoMemoria(); // Imprimir consumo de memória após a ordenação
+
     }
 
     /**
-     * Ordena um conjunto de dados usando o algoritmo Heap Sort baseado na coluna venue.
+     * Ordena um conjunto de dados usando o algoritmo Heap Sort baseado na coluna
+     * venue.
      *
      * @param data       O conjunto de dados a ser ordenado.
      * @param venueIndex O índice da coluna venue.
@@ -218,12 +230,22 @@ public class HeapSortVenue {
     }
 
     /**
-     * Sanitiza uma string removendo as aspas e convertendo-a para letras minúsculas.
+     * Sanitiza uma string removendo as aspas e convertendo-a para letras
+     * minúsculas.
      *
      * @param str A string a ser sanitizada.
      * @return A string sanitizada.
      */
     private String sanitize(String str) {
         return str.replace("\"", "").toLowerCase();
+    }
+
+    private void imprimirConsumoMemoria() {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
+
+        long usedMemory = heapMemoryUsage.getUsed();
+
+        System.out.println("Consumo de memória: " + usedMemory + " bytes");
     }
 }

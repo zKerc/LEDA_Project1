@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 
 /**
  * A classe {@code MergeSortAttendance} realiza a ordenação de dados em
@@ -39,9 +42,15 @@ public class MergeSortAttendance {
         criarCasoMelhor();
         criarCasoMedio();
         criarCasoPior();
+
+        System.out.println("Ordenando utilizando o algoritmo Merge Sort...");
+
         ordenarEImprimirTempo(outputMelhor);
+
         ordenarEImprimirTempo(outputMedio);
+
         ordenarEImprimirTempo(outputPior);
+        System.out.println("\nOrdenação concluída com sucesso!");
     }
 
     /**
@@ -81,7 +90,7 @@ public class MergeSortAttendance {
      */
     private void copiarArquivo(String origem, String destino) {
         try (BufferedReader br = new BufferedReader(new FileReader(origem));
-             FileWriter writer = new FileWriter(destino)) {
+                FileWriter writer = new FileWriter(destino)) {
             String line;
             while ((line = br.readLine()) != null) {
                 writer.write(line + "\n");
@@ -157,15 +166,17 @@ public class MergeSortAttendance {
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+        imprimirConsumoMemoria(); // Imprimir consumo de memória após a ordenação
+
     }
 
     /**
      * Realiza a ordenação de um subarray usando o algoritmo Merge Sort.
      *
-     * @param data       O array bidimensional contendo os dados a serem ordenados.
+     * @param data        O array bidimensional contendo os dados a serem ordenados.
      * @param columnIndex O índice da coluna pela qual os dados serão ordenados.
-     * @param left       O índice de início do subarray.
-     * @param right      O índice de fim do subarray.
+     * @param left        O índice de início do subarray.
+     * @param right       O índice de fim do subarray.
      */
     private void mergeSort(String[][] data, int columnIndex, int left, int right) {
         if (left < right) {
@@ -177,57 +188,61 @@ public class MergeSortAttendance {
     }
 
     /**
-     * Esta função realiza a fusão (merge) de dois subarrays ordenados em um único subarray ordenado.
-     * O processo de fusão é um passo fundamental no algoritmo de ordenação Merge Sort.
+     * Esta função realiza a fusão (merge) de dois subarrays ordenados em um único
+     * subarray ordenado.
+     * O processo de fusão é um passo fundamental no algoritmo de ordenação Merge
+     * Sort.
      *
-     * @param data       O array bidimensional contendo os dados a serem mesclados.
+     * @param data        O array bidimensional contendo os dados a serem mesclados.
      * @param columnIndex O índice da coluna pela qual os dados serão ordenados.
-     * @param left       O índice de início do primeiro subarray.
-     * @param mid        O índice de meio que divide os dois subarrays.
-     * @param right      O índice de fim do segundo subarray.
+     * @param left        O índice de início do primeiro subarray.
+     * @param mid         O índice de meio que divide os dois subarrays.
+     * @param right       O índice de fim do segundo subarray.
      */
     private void merge(String[][] data, int columnIndex, int left, int mid, int right) {
         int n1 = mid - left + 1;
         int n2 = right - mid;
-    
+
         String[][] leftArray = new String[n1][];
         String[][] rightArray = new String[n2][];
-    
+
         for (int i = 0; i < n1; i++) {
             leftArray[i] = data[left + i];
         }
         for (int i = 0; i < n2; i++) {
             rightArray[i] = data[mid + 1 + i];
         }
-    
+
         int i = 0, j = 0, k = left;
         while (i < n1 && j < n2) {
             int leftVal = parseToInt(leftArray[i][columnIndex]);
             int rightVal = parseToInt(rightArray[j][columnIndex]);
-    
+
             if (leftVal <= rightVal) {
                 data[k++] = leftArray[i++];
             } else {
                 data[k++] = rightArray[j++];
             }
         }
-    
+
         while (i < n1) {
             data[k++] = leftArray[i++];
         }
-    
+
         while (j < n2) {
             data[k++] = rightArray[j++];
         }
     }
 
     /**
-     * Converte uma string em um número inteiro. 
+     * Converte uma string em um número inteiro.
      * Se a string estiver vazia ou não for numérica, retorna 0.
-     * O valor pode ter aspas duplas e vírgulas, que são removidas antes da conversão.
+     * O valor pode ter aspas duplas e vírgulas, que são removidas antes da
+     * conversão.
      *
      * @param value A string a ser convertida em um número inteiro.
-     * @return O valor inteiro correspondente à string ou 0 se a string não for numérica.
+     * @return O valor inteiro correspondente à string ou 0 se a string não for
+     *         numérica.
      */
     private int parseToInt(String value) {
         value = value.replace("\"", "").replace(",", "");
@@ -236,13 +251,14 @@ public class MergeSortAttendance {
         }
         return Integer.parseInt(value);
     }
-    
+
     /**
      * Verifica se uma string pode ser convertida em um número inteiro.
      * Esta função é usada para garantir que tentativas de conversão sejam seguras.
      *
      * @param str A string a ser verificada.
-     * @return {@code true} se a string for um número inteiro válido, caso contrário {@code false}.
+     * @return {@code true} se a string for um número inteiro válido, caso contrário
+     *         {@code false}.
      */
     private boolean isNumeric(String str) {
         try {
@@ -251,5 +267,14 @@ public class MergeSortAttendance {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    private void imprimirConsumoMemoria() {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
+
+        long usedMemory = heapMemoryUsage.getUsed();
+
+        System.out.println("Consumo de memória: " + usedMemory + " bytes");
     }
 }

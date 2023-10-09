@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 
 /**
  * A classe {@code HeapSortAttendance} realiza a ordenação de dados em arquivos
@@ -40,9 +43,14 @@ public class HeapSortAttendance {
         criarCasoMedio();
         criarCasoPior();
 
+        System.out.println("Ordenando utilizando o algoritmo Heap Sort...");
+
         ordenarEImprimirTempo(outputMelhor);
+
         ordenarEImprimirTempo(outputMedio);
+
         ordenarEImprimirTempo(outputPior);
+        System.out.println("\nOrdenação concluída com sucesso!");
     }
 
     /**
@@ -63,13 +71,13 @@ public class HeapSortAttendance {
 
             // Salvando o cabeçalho antes da ordenação
             String[] header = data[0];
-            
+
             // Criando um novo array sem o cabeçalho para a ordenação
             String[][] dataArray = new String[rowCount - 1][];
             System.arraycopy(data, 1, dataArray, 0, rowCount - 1);
-            
+
             heapSort(dataArray, attendanceIndex, rowCount - 1); // Ordena o array
-            
+
             // Escrevendo o resultado no arquivo, incluindo o cabeçalho
             try (FileWriter writer = new FileWriter(outputMelhor)) {
                 writer.write(String.join(",", header) + "\n");
@@ -165,6 +173,7 @@ public class HeapSortAttendance {
 
             long endTime = System.currentTimeMillis();
             System.out.println("Tempo de execução para " + fileToOrder + ": " + (endTime - startTime) + " ms");
+            imprimirConsumoMemoria(); // Imprimir consumo de memória após a ordenação
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -247,7 +256,8 @@ public class HeapSortAttendance {
     }
 
     /**
-     * Transforma um array em um heap binário, usando a coluna de atendimento como critério de ordenação.
+     * Transforma um array em um heap binário, usando a coluna de atendimento como
+     * critério de ordenação.
      *
      * @param data        O array a ser transformado em um heap.
      * @param columnIndex O índice da coluna pela qual os dados são comparados.
@@ -259,7 +269,8 @@ public class HeapSortAttendance {
         int left = 2 * root + 1;
         int right = 2 * root + 2;
 
-        // Usa a função sanitizeAttendance para limpar e converter a string de atendimento em um inteiro.
+        // Usa a função sanitizeAttendance para limpar e converter a string de
+        // atendimento em um inteiro.
         if (left < rowCount
                 && sanitizeAttendance(data[left][columnIndex]) > sanitizeAttendance(data[largest][columnIndex])) {
             largest = left;
@@ -277,5 +288,17 @@ public class HeapSortAttendance {
 
             heapify(data, columnIndex, rowCount, largest);
         }
+    }
+
+    /**
+     * Imprime o consumo de memória atual do sistema.
+     */
+    private void imprimirConsumoMemoria() {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
+
+        long usedMemory = heapMemoryUsage.getUsed();
+
+        System.out.println("Consumo de memória: " + usedMemory + " bytes");
     }
 }
