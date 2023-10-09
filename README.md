@@ -1,4 +1,4 @@
-# Projeto EDA - Ligas Europeias (GAP)
+# Projeto EDA - Ligas Europeias
 
 ## Desenvolvedores:
 - Deyvid Jerônimo de Araújo Macêdo
