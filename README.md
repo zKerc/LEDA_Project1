@@ -6,7 +6,7 @@
 
 ## Orientações sobre a execução:
 
-* Certifique-se de que o arquivo `matches.csv` esteja localizado na pasta `data`.
+* Certifique-se de que o arquivo `matches.csv` esteja localizado na pasta `data`. (caso seja precise baixar o arquivo aqui está o link: https://drive.google.com/drive/folders/1qTCGYDRmoS9-K_etvUUsyWTnca354lPY?usp=sharing)
 * Execute o arquivo `Main.java`.
 * Através do menu interativo, selecione a coluna desejada para ordenação (opções: attendance, date, venue).
 * Escolha o algoritmo de ordenação que deseja utilizar (opções disponíveis nas subpastas do diretório `Ordenacao`).
