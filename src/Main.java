@@ -20,17 +20,18 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         String inputMatches = "src/data/matches.csv";
         String outputMatchesT1 = "src/TransformaçõesResultados/matches_T1.csv";
-        String[] columnsToKeep = {"id", "home", "away", "date", "year", "time (utc)", "attendance", "venue", "league", "home_score", "away_score", "home_goal_scorers", "away_goal_scorers"};
-        
+        String[] columnsToKeep = { "id", "home", "away", "date", "year", "time (utc)", "attendance", "venue", "league",
+                "home_score", "away_score", "home_goal_scorers", "away_goal_scorers" };
+
         try (BufferedReader br = new BufferedReader(new FileReader(inputMatches));
                 FileWriter writer = new FileWriter(outputMatchesT1)) {
-            
+
             String line;
             int[] indicesToKeep = new int[columnsToKeep.length];
-            
+
             if ((line = br.readLine()) != null) {
                 String[] headers = line.split(",");
-                
+
                 for (int i = 0; i < headers.length; i++) {
                     for (int j = 0; j < columnsToKeep.length; j++) {
                         if (headers[i].equals(columnsToKeep[j])) {
@@ -38,7 +39,7 @@ public class Main {
                         }
                     }
                 }
-                
+
                 for (int i = 0; i < indicesToKeep.length; i++) {
                     writer.write(headers[indicesToKeep[i]]);
                     if (i < indicesToKeep.length - 1) {
@@ -47,13 +48,13 @@ public class Main {
                 }
                 writer.write("\n");
             }
-            
+
             while ((line = br.readLine()) != null) {
                 StringBuilder sb = new StringBuilder();
                 boolean insideQuotes = false;
                 int valueCount = 0;
                 String[] values = new String[50];
-                
+
                 for (char c : line.toCharArray()) {
                     if (c == '\"') {
                         insideQuotes = !insideQuotes;
@@ -76,8 +77,8 @@ public class Main {
                     System.arraycopy(values, 0, newValues, 0, values.length);
                     values = newValues;
                 }
-                values[valueCount] = sb.toString(); 
-                
+                values[valueCount] = sb.toString();
+
                 for (int i = 0; i < indicesToKeep.length; i++) {
                     if (indicesToKeep[i] <= valueCount) {
                         writer.write(values[indicesToKeep[i]]);
@@ -89,8 +90,9 @@ public class Main {
                 writer.write("\n");
             }
             /*
-            System.out.println("Criando arquivo " + outputMatchesT1);
-            Thread.sleep(3000);  // Pause de 3 segundos*/
+             * System.out.println("Criando arquivo " + outputMatchesT1);
+             * Thread.sleep(3000); // Pause de 3 segundos
+             */
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -100,7 +102,7 @@ public class Main {
         String outputMatchesT2 = "src/TransformaçõesResultados/matches_T2.csv";
 
         try (BufferedReader br = new BufferedReader(new FileReader(inputMatchesT1));
-             FileWriter writer = new FileWriter(outputMatchesT2)) {
+                FileWriter writer = new FileWriter(outputMatchesT2)) {
 
             String line;
 
@@ -123,7 +125,7 @@ public class Main {
                     }
                     if (c == ',' && !insideQuote) {
                         values[valueCount] = sb.toString().trim();
-                        sb.setLength(0); 
+                        sb.setLength(0);
                         valueCount++;
                     } else {
                         sb.append(c);
@@ -138,9 +140,10 @@ public class Main {
                 writer.write(line + "," + fullDate + "\n");
             }
             /*
-            System.out.println("Criando arquivo " + outputMatchesT2);
-            Thread.sleep(3000);  // Pause de 3 segundos*/
-            
+             * System.out.println("Criando arquivo " + outputMatchesT2);
+             * Thread.sleep(3000); // Pause de 3 segundos
+             */
+
         } catch (IOException | java.text.ParseException e) {
             e.printStackTrace();
         }
@@ -149,14 +152,14 @@ public class Main {
         String outputMatchesF1 = "src/TransformaçõesResultados/matches_F1.csv";
 
         try (BufferedReader br = new BufferedReader(new FileReader(inputMatchesT2));
-             FileWriter writer = new FileWriter(outputMatchesF1)) {
+                FileWriter writer = new FileWriter(outputMatchesF1)) {
 
             String line;
 
             if ((line = br.readLine()) != null) {
                 writer.write(line + "\n");
             }
-            
+
             int leagueIndex = 8;
 
             while ((line = br.readLine()) != null) {
@@ -183,9 +186,10 @@ public class Main {
                     writer.write(line + "\n");
                 }
             }
-/*
-            System.out.println("Criando arquivo " + outputMatchesF1);
-            Thread.sleep(3000);  // Pause de 3 segundos*/
+            /*
+             * System.out.println("Criando arquivo " + outputMatchesF1);
+             * Thread.sleep(3000); // Pause de 3 segundos
+             */
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -195,14 +199,14 @@ public class Main {
         String outputMatchesF2 = "src/TransformaçõesResultados/matches_F2.csv";
 
         try (BufferedReader br = new BufferedReader(new FileReader(inputMatchesF1));
-             FileWriter writer = new FileWriter(outputMatchesF2)) {
+                FileWriter writer = new FileWriter(outputMatchesF2)) {
 
             String line;
 
             if ((line = br.readLine()) != null) {
-                writer.write(line + "\n"); 
+                writer.write(line + "\n");
             }
-            
+
             int attendanceIndex = 6;
 
             while ((line = br.readLine()) != null) {
@@ -234,8 +238,9 @@ public class Main {
                 }
             }
             /*
-            System.out.println("Criando arquivo " + outputMatchesF2);
-            Thread.sleep(3000);  // Pause de 3 segundos*/
+             * System.out.println("Criando arquivo " + outputMatchesF2);
+             * Thread.sleep(3000); // Pause de 3 segundos
+             */
 
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
@@ -252,8 +257,10 @@ public class Main {
             System.out.println("0- Sair");
             System.out.print("Sua escolha: ");
             fieldChoice = scanner.nextInt();
+            System.out.println();
 
-            if (fieldChoice == 0) break;
+            if (fieldChoice == 0)
+                break;
 
             do {
                 System.out.println("Escolha o algoritmo de ordenação:");
@@ -267,11 +274,13 @@ public class Main {
                 System.out.println("0- Voltar");
                 System.out.print("Sua escolha: ");
                 algorithmChoice = scanner.nextInt();
+                System.out.println("\nCriando Arquivos... (isso pode levar um tempo)");
 
-                if (algorithmChoice == 0) break;
+                if (algorithmChoice == 0)
+                    break;
 
                 switch (fieldChoice) {
-                    case 1: 
+                    case 1:
                         switch (algorithmChoice) {
                             case 1:
                                 InsertionSortVenue insertionVenue = new InsertionSortVenue(outputMatchesT2);
@@ -308,11 +317,13 @@ public class Main {
                     case 2:
                         switch (algorithmChoice) {
                             case 1:
-                                InsertionSortAttendance insertionAttendance = new InsertionSortAttendance(outputMatchesT2);
+                                InsertionSortAttendance insertionAttendance = new InsertionSortAttendance(
+                                        outputMatchesT2);
                                 insertionAttendance.ordenar();
                                 break;
                             case 2:
-                                SelectionSortAttendance selectionAttendance = new SelectionSortAttendance(outputMatchesT2);
+                                SelectionSortAttendance selectionAttendance = new SelectionSortAttendance(
+                                        outputMatchesT2);
                                 selectionAttendance.ordenar();
                                 break;
                             case 3:
@@ -332,7 +343,8 @@ public class Main {
                                 quickAttendance.ordenar();
                                 break;
                             case 7:
-                                QuickSortMediana3Attendance quickMediana3Attendance = new QuickSortMediana3Attendance(outputMatchesT2);
+                                QuickSortMediana3Attendance quickMediana3Attendance = new QuickSortMediana3Attendance(
+                                        outputMatchesT2);
                                 quickMediana3Attendance.ordenar();
                                 break;
                         }
@@ -365,7 +377,8 @@ public class Main {
                                 quickFullDate.ordenar();
                                 break;
                             case 7:
-                                QuickSortMediana3FullDate quickMediana3FullDate = new QuickSortMediana3FullDate(outputMatchesT2);
+                                QuickSortMediana3FullDate quickMediana3FullDate = new QuickSortMediana3FullDate(
+                                        outputMatchesT2);
                                 quickMediana3FullDate.ordenar();
                                 break;
                         }
@@ -379,4 +392,3 @@ public class Main {
         scanner.close();
     }
 }
-
